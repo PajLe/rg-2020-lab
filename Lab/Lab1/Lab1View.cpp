@@ -38,8 +38,8 @@ CLab1View::CLab1View() noexcept
 	drawGridButtonClicked = false;
 	mainRectSideSize = 500;
 	gridSquareSize = mainRectSideSize / 20;
-
 	gridButton = CRect(0, 0, mainRectSideSize * 7 / 20, mainRectSideSize / 20);
+	mainRect = CRect(gridButton.left, gridButton.bottom + 10, gridButton.left + mainRectSideSize, gridButton.bottom + 10 + mainRectSideSize);
 }
 
 CLab1View::~CLab1View()
@@ -151,7 +151,7 @@ void CLab1View::DrawBackgroundRect(CDC* pDC)
 	CBrush grayBrush(RGB(221, 221, 221));
 	CBrush* oldBrush = pDC->SelectObject(&grayBrush);
 	CGdiObject* oldPen = pDC->SelectStockObject(NULL_PEN);
-	pDC->Rectangle(gridButton.left, gridButton.bottom + 10, gridButton.left + mainRectSideSize, gridButton.bottom + 10 + mainRectSideSize);
+	pDC->Rectangle(mainRect);
 
 	pDC->SelectObject(oldBrush);
 	pDC->SelectObject(oldPen);
@@ -160,8 +160,8 @@ void CLab1View::DrawBackgroundRect(CDC* pDC)
 
 void CLab1View::DrawYellowTriangle(CDC* pDC)
 {
-	/*CPen redPen = CPen(PS_SOLID, 0, RGB(255, 0, 0));
-	CBrush yellowBrush = CBrush(RGB(255, 255, 0));*/
+	/*CPen redPen(PS_SOLID, 0, RGB(255, 0, 0));
+	CBrush yellowBrush(RGB(255, 255, 0));*/
 }
 
 void CLab1View::DrawPinkParallelogram(CDC* pDC)
