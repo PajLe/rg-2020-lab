@@ -35,7 +35,11 @@ END_MESSAGE_MAP()
 CLab1View::CLab1View() noexcept
 {
 	// TODO: add construction code here
+	drawGridButtonClicked = false;
+	mainRectWidth = 500;
+	mainRectHeight = 500;
 
+	gridButton = CRect(0, 0, mainRectWidth * 7 / 20, mainRectHeight / 20);
 }
 
 CLab1View::~CLab1View()
@@ -52,14 +56,21 @@ BOOL CLab1View::PreCreateWindow(CREATESTRUCT& cs)
 
 // CLab1View drawing
 
-void CLab1View::OnDraw(CDC* /*pDC*/)
+void CLab1View::OnDraw(CDC* pDC)
 {
-	CLab1Doc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-	if (!pDoc)
-		return;
-
-	// TODO: add draw code for native data here
+	DrawGridButton(pDC);
+	DrawBackgroundRect(pDC);
+	DrawYellowTriangle(pDC);
+	DrawPinkParallelogram(pDC);
+	DrawRedTriangle(pDC);
+	DrawLeftGrayTriangle(pDC);
+	DrawOrangeSquare(pDC);
+	DrawRightGrayTriangle(pDC);
+	DrawGreenTriangle(pDC);
+	DrawHachedTriangle(pDC);
+	DrawPurpleTriangle(pDC);
+	if (drawGridButtonClicked)
+		DrawGrid(pDC);
 }
 
 
@@ -102,6 +113,53 @@ CLab1Doc* CLab1View::GetDocument() const // non-debug version is inline
 }
 #endif //_DEBUG
 
+void CLab1View::DrawLeftGrayTriangle(CDC* pDC)
+{
+}
+
+void CLab1View::DrawOrangeSquare(CDC* pDC)
+{
+}
+
+void CLab1View::DrawGreenTriangle(CDC* pDC)
+{
+}
+
+void CLab1View::DrawHachedTriangle(CDC* pDC)
+{
+}
+
+void CLab1View::DrawPurpleTriangle(CDC* pDC)
+{
+}
+
+void CLab1View::DrawGridButton(CDC* pDC)
+{
+}
+
+void CLab1View::DrawBackgroundRect(CDC* pDC)
+{
+}
+
+void CLab1View::DrawYellowTriangle(CDC* pDC)
+{
+}
+
+void CLab1View::DrawPinkParallelogram(CDC* pDC)
+{
+}
+
+void CLab1View::DrawRedTriangle(CDC* pDC)
+{
+}
+
+void CLab1View::DrawRightGrayTriangle(CDC* pDC)
+{
+}
+
+void CLab1View::DrawGrid(CDC* pDC)
+{
+}
 
 // CLab1View message handlers
 

@@ -15,6 +15,12 @@ protected: // create from serialization only
 public:
 	CLab1Doc* GetDocument() const;
 
+private:
+	bool drawGridButtonClicked;
+	CRect gridButton;
+	int mainRectWidth;
+	int mainRectHeight;
+
 // Operations
 public:
 
@@ -37,6 +43,19 @@ public:
 
 protected:
 
+private:
+	void DrawGridButton(CDC*);
+	void DrawBackgroundRect(CDC*);
+	void DrawYellowTriangle(CDC*);
+	void DrawPinkParallelogram(CDC*);
+	void DrawRedTriangle(CDC*);
+	void DrawLeftGrayTriangle(CDC*);
+	void DrawOrangeSquare(CDC*);
+	void DrawRightGrayTriangle(CDC*);
+	void DrawGreenTriangle(CDC*);
+	void DrawHachedTriangle(CDC*);
+	void DrawPurpleTriangle(CDC*);
+	void DrawGrid(CDC*);
 // Generated message map functions
 protected:
 	DECLARE_MESSAGE_MAP()
