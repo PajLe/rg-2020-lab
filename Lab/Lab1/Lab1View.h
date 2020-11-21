@@ -18,8 +18,8 @@ public:
 private:
 	bool drawGridButtonClicked;
 	CRect gridButton;
-	int mainRectWidth;
-	int mainRectHeight;
+	int mainRectSideSize;
+	int gridSquareSize;
 
 // Operations
 public:
