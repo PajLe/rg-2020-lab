@@ -135,6 +135,15 @@ void CLab1View::DrawPurpleTriangle(CDC* pDC)
 
 void CLab1View::DrawGridButton(CDC* pDC)
 {
+	CBrush gridButtonBrush(RGB(236, 236, 236));
+	CBrush* oldBrush = pDC->SelectObject(&gridButtonBrush);
+	pDC->Rectangle(gridButton);
+	int oldBkMode = pDC->SetBkMode(TRANSPARENT);
+	pDC->DrawText(CString("ISKLJUCI GRID (MREZU)"), gridButton, DT_CENTER);
+
+	pDC->SelectObject(oldBrush);
+	pDC->SetBkMode(oldBkMode);
+	gridButtonBrush.DeleteObject();
 }
 
 void CLab1View::DrawBackgroundRect(CDC* pDC)
