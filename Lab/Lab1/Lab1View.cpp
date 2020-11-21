@@ -17,6 +17,10 @@
 #define new DEBUG_NEW
 #endif
 
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif // !_USE_MATH_DEFINES
+#include <math.h>
 
 // CLab1View
 
@@ -160,8 +164,42 @@ void CLab1View::DrawBackgroundRect(CDC* pDC)
 
 void CLab1View::DrawYellowTriangle(CDC* pDC)
 {
-	/*CPen redPen(PS_SOLID, 0, RGB(255, 0, 0));
-	CBrush yellowBrush(RGB(255, 255, 0));*/
+	CPen redPen(PS_SOLID, 5, RGB(255, 0, 0));
+	CBrush yellowBrush(RGB(255, 255, 0));
+
+	POINT A = { mainRect.left + gridSquareSize, mainRect.top + gridSquareSize };
+	POINT B = { mainRect.left + 13 * gridSquareSize, mainRect.top + gridSquareSize };
+	POINT C = { mainRect.left + gridSquareSize, mainRect.top + 13 * gridSquareSize };
+	POINT yellowTrianglePoints[] = { A, B, C };
+	double a = DistanceBetweenTwoPoints(B, C);
+	double b = DistanceBetweenTwoPoints(A, C);
+	double c = DistanceBetweenTwoPoints(A, B);
+	POINT triangleCenter = { int((a * A.x + b * B.x + c * C.x) / (a + b + c)), int((a * A.y + b * B.y + c * C.y) / (a + b + c)) };
+
+	CPen* oldPen = pDC->SelectObject(&redPen);
+	CBrush* oldBrush = pDC->SelectObject(&yellowBrush);
+	pDC->Polygon(yellowTrianglePoints, 3);
+
+	CPen redPen2(PS_SOLID, 3, RGB(255, 0, 0));
+	pDC->SelectObject(&redPen2);
+	POINT pentagonPoints[5];
+	double alfa = 0;
+	for (int i = 0; i < 5; i++)
+	{
+		pentagonPoints[i] = 
+		{ 
+			triangleCenter.x + int(gridSquareSize * 1.85 * cos(alfa * M_PI / 180) + 0.5),
+			triangleCenter.y + int(gridSquareSize * 1.85 * sin(alfa * M_PI / 180) + 0.5) 
+		};
+		alfa += 360 / 5;
+	}
+	pDC->Polygon(pentagonPoints, 5);
+
+	pDC->SelectObject(oldPen);
+	pDC->SelectObject(oldBrush);
+	redPen.DeleteObject();
+	yellowBrush.DeleteObject();
+	redPen2.DeleteObject();
 }
 
 void CLab1View::DrawPinkParallelogram(CDC* pDC)
@@ -178,6 +216,11 @@ void CLab1View::DrawRightGrayTriangle(CDC* pDC)
 
 void CLab1View::DrawGrid(CDC* pDC)
 {
+}
+
+double CLab1View::DistanceBetweenTwoPoints(POINT p1, POINT p2)
+{
+	return sqrt(pow(abs(p1.x - p2.x), 2) + pow(abs(p1.y - p2.y), 2));
 }
 
 // CLab1View message handlers

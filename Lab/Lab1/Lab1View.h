@@ -57,6 +57,7 @@ private:
 	void DrawHachedTriangle(CDC*);
 	void DrawPurpleTriangle(CDC*);
 	void DrawGrid(CDC*);
+	double DistanceBetweenTwoPoints(POINT p1, POINT p2);
 // Generated message map functions
 protected:
 	DECLARE_MESSAGE_MAP()
