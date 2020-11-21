@@ -141,6 +141,25 @@ void CLab1View::DrawLeftGrayTriangle(CDC* pDC)
 
 void CLab1View::DrawOrangeSquare(CDC* pDC)
 {
+	CPen redPen(PS_SOLID, 5, RGB(255, 0, 0));
+	CBrush orangeBrush(RGB(255, 153, 51));
+
+	POINT orangeSquarePoints[] =
+	{
+		{mainRect.left + 7 * gridSquareSize, mainRect.top + 7 * gridSquareSize},
+		{mainRect.left + 7 * gridSquareSize, mainRect.bottom - 7 * gridSquareSize},
+		{mainRect.right - 7 * gridSquareSize, mainRect.bottom - 7 * gridSquareSize},
+		{mainRect.right - 7 * gridSquareSize, mainRect.top + 7 * gridSquareSize}
+	};
+
+	CPen* oldPen = pDC->SelectObject(&redPen);
+	CBrush* oldBrush = pDC->SelectObject(&orangeBrush);
+	pDC->Polygon(orangeSquarePoints, 4);
+
+	pDC->SelectObject(oldPen);
+	pDC->SelectObject(oldBrush);
+	orangeBrush.DeleteObject();
+	redPen.DeleteObject();
 }
 
 void CLab1View::DrawGreenTriangle(CDC* pDC)
