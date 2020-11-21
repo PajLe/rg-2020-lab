@@ -204,6 +204,42 @@ void CLab1View::DrawGreenTriangle(CDC* pDC)
 
 void CLab1View::DrawHachedTriangle(CDC* pDC)
 {
+	CPen redPen(PS_SOLID, 5, RGB(255, 0, 0));
+	CBrush blueVerticalHachedBrush(HS_VERTICAL, RGB(102, 153, 255));
+
+	POINT A = { mainRect.right - 7 * gridSquareSize, mainRect.bottom - 7 * gridSquareSize };
+	POINT B = { mainRect.left + 7 * gridSquareSize, mainRect.bottom - gridSquareSize };
+	POINT C = { mainRect.left + gridSquareSize, mainRect.top + 13 * gridSquareSize };
+	POINT hachedTrianglePoints[] = { A, B, C };
+	double a = DistanceBetweenTwoPoints(B, C);
+	double b = DistanceBetweenTwoPoints(A, C);
+	double c = DistanceBetweenTwoPoints(A, B);
+	POINT triangleCenter = { int((a * A.x + b * B.x + c * C.x) / (a + b + c)), int((a * A.y + b * B.y + c * C.y) / (a + b + c)) };
+
+	CPen* oldPen = pDC->SelectObject(&redPen);
+	CBrush* oldBrush = pDC->SelectObject(&blueVerticalHachedBrush);
+	pDC->Polygon(hachedTrianglePoints, 3);
+
+	CPen redPen2(PS_SOLID, 3, RGB(255, 0, 0));
+	pDC->SelectObject(&redPen2);
+	POINT squarePoints[4];
+	double alfa = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		squarePoints[i] =
+		{
+			triangleCenter.x + int(gridSquareSize * 1.3 * cos(alfa * M_PI / 180) + 0.5),
+			triangleCenter.y + int(gridSquareSize * 1.3 * sin(alfa * M_PI / 180) + 0.5)
+		};
+		alfa += 360 / 4;
+	}
+	pDC->Polygon(squarePoints, 4);
+
+	pDC->SelectObject(oldPen);
+	pDC->SelectObject(oldBrush);
+	redPen2.DeleteObject();
+	blueVerticalHachedBrush.DeleteObject();
+	redPen.DeleteObject();
 }
 
 void CLab1View::DrawPurpleTriangle(CDC* pDC)
