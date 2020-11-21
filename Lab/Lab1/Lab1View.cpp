@@ -119,6 +119,24 @@ CLab1Doc* CLab1View::GetDocument() const // non-debug version is inline
 
 void CLab1View::DrawLeftGrayTriangle(CDC* pDC)
 {
+	CPen redPen(PS_SOLID, 5, RGB(255, 0, 0));
+	CBrush grayBrush(RGB(221, 221, 221));
+
+	POINT grayTrianglePoints[] =
+	{
+		{mainRect.left + 7 * gridSquareSize, mainRect.top + 7 * gridSquareSize},
+		{mainRect.left + 7 * gridSquareSize, mainRect.bottom - 7 * gridSquareSize},
+		{mainRect.left + gridSquareSize, mainRect.bottom - 7 * gridSquareSize}
+	};
+
+	CPen* oldPen = pDC->SelectObject(&redPen);
+	CBrush* oldBrush = pDC->SelectObject(&grayBrush);
+	pDC->Polygon(grayTrianglePoints, 3);
+
+	pDC->SelectObject(oldPen);
+	pDC->SelectObject(oldBrush);
+	grayBrush.DeleteObject();
+	redPen.DeleteObject();
 }
 
 void CLab1View::DrawOrangeSquare(CDC* pDC)
