@@ -226,6 +226,24 @@ void CLab1View::DrawPinkParallelogram(CDC* pDC)
 
 void CLab1View::DrawRedTriangle(CDC* pDC)
 {
+	CPen redPen(PS_SOLID, 5, RGB(255, 0, 0));
+	CBrush redBrush(RGB(255, 0, 0));
+
+	POINT redTrianglePoints[] =
+	{
+		{mainRect.right - gridSquareSize, mainRect.top + gridSquareSize},
+		{mainRect.right - gridSquareSize, mainRect.top + 7 * gridSquareSize},
+		{mainRect.right - 7 * gridSquareSize, mainRect.top + 7 * gridSquareSize}
+	};
+
+	CPen* oldPen = pDC->SelectObject(&redPen);
+	CBrush* oldBrush = pDC->SelectObject(&redBrush);
+	pDC->Polygon(redTrianglePoints, 3);
+
+	pDC->SelectObject(oldPen);
+	pDC->SelectObject(oldBrush);
+	redBrush.DeleteObject();
+	redPen.DeleteObject();
 }
 
 void CLab1View::DrawRightGrayTriangle(CDC* pDC)
