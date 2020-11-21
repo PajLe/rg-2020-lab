@@ -197,13 +197,31 @@ void CLab1View::DrawYellowTriangle(CDC* pDC)
 
 	pDC->SelectObject(oldPen);
 	pDC->SelectObject(oldBrush);
-	redPen.DeleteObject();
-	yellowBrush.DeleteObject();
 	redPen2.DeleteObject();
+	yellowBrush.DeleteObject();
+	redPen.DeleteObject();
 }
 
 void CLab1View::DrawPinkParallelogram(CDC* pDC)
 {
+	CPen redPen(PS_SOLID, 5, RGB(255, 0, 0));
+	CBrush pinkBrush(RGB(255, 153, 204));
+
+	POINT parallelogramPoints[] =
+	{
+		{mainRect.left + 13 * gridSquareSize, mainRect.top + gridSquareSize},
+		{mainRect.right - gridSquareSize, mainRect.top + gridSquareSize},
+		{mainRect.right - 7 * gridSquareSize, mainRect.top + 7 * gridSquareSize},
+		{mainRect.left + 7 * gridSquareSize, mainRect.top + 7 * gridSquareSize}
+	};
+	CPen* oldPen = pDC->SelectObject(&redPen);
+	CBrush* oldBrush = pDC->SelectObject(&pinkBrush);
+	pDC->Polygon(parallelogramPoints, 4);
+
+	pDC->SelectObject(oldPen);
+	pDC->SelectObject(oldBrush);
+	pinkBrush.DeleteObject();
+	redPen.DeleteObject();
 }
 
 void CLab1View::DrawRedTriangle(CDC* pDC)
