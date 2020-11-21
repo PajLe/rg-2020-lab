@@ -285,6 +285,24 @@ void CLab1View::DrawRedTriangle(CDC* pDC)
 
 void CLab1View::DrawRightGrayTriangle(CDC* pDC)
 {
+	CPen redPen(PS_SOLID, 5, RGB(255, 0, 0));
+	CBrush grayBrush(RGB(221, 221, 221));
+
+	POINT grayTrianglePoints[] =
+	{
+		{mainRect.right - gridSquareSize, mainRect.top + 7 * gridSquareSize},
+		{mainRect.right - 7 * gridSquareSize, mainRect.top + 7 * gridSquareSize},
+		{mainRect.right - 7 * gridSquareSize, mainRect.bottom - 7 * gridSquareSize}
+	};
+
+	CPen* oldPen = pDC->SelectObject(&redPen);
+	CBrush* oldBrush = pDC->SelectObject(&grayBrush);
+	pDC->Polygon(grayTrianglePoints, 3);
+
+	pDC->SelectObject(oldPen);
+	pDC->SelectObject(oldBrush);
+	grayBrush.DeleteObject();
+	redPen.DeleteObject();
 }
 
 void CLab1View::DrawGrid(CDC* pDC)
