@@ -244,6 +244,44 @@ void CLab1View::DrawHachedTriangle(CDC* pDC)
 
 void CLab1View::DrawPurpleTriangle(CDC* pDC)
 {
+	CPen redPen(PS_SOLID, 5, RGB(255, 0, 0));
+	CBrush purpleBrush(RGB(153, 0, 204));
+
+	POINT A = { mainRect.right - gridSquareSize, mainRect.top + 7 * gridSquareSize };
+	POINT B = { mainRect.left + 7 * gridSquareSize, mainRect.bottom - gridSquareSize };
+	POINT C = { mainRect.right - gridSquareSize, mainRect.bottom - gridSquareSize };
+	POINT purpleTrianglePoints[] = { A, B, C };
+	double a = DistanceBetweenTwoPoints(B, C);
+	double b = DistanceBetweenTwoPoints(A, C);
+	double c = DistanceBetweenTwoPoints(A, B);
+	POINT triangleCenter = { int((a * A.x + b * B.x + c * C.x) / (a + b + c)), int((a * A.y + b * B.y + c * C.y) / (a + b + c)) };
+
+	CPen* oldPen = pDC->SelectObject(&redPen);
+	CBrush* oldBrush = pDC->SelectObject(&purpleBrush);
+	pDC->Polygon(purpleTrianglePoints, 3);
+
+	CPen redPen2(PS_SOLID, 3, RGB(255, 0, 0));
+	pDC->SelectObject(&redPen2);
+	POINT heptagonPoints[7];
+	double alfa = 0;
+	for (int i = 0; i < 7; i++)
+	{
+		heptagonPoints[i] =
+		{
+			triangleCenter.x + int(gridSquareSize * 1.85 * cos(alfa * M_PI / 180) + 0.5),
+			triangleCenter.y + int(gridSquareSize * 1.85 * sin(alfa * M_PI / 180) + 0.5)
+		};
+		if (i == 4)
+			heptagonPoints[i].x = heptagonPoints[i - 1].x;
+		alfa += 360 / 7;
+	}
+	pDC->Polygon(heptagonPoints, 7);
+
+	pDC->SelectObject(oldPen);
+	pDC->SelectObject(oldBrush);
+	redPen2.DeleteObject();
+	purpleBrush.DeleteObject();
+	redPen.DeleteObject();
 }
 
 void CLab1View::DrawGridButton(CDC* pDC)
