@@ -290,7 +290,10 @@ void CLab1View::DrawGridButton(CDC* pDC)
 	CBrush* oldBrush = pDC->SelectObject(&gridButtonBrush);
 	pDC->Rectangle(gridButton);
 	int oldBkMode = pDC->SetBkMode(TRANSPARENT);
-	pDC->DrawText(CString("ISKLJUCI GRID (MREZU)"), gridButton, DT_CENTER);
+	if (drawGridButtonClicked)
+		pDC->DrawText(CString("ISKLJUCI GRID (MREZU)"), gridButton, DT_CENTER);
+	else
+		pDC->DrawText(CString("UKLJUCI GRID (MREZU)"), gridButton, DT_CENTER);
 
 	pDC->SelectObject(oldBrush);
 	pDC->SetBkMode(oldBkMode);
@@ -417,6 +420,33 @@ void CLab1View::DrawRightGrayTriangle(CDC* pDC)
 
 void CLab1View::DrawGrid(CDC* pDC)
 {
+	CPen gridWhitePen(PS_SOLID, 2, RGB(255, 255, 255));
+	POINT verticalGridlinePoints[40];
+	POINT horizontalGridlinePoints[40];
+	DWORD pointCount[40];
+	for (int i = 0; i < 40; i++)
+		pointCount[i] = 2; // all polyLines have 2 points
+
+	for (int i = 0; i < 40 - 1; i += 2)
+	{
+		verticalGridlinePoints[i] = { mainRect.left + i/2 * gridSquareSize, mainRect.top }; // top points
+		verticalGridlinePoints[i + 1] = { mainRect.left + i/2 * gridSquareSize, mainRect.bottom }; // bottom points
+		horizontalGridlinePoints[i] = { mainRect.left, mainRect.top + i/2 * gridSquareSize }; // left points
+		horizontalGridlinePoints[i + 1] = { mainRect.right, mainRect.top + i/2 * gridSquareSize }; // right points
+	}
+
+	POINT allPoints[80];
+	for (int i = 0; i < 40; i++)
+	{
+		allPoints[i] = verticalGridlinePoints[i];
+		allPoints[40 + i] = horizontalGridlinePoints[i];
+	}
+
+	CPen* oldPen = pDC->SelectObject(&gridWhitePen);
+	pDC->PolyPolyline(allPoints, pointCount, 40);
+
+	pDC->SelectObject(oldPen);
+	gridWhitePen.DeleteObject();
 }
 
 double CLab1View::DistanceBetweenTwoPoints(POINT p1, POINT p2)
@@ -429,7 +459,13 @@ double CLab1View::DistanceBetweenTwoPoints(POINT p1, POINT p2)
 
 void CLab1View::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	// TODO: Add your message handler code here and/or call default
+	CRgn rgn; 
+	rgn.CreateRectRgn(gridButton.left, gridButton.top, gridButton.right, gridButton.bottom);
+	if (rgn.PtInRegion(point)) 
+	{ 
+		drawGridButtonClicked = !drawGridButtonClicked;
+		Invalidate(); 
+	}
 
 	CView::OnLButtonUp(nFlags, point);
 }
