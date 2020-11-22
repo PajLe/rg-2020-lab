@@ -167,7 +167,7 @@ void CLab1View::DrawGreenTriangle(CDC* pDC)
 	CPen redPen(PS_SOLID, 5, RGB(255, 0, 0));
 	CBrush greenBrush(RGB(50, 205, 50));
 
-	POINT A = { mainRect.left + gridSquareSize, mainRect.bottom - gridSquareSize};
+	POINT A = { mainRect.left + gridSquareSize, mainRect.bottom - gridSquareSize };
 	POINT B = { mainRect.left + 7 * gridSquareSize, mainRect.bottom - gridSquareSize };
 	POINT C = { mainRect.left + gridSquareSize, mainRect.top + 13 * gridSquareSize };
 	POINT greenTrianglePoints[] = { A, B, C };
@@ -336,10 +336,10 @@ void CLab1View::DrawYellowTriangle(CDC* pDC)
 	double alfa = 0;
 	for (int i = 0; i < 5; i++)
 	{
-		pentagonPoints[i] = 
-		{ 
+		pentagonPoints[i] =
+		{
 			triangleCenter.x + int(gridSquareSize * 1.85 * cos(alfa * M_PI / 180) + 0.5),
-			triangleCenter.y + int(gridSquareSize * 1.85 * sin(alfa * M_PI / 180) + 0.5) 
+			triangleCenter.y + int(gridSquareSize * 1.85 * sin(alfa * M_PI / 180) + 0.5)
 		};
 		alfa += 360 / 5;
 	}
@@ -429,10 +429,10 @@ void CLab1View::DrawGrid(CDC* pDC)
 
 	for (int i = 0; i < 40 - 1; i += 2)
 	{
-		verticalGridlinePoints[i] = { mainRect.left + i/2 * gridSquareSize, mainRect.top }; // top points
-		verticalGridlinePoints[i + 1] = { mainRect.left + i/2 * gridSquareSize, mainRect.bottom }; // bottom points
-		horizontalGridlinePoints[i] = { mainRect.left, mainRect.top + i/2 * gridSquareSize }; // left points
-		horizontalGridlinePoints[i + 1] = { mainRect.right, mainRect.top + i/2 * gridSquareSize }; // right points
+		verticalGridlinePoints[i] = { mainRect.left + i / 2 * gridSquareSize, mainRect.top }; // top points
+		verticalGridlinePoints[i + 1] = { mainRect.left + i / 2 * gridSquareSize, mainRect.bottom }; // bottom points
+		horizontalGridlinePoints[i] = { mainRect.left, mainRect.top + i / 2 * gridSquareSize }; // left points
+		horizontalGridlinePoints[i + 1] = { mainRect.right, mainRect.top + i / 2 * gridSquareSize }; // right points
 	}
 
 	POINT allPoints[80];
@@ -459,12 +459,12 @@ double CLab1View::DistanceBetweenTwoPoints(POINT p1, POINT p2)
 
 void CLab1View::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	CRgn rgn; 
+	CRgn rgn;
 	rgn.CreateRectRgn(gridButton.left, gridButton.top, gridButton.right, gridButton.bottom);
-	if (rgn.PtInRegion(point)) 
-	{ 
+	if (rgn.PtInRegion(point))
+	{
 		drawGridButtonClicked = !drawGridButtonClicked;
-		Invalidate(); 
+		Invalidate();
 	}
 
 	CView::OnLButtonUp(nFlags, point);
