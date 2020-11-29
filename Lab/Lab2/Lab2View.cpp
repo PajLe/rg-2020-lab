@@ -31,14 +31,18 @@ BEGIN_MESSAGE_MAP(CLab2View, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+	ON_WM_KEYUP()
 END_MESSAGE_MAP()
 
 // CLab2View construction/destruction
 
 CLab2View::CLab2View() noexcept
 {
-	// TODO: add construction code here
-
+	mainRectSideSize = 500;
+	gridSquareSize = mainRectSideSize / 20;
+	mainRect = CRect(0, 0, mainRectSideSize, mainRectSideSize);
+	leftCactusPartDeg = 135;
+	rightCactusPartDeg = 0;
 }
 
 CLab2View::~CLab2View()
@@ -57,24 +61,14 @@ BOOL CLab2View::PreCreateWindow(CREATESTRUCT& cs)
 
 void CLab2View::OnDraw(CDC* pDC)
 {
-	HENHMETAFILE a = GetEnhMetaFile(CString("res/cactus_part.emf"));
-	int prevMode = SetGraphicsMode(pDC->m_hDC, GM_ADVANCED);
-	XFORM xform, xformOld;
-	GetWorldTransform(pDC->m_hDC, &xformOld);
-
-	double piSeventh = M_PI / 7.0;
-	xform.eM11 = cos(piSeventh);
-	xform.eM12 = sin(piSeventh);
-	xform.eM21 = -sin(piSeventh);
-	xform.eM22 = cos(piSeventh);
-	xform.eDx = 0.0; 
-	xform.eDy = 0.0;
-	SetWorldTransform(pDC->m_hDC, &xform);
-	PlayEnhMetaFile(pDC->m_hDC, a, CRect(100, 100, 350, 450));
-
-	SetWorldTransform(pDC->m_hDC, &xformOld);
-	SetGraphicsMode(pDC->m_hDC, prevMode);
-	DeleteEnhMetaFile(a);
+	DrawBackground(pDC);
+	DrawStaticPartOfTheCactus(pDC);
+	DrawLeftMovingPartOfTheCactus(pDC);
+	DrawRightMovingPartOfTheCactus(pDC);
+	DrawFlowerPot(pDC);
+	DrawStudentInfo(pDC);
+	if (gridToggled)
+		DrawGrid(pDC);
 }
 
 
@@ -110,6 +104,36 @@ void CLab2View::Dump(CDumpContext& dc) const
 	CView::Dump(dc);
 }
 
+void CLab2View::DrawBackground(CDC*)
+{
+}
+
+void CLab2View::DrawStaticPartOfTheCactus(CDC*)
+{
+}
+
+void CLab2View::DrawLeftMovingPartOfTheCactus(CDC*)
+{
+}
+
+void CLab2View::DrawRightMovingPartOfTheCactus(CDC*)
+{
+}
+
+void CLab2View::DrawFlowerPot(CDC*)
+{
+}
+
+void CLab2View::DrawStudentInfo(CDC*)
+{
+}
+
+void CLab2View::DrawGrid(CDC*)
+{
+}
+
+int CLab2View::mod(int k, int n) { return ((k %= n) < 0) ? k + n : k; }
+
 CLab2Doc* CLab2View::GetDocument() const // non-debug version is inline
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CLab2Doc)));
@@ -119,3 +143,34 @@ CLab2Doc* CLab2View::GetDocument() const // non-debug version is inline
 
 
 // CLab2View message handlers
+
+
+void CLab2View::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: Add your message handler code here and/or call default
+	switch (nChar)
+	{
+	case VK_RETURN:
+		gridToggled = !gridToggled;
+		Invalidate();
+		break;
+	case VK_LEFT:
+		rightCactusPartDeg = mod((rightCactusPartDeg - 6), 360);
+		Invalidate();
+		break;
+	case VK_RIGHT:
+		rightCactusPartDeg = mod((rightCactusPartDeg + 6), 360);
+		Invalidate();
+		break;
+	case 0x41: // A
+		leftCactusPartDeg = mod((rightCactusPartDeg - 6), 360);
+		Invalidate();
+		break;
+	case 0x44: // D
+		leftCactusPartDeg = mod((rightCactusPartDeg + 6), 360);
+		Invalidate();
+		break;
+	}
+
+	CView::OnKeyUp(nChar, nRepCnt, nFlags);
+}
