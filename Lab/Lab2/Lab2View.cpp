@@ -43,6 +43,7 @@ CLab2View::CLab2View() noexcept
 	mainRect = CRect(0, 0, mainRectSideSize, mainRectSideSize);
 	leftCactusPartDeg = 135;
 	rightCactusPartDeg = 0;
+	gridToggled = false;
 }
 
 CLab2View::~CLab2View()
