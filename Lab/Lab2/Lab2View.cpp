@@ -105,8 +105,16 @@ void CLab2View::Dump(CDumpContext& dc) const
 	CView::Dump(dc);
 }
 
-void CLab2View::DrawBackground(CDC*)
+void CLab2View::DrawBackground(CDC* pDC)
 {
+	CBrush skyBrush(RGB(135, 206, 235));
+	CBrush* oldBrush = pDC->SelectObject(&skyBrush);
+	CGdiObject* oldPen = pDC->SelectStockObject(NULL_PEN);
+	pDC->Rectangle(mainRect);
+
+	pDC->SelectObject(oldBrush);
+	pDC->SelectObject(oldPen);
+	skyBrush.DeleteObject();
 }
 
 void CLab2View::DrawStaticPartOfTheCactus(CDC*)
