@@ -66,6 +66,12 @@
     <None Include="res\Lab2.rc2">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\cactus_part_light.emf">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\cactus_part.emf">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Lab2Doc.ico">

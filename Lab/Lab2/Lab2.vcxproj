@@ -208,6 +208,8 @@
     <ResourceCompile Include="Lab2.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\cactus_part.emf" />
+    <None Include="res\cactus_part_light.emf" />
     <None Include="res\Lab2.rc2" />
   </ItemGroup>
   <ItemGroup>

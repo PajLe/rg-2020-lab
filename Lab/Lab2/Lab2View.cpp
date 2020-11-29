@@ -51,14 +51,10 @@ BOOL CLab2View::PreCreateWindow(CREATESTRUCT& cs)
 
 // CLab2View drawing
 
-void CLab2View::OnDraw(CDC* /*pDC*/)
+void CLab2View::OnDraw(CDC* pDC)
 {
-	CLab2Doc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-	if (!pDoc)
-		return;
-
-	// TODO: add draw code for native data here
+	HENHMETAFILE a = GetEnhMetaFile(CString("res/cactus_part.emf"));
+	pDC->PlayMetaFile(a, CRect(0, 0, 500, 300));
 }
 
 
