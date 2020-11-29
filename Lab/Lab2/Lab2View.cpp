@@ -17,6 +17,10 @@
 #define new DEBUG_NEW
 #endif
 
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif // !_USE_MATH_DEFINES
+#include <math.h>
 
 // CLab2View
 
@@ -54,7 +58,23 @@ BOOL CLab2View::PreCreateWindow(CREATESTRUCT& cs)
 void CLab2View::OnDraw(CDC* pDC)
 {
 	HENHMETAFILE a = GetEnhMetaFile(CString("res/cactus_part.emf"));
-	pDC->PlayMetaFile(a, CRect(0, 0, 500, 300));
+	int prevMode = SetGraphicsMode(pDC->m_hDC, GM_ADVANCED);
+	XFORM xform, xformOld;
+	GetWorldTransform(pDC->m_hDC, &xformOld);
+
+	double piSeventh = M_PI / 7.0;
+	xform.eM11 = cos(piSeventh);
+	xform.eM12 = sin(piSeventh);
+	xform.eM21 = -sin(piSeventh);
+	xform.eM22 = cos(piSeventh);
+	xform.eDx = 0.0; 
+	xform.eDy = 0.0;
+	SetWorldTransform(pDC->m_hDC, &xform);
+	PlayEnhMetaFile(pDC->m_hDC, a, CRect(100, 100, 350, 450));
+
+	SetWorldTransform(pDC->m_hDC, &xformOld);
+	SetGraphicsMode(pDC->m_hDC, prevMode);
+	DeleteEnhMetaFile(a);
 }
 
 
