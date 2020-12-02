@@ -194,67 +194,75 @@ void CLab2View::DrawBackground(CDC* pDC)
 void CLab2View::DrawStaticPartOfTheCactus(CDC* pDC)
 {
 	HENHMETAFILE cactusPart = GetEnhMetaFile(CString("res/cactus_part.emf"));
-
-	// first from bottom not rotated cactus part
-	CRect middleCactusPart(int(mainRect.left + 8.5 * gridSquareSize),
-		mainRect.bottom - 6 * gridSquareSize,
-		int(mainRect.right - 8.5 * gridSquareSize),
-		mainRect.bottom - 3 * gridSquareSize);
-	PlayEnhMetaFile(pDC->m_hDC, cactusPart, middleCactusPart);
-
 	int prevMode = SetGraphicsMode(pDC->m_hDC, GM_ADVANCED);
-	XFORM xform, xformOld;
+	XFORM xformOld;
 	GetWorldTransform(pDC->m_hDC, &xformOld);
-	double firstRotatedCactusSide = 2.0 * gridSquareSize;
-	double firstRotatedCactusDiag = sqrt(2.0 * pow(firstRotatedCactusSide, 2));
-	CRect firstRotatedCactusPart(int(mainRect.left + 10.2 * gridSquareSize), 
-		int(mainRect.bottom - 5.8 * gridSquareSize - firstRotatedCactusDiag),
-		mainRect.right - 8 * gridSquareSize,
-		int(mainRect.bottom - 5.4 * gridSquareSize));
-	
-	double piFourth = M_PI / 4.0;
-	SetWorldTransformTranslate(pDC, float(firstRotatedCactusPart.CenterPoint().x), float(firstRotatedCactusPart.CenterPoint().y));
-	ModifyWorldTransformRotate(pDC, piFourth, MWT_LEFTMULTIPLY);
-	ModifyWorldTransformTranslate(pDC, -float(firstRotatedCactusPart.CenterPoint().x), -float(firstRotatedCactusPart.CenterPoint().y), MWT_LEFTMULTIPLY);
 
-	PlayEnhMetaFile(pDC->m_hDC, cactusPart, firstRotatedCactusPart);
-	CBrush darkGreenBrush(RGB(0, 204, 0));
-	CBrush* oldBrush = pDC->SelectObject(&darkGreenBrush);
-	CRect topRightCircle(int(firstRotatedCactusPart.left + 0.5 * gridSquareSize),
-		firstRotatedCactusPart.top - 0.4 * gridSquareSize,
-		int(firstRotatedCactusPart.right - 0.5 * gridSquareSize),
-		firstRotatedCactusPart.top + 0.4 * gridSquareSize);
-	PlayEnhMetaFile(pDC->m_hDC, cactusPart, CRect(
-		topRightCircle.left,
-		topRightCircle.top - firstRotatedCactusDiag,
-		topRightCircle.right,
-		topRightCircle.CenterPoint().y));
-
-	// restore old transform 
-	SetWorldTransform(pDC->m_hDC, &xformOld);
-
-	PlayEnhMetaFile(pDC->m_hDC, cactusPart, CRect(
-		mainRect.right - 8.2 * gridSquareSize,
-		mainRect.bottom - 8 * gridSquareSize - firstRotatedCactusDiag,
-		mainRect.right - 7.4 * gridSquareSize,
-		mainRect.bottom - 8 * gridSquareSize));
-	pDC->Ellipse(CRect(mainRect.right - (8 + 0.2) * gridSquareSize,
-		mainRect.bottom - (9 - 0.4) * gridSquareSize,
-		mainRect.right - (8 - 0.6) * gridSquareSize,
-		mainRect.bottom - (8 - 0.2) * gridSquareSize));
-
-	// static circles
 	CRect bottomCircle(int(mainRect.left + 9.6 * gridSquareSize),
 		int(mainRect.bottom - 3.4 * gridSquareSize),
 		int(mainRect.left + 10.4 * gridSquareSize),
 		int(mainRect.bottom - 2.6 * gridSquareSize));
-	pDC->Ellipse(bottomCircle);
 
-	CRect topCircle(bottomCircle.left,
+	// first from bottom not rotated cactus part
+	CRect middleCactusPart(mainRect.left + 8.8 * gridSquareSize,
+		mainRect.bottom - 6 * gridSquareSize,
+		mainRect.right - 8.8 * gridSquareSize,
+		mainRect.bottom - 3 * gridSquareSize);
+	PlayEnhMetaFile(pDC->m_hDC, cactusPart, middleCactusPart);
+
+	CRect middleCircle(bottomCircle.left,
 		int(mainRect.bottom - 6.4 * gridSquareSize),
 		bottomCircle.right,
 		int(mainRect.bottom - 5.6 * gridSquareSize));
+
+	CRect firstRotatedCactusPart(
+		mainRect.left + 9.2 * gridSquareSize,
+		mainRect.bottom - 9 * gridSquareSize,
+		mainRect.right - 9.2 * gridSquareSize,
+		mainRect.bottom - 6 * gridSquareSize
+	);
+	SetWorldTransformTranslate(pDC, float(firstRotatedCactusPart.CenterPoint().x), float(firstRotatedCactusPart.bottom));
+	ModifyWorldTransformRotate(pDC, 45 * M_PI / 180, MWT_LEFTMULTIPLY);
+	ModifyWorldTransformTranslate(pDC, -float(firstRotatedCactusPart.CenterPoint().x), -float(firstRotatedCactusPart.bottom), MWT_LEFTMULTIPLY);
+	PlayEnhMetaFile(pDC->m_hDC, cactusPart, firstRotatedCactusPart);
+	
+	CRect topCircle(
+		mainRect.left + (10 - 0.4) * gridSquareSize,
+		firstRotatedCactusPart.top - 0.4 * gridSquareSize,
+		mainRect.left + (10 + 0.4) * gridSquareSize,
+		firstRotatedCactusPart.top + 0.4 * gridSquareSize
+	);
+
+	CRect middleThinCactusPart(
+		mainRect.left + 9.5 * gridSquareSize,
+		mainRect.top + 8 * gridSquareSize,
+		mainRect.right - 9.5 * gridSquareSize,
+		mainRect.top + 11 * gridSquareSize
+	);
+	PlayEnhMetaFile(pDC->m_hDC, cactusPart, middleThinCactusPart);
+
+	// rotate middle thin cactus part to the left by 45 deg = -pi/4
+	ModifyWorldTransformTranslate(pDC, middleThinCactusPart.CenterPoint().x, middleThinCactusPart.bottom, MWT_LEFTMULTIPLY);
+	ModifyWorldTransformRotate(pDC, -M_PI / 4.0, MWT_LEFTMULTIPLY);
+	ModifyWorldTransformTranslate(pDC, -middleThinCactusPart.CenterPoint().x, -middleThinCactusPart.bottom, MWT_LEFTMULTIPLY);
+	PlayEnhMetaFile(pDC->m_hDC, cactusPart, middleThinCactusPart);
+	
+	// reset world transforms and bring back only global part transform
+	ModifyWorldTransformTranslate(pDC, 0.0f, 0.0f, MWT_IDENTITY);
+	ModifyWorldTransformTranslate(pDC, float(firstRotatedCactusPart.CenterPoint().x), float(firstRotatedCactusPart.bottom), MWT_LEFTMULTIPLY);
+	ModifyWorldTransformRotate(pDC, 45 * M_PI / 180, MWT_LEFTMULTIPLY);
+	ModifyWorldTransformTranslate(pDC, -float(firstRotatedCactusPart.CenterPoint().x), -float(firstRotatedCactusPart.bottom), MWT_LEFTMULTIPLY);
+	CBrush darkGreenBrush(RGB(0, 204, 0));
+	CBrush* oldBrush = pDC->SelectObject(&darkGreenBrush);
 	pDC->Ellipse(topCircle);
+
+	// reset all world transforms to draw bottom circle
+	ModifyWorldTransformTranslate(pDC, 0.0f, 0.0f, MWT_IDENTITY);
+	pDC->Ellipse(bottomCircle);
+	pDC->Ellipse(middleCircle);
+
+	// restore old transform 
+	SetWorldTransform(pDC->m_hDC, &xformOld);
 
 	// restore old DC objects
 	pDC->SelectObject(oldBrush);
@@ -343,8 +351,25 @@ void CLab2View::DrawLeftMovingPartOfTheCactus(CDC* pDC)
 	SetWorldTransform(pDC->m_hDC, &xformOld);
 }
 
-void CLab2View::DrawRightMovingPartOfTheCactus(CDC*)
+void CLab2View::DrawRightMovingPartOfTheCactus(CDC* pDC)
 {
+	/*HENHMETAFILE cactusPart = GetEnhMetaFile(CString("res/cactus_part.emf"));
+	HENHMETAFILE rotatingCactusPart = GetEnhMetaFile(CString("res/cactus_part_light.emf"));
+	int prevMode = SetGraphicsMode(pDC->m_hDC, GM_ADVANCED);
+	XFORM xformOld;
+	GetWorldTransform(pDC->m_hDC, &xformOld);
+
+	CRect lightGreenCactusPart(
+		mainRect.right - 7.5 * gridSquareSize,
+		mainRect.top + 8 * gridSquareSize,
+		mainRect.right - 8.5 * gridSquareSize,
+		mainRect.top + 11 * gridSquareSize
+	);
+	PlayEnhMetaFile(pDC->m_hDC, rotatingCactusPart, lightGreenCactusPart);
+
+	SetGraphicsMode(pDC->m_hDC, prevMode);
+	DeleteEnhMetaFile(cactusPart);
+	DeleteEnhMetaFile(rotatingCactusPart);*/
 }
 
 void CLab2View::DrawFlowerPot(CDC*)
