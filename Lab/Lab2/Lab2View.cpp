@@ -313,9 +313,9 @@ void CLab2View::DrawLeftMovingPartOfTheCactus(CDC* pDC)
 	);
 
 	CRect topThickCactusPart(
-		mainRect.left + 9 * gridSquareSize,
+		mainRect.left + 8.8 * gridSquareSize,
 		mainRect.top + 5 * gridSquareSize,
-		mainRect.right - 9 * gridSquareSize,
+		mainRect.right - 8.8 * gridSquareSize,
 		mainRect.top + 8 * gridSquareSize
 	);
 	PlayEnhMetaFile(pDC->m_hDC, cactusPart, topThickCactusPart);
