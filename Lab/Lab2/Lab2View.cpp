@@ -211,22 +211,11 @@ void CLab2View::DrawStaticPartOfTheCactus(CDC* pDC)
 		int(mainRect.bottom - 5.8 * gridSquareSize - firstRotatedCactusDiag),
 		mainRect.right - 8 * gridSquareSize,
 		int(mainRect.bottom - 5.4 * gridSquareSize));
-	xform.eM11 = 1.0f;
-	xform.eM12 = 0.0f;
-	xform.eM21 = 0.0f;
-	xform.eM22 = 1.0f;
-	xform.eDx = float(-firstRotatedCactusPart.CenterPoint().x);
-	xform.eDy = float(-firstRotatedCactusPart.CenterPoint().y);
-	SetWorldTransform(pDC->m_hDC, &xform);
-
+	
 	double piFourth = M_PI / 4.0;
-	xform.eM11 = float(cos(piFourth));
-	xform.eM12 = float(sin(piFourth));
-	xform.eM21 = float(-sin(piFourth));
-	xform.eM22 = float(cos(piFourth));
-	xform.eDx = float(firstRotatedCactusPart.CenterPoint().x);
-	xform.eDy = float(firstRotatedCactusPart.CenterPoint().y);
-	ModifyWorldTransform(pDC->m_hDC, &xform, MWT_RIGHTMULTIPLY);
+	SetWorldTransformTranslate(pDC, float(firstRotatedCactusPart.CenterPoint().x), float(firstRotatedCactusPart.CenterPoint().y));
+	ModifyWorldTransformRotate(pDC, piFourth, MWT_LEFTMULTIPLY);
+	ModifyWorldTransformTranslate(pDC, -float(firstRotatedCactusPart.CenterPoint().x), -float(firstRotatedCactusPart.CenterPoint().y), MWT_LEFTMULTIPLY);
 
 	PlayEnhMetaFile(pDC->m_hDC, cactusPart, firstRotatedCactusPart);
 	CBrush darkGreenBrush(RGB(0, 204, 0));
