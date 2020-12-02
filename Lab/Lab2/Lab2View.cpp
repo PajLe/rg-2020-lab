@@ -41,8 +41,8 @@ CLab2View::CLab2View() noexcept
 	mainRectSideSize = 500;
 	gridSquareSize = mainRectSideSize / 20;
 	mainRect = CRect(0, 0, mainRectSideSize, mainRectSideSize);
-	leftCactusPartDeg = 135;
-	rightCactusPartDeg = 0;
+	leftCactusPartDeg = 315;
+	rightCactusPartDeg = 90;
 	gridToggled = false;
 }
 
@@ -63,41 +63,87 @@ BOOL CLab2View::PreCreateWindow(CREATESTRUCT& cs)
 void CLab2View::OnDraw(CDC* pDC)
 {
 	DrawBackground(pDC);
-	DrawStaticPartOfTheCactus(pDC);
 	DrawLeftMovingPartOfTheCactus(pDC);
 	DrawRightMovingPartOfTheCactus(pDC);
+	DrawStaticPartOfTheCactus(pDC);
 	DrawFlowerPot(pDC);
 	DrawStudentInfo(pDC);
 	if (gridToggled)
 		DrawGrid(pDC);
 
-	/*int prevMode = SetGraphicsMode(pDC->m_hDC, GM_ADVANCED);
-	XFORM xform, xformOld;
-	GetWorldTransform(pDC->m_hDC, &xformOld);
+	//int prevMode = SetGraphicsMode(pDC->m_hDC, GM_ADVANCED);
+	//XFORM xform, xformOld;
+	//GetWorldTransform(pDC->m_hDC, &xformOld);
 
-	CRect rect(300, 300, 500, 500);
+	//CRect rect(200, 200, 300, 350);
+	//CBrush redBrush(RGB(255, 0, 0));
+	//CRect rect2(300, 350, 450, 450);
+	//CBrush greenBrush(RGB(0, 255, 0));
 
-	double piSeventh = M_PI / 4.0;
-	xform.eM11 = 1.0f;
-	xform.eM12 = 0.0f;
-	xform.eM21 = 0.0f;
-	xform.eM22 = 1.0f;
-	xform.eDx = -rect.CenterPoint().x;
-	xform.eDy = -rect.CenterPoint().y;
-	SetWorldTransform(pDC->m_hDC, &xform);
+	//double piSeventh = M_PI / 2.0;
 
-	xform.eM11 = cos(piSeventh);
-	xform.eM12 = sin(piSeventh);
-	xform.eM21 = -sin(piSeventh);
-	xform.eM22 = cos(piSeventh);
-	xform.eDx = rect.CenterPoint().x;
-	xform.eDy = rect.CenterPoint().y;
-	ModifyWorldTransform(pDC->m_hDC, &xform, MWT_RIGHTMULTIPLY);
-	pDC->Rectangle(rect);
+	//xform.eM11 = 1.0f;
+	//xform.eM12 = 0.0f;
+	//xform.eM21 = 0.0f;
+	//xform.eM22 = 1.0f;
+	//xform.eDx = rect.CenterPoint().x;
+	//xform.eDy = rect2.CenterPoint().y;
+	//SetWorldTransform(pDC->m_hDC, &xform);
+
+	//xform.eM11 = cos(piSeventh);
+	//xform.eM12 = sin(piSeventh);
+	//xform.eM21 = -sin(piSeventh);
+	//xform.eM22 = cos(piSeventh);
+	//xform.eDx = 0.0;
+	//xform.eDy = 0.0;
+	//ModifyWorldTransform(pDC->m_hDC, &xform, MWT_LEFTMULTIPLY);
+
+	//xform.eM11 = 1.0f;
+	//xform.eM12 = 0.0f;
+	//xform.eM21 = 0.0f;
+	//xform.eM22 = 1.0f;
+	//xform.eDx = -rect.CenterPoint().x;
+	//xform.eDy = -rect2.CenterPoint().y;
+	//ModifyWorldTransform(pDC->m_hDC, &xform, MWT_LEFTMULTIPLY);
+
+	//CBrush* oldBrush = pDC->SelectObject(&redBrush);
+	//pDC->Ellipse(rect);
+
+	////ModifyWorldTransform(pDC->m_hDC, &xform, MWT_IDENTITY);
+
+	//xform.eM11 = 1.0f;
+	//xform.eM12 = 0.0f;
+	//xform.eM21 = 0.0f;
+	//xform.eM22 = 1.0f;
+	//xform.eDx = rect2.CenterPoint().x;
+	//xform.eDy = rect2.CenterPoint().y;
+	//ModifyWorldTransform(pDC->m_hDC, &xform, MWT_LEFTMULTIPLY);
+
+	//xform.eM11 = cos(piSeventh);
+	//xform.eM12 = sin(piSeventh);
+	//xform.eM21 = -sin(piSeventh);
+	//xform.eM22 = cos(piSeventh);
+	//xform.eDx = 0.0;
+	//xform.eDy = 0.0;
+	//ModifyWorldTransform(pDC->m_hDC, &xform, MWT_LEFTMULTIPLY);
+
+	//xform.eM11 = 1.0f;
+	//xform.eM12 = 0.0f;
+	//xform.eM21 = 0.0f;
+	//xform.eM22 = 1.0f;
+	//xform.eDx = -rect2.CenterPoint().x;
+	//xform.eDy = -rect2.CenterPoint().y;
+	//ModifyWorldTransform(pDC->m_hDC, &xform, MWT_LEFTMULTIPLY);
+	//
+	//pDC->SelectObject(&greenBrush);
+	//pDC->Ellipse(rect2);
 
 
-	SetWorldTransform(pDC->m_hDC, &xformOld);
-	SetGraphicsMode(pDC->m_hDC, prevMode);*/
+	//SetGraphicsMode(pDC->m_hDC, prevMode);
+	//SetWorldTransform(pDC->m_hDC, &xformOld);
+	//pDC->SelectObject(oldBrush);
+	//greenBrush.DeleteObject();
+	//redBrush.DeleteObject();
 }
 
 
@@ -228,8 +274,84 @@ void CLab2View::DrawStaticPartOfTheCactus(CDC* pDC)
 	DeleteEnhMetaFile(cactusPart);
 }
 
-void CLab2View::DrawLeftMovingPartOfTheCactus(CDC*)
+void CLab2View::DrawLeftMovingPartOfTheCactus(CDC* pDC)
 {
+	HENHMETAFILE cactusPart = GetEnhMetaFile(CString("res/cactus_part.emf"));
+	HENHMETAFILE rotatingCactusPart = GetEnhMetaFile(CString("res/cactus_part_light.emf"));
+	int prevMode = SetGraphicsMode(pDC->m_hDC, GM_ADVANCED);
+	XFORM xformOld;
+	GetWorldTransform(pDC->m_hDC, &xformOld);
+
+	CRect lightGreenCactusPart(
+		mainRect.left + 9.2 * gridSquareSize,
+		mainRect.bottom - 9 * gridSquareSize,
+		mainRect.right - 9.2 * gridSquareSize,
+		mainRect.bottom - 6 * gridSquareSize
+	);
+	SetWorldTransformTranslate(pDC, float(lightGreenCactusPart.CenterPoint().x), float(lightGreenCactusPart.bottom));
+	ModifyWorldTransformRotate(pDC, leftCactusPartDeg * M_PI / 180, MWT_LEFTMULTIPLY);
+	ModifyWorldTransformTranslate(pDC, -float(lightGreenCactusPart.CenterPoint().x), -float(lightGreenCactusPart.bottom), MWT_LEFTMULTIPLY);
+	PlayEnhMetaFile(pDC->m_hDC, rotatingCactusPart, lightGreenCactusPart);
+
+	CRect bottomCircle(
+		mainRect.left + (10 - 0.4) * gridSquareSize,
+		lightGreenCactusPart.top - 0.4 * gridSquareSize,
+		mainRect.left + (10 + 0.4) * gridSquareSize,
+		lightGreenCactusPart.top + 0.4 * gridSquareSize
+	);
+
+	CRect middleThinCactusPart(
+		mainRect.left + 9.5 * gridSquareSize,
+		mainRect.top + 8 * gridSquareSize,
+		mainRect.right - 9.5 * gridSquareSize,
+		mainRect.top + 11 * gridSquareSize
+	);
+	PlayEnhMetaFile(pDC->m_hDC, cactusPart, middleThinCactusPart);
+
+	CRect topCircle(
+		mainRect.left + (10 - 0.4) * gridSquareSize,
+		middleThinCactusPart.top - 0.4 * gridSquareSize,
+		mainRect.left + (10 + 0.4) * gridSquareSize,
+		middleThinCactusPart.top + 0.4 * gridSquareSize
+	);
+
+	CRect topThickCactusPart(
+		mainRect.left + 9 * gridSquareSize,
+		mainRect.top + 5 * gridSquareSize,
+		mainRect.right - 9 * gridSquareSize,
+		mainRect.top + 8 * gridSquareSize
+	);
+	PlayEnhMetaFile(pDC->m_hDC, cactusPart, topThickCactusPart);
+
+	// rotate thin cactus around its bottom to the right by pi/4
+	ModifyWorldTransformTranslate(pDC, middleThinCactusPart.CenterPoint().x, middleThinCactusPart.bottom, MWT_LEFTMULTIPLY);
+	ModifyWorldTransformRotate(pDC, M_PI / 4.0, MWT_LEFTMULTIPLY);
+	ModifyWorldTransformTranslate(pDC, -middleThinCactusPart.CenterPoint().x, -middleThinCactusPart.bottom, MWT_LEFTMULTIPLY);
+	PlayEnhMetaFile(pDC->m_hDC, cactusPart, middleThinCactusPart);
+
+	// rotate thin cactus around its bottom to the left by pi/4 (reset to middle) + pi/4 (rotate to the left) = pi/2 to the left = -pi/2
+	ModifyWorldTransformTranslate(pDC, middleThinCactusPart.CenterPoint().x, middleThinCactusPart.bottom, MWT_LEFTMULTIPLY);
+	ModifyWorldTransformRotate(pDC, -M_PI / 2.0, MWT_LEFTMULTIPLY);
+	ModifyWorldTransformTranslate(pDC, -middleThinCactusPart.CenterPoint().x, -middleThinCactusPart.bottom, MWT_LEFTMULTIPLY);
+	PlayEnhMetaFile(pDC->m_hDC, cactusPart, middleThinCactusPart);
+
+	// reset world transforms and bring back only global part transform
+	ModifyWorldTransformTranslate(pDC, 0.0f, 0.0f, MWT_IDENTITY);
+	ModifyWorldTransformTranslate(pDC, float(lightGreenCactusPart.CenterPoint().x), float(lightGreenCactusPart.bottom), MWT_LEFTMULTIPLY);
+	ModifyWorldTransformRotate(pDC, leftCactusPartDeg * M_PI / 180, MWT_LEFTMULTIPLY);
+	ModifyWorldTransformTranslate(pDC, -float(lightGreenCactusPart.CenterPoint().x), -float(lightGreenCactusPart.bottom), MWT_LEFTMULTIPLY);
+	CBrush darkGreenBrush(RGB(0, 204, 0));
+	CBrush* oldBrush = pDC->SelectObject(&darkGreenBrush);
+	pDC->Ellipse(bottomCircle);
+	pDC->Ellipse(topCircle);
+
+	// restore old objects
+	pDC->SelectObject(oldBrush);
+	darkGreenBrush.DeleteObject();
+	DeleteEnhMetaFile(cactusPart);
+	DeleteEnhMetaFile(rotatingCactusPart);
+	// restore old transform 
+	SetWorldTransform(pDC->m_hDC, &xformOld);
 }
 
 void CLab2View::DrawRightMovingPartOfTheCactus(CDC*)
@@ -277,6 +399,54 @@ void CLab2View::DrawGrid(CDC* pDC)
 
 int CLab2View::mod(int k, int n) { return ((k %= n) < 0) ? k + n : k; }
 
+void CLab2View::SetWorldTransformRotate(CDC* pDC, double radians)
+{
+	XFORM xform;
+	xform.eM11 = float(cos(radians));
+	xform.eM12 = float(sin(radians));
+	xform.eM21 = float(-sin(radians));
+	xform.eM22 = float(cos(radians));
+	xform.eDx = 0.0f;
+	xform.eDy = 0.0f;
+	SetWorldTransform(pDC->m_hDC, &xform);
+}
+
+void CLab2View::SetWorldTransformTranslate(CDC* pDC, float eDx, float eDy)
+{
+	XFORM xform;
+	xform.eM11 = 1.0f;
+	xform.eM12 = 0.0f;
+	xform.eM21 = 0.0f;
+	xform.eM22 = 1.0f;
+	xform.eDx = eDx;
+	xform.eDy = eDy;
+	SetWorldTransform(pDC->m_hDC, &xform);
+}
+
+void CLab2View::ModifyWorldTransformRotate(CDC* pDC, double radians, DWORD modifyMode)
+{
+	XFORM xform;
+	xform.eM11 = float(cos(radians));
+	xform.eM12 = float(sin(radians));
+	xform.eM21 = float(-sin(radians));
+	xform.eM22 = float(cos(radians));
+	xform.eDx = 0.0f;
+	xform.eDy = 0.0f;
+	ModifyWorldTransform(pDC->m_hDC, &xform, modifyMode);
+}
+
+void CLab2View::ModifyWorldTransformTranslate(CDC* pDC, float eDx, float eDy, DWORD modifyMode)
+{
+	XFORM xform;
+	xform.eM11 = 1.0f;
+	xform.eM12 = 0.0f;
+	xform.eM21 = 0.0f;
+	xform.eM22 = 1.0f;
+	xform.eDx = eDx;
+	xform.eDy = eDy;
+	ModifyWorldTransform(pDC->m_hDC, &xform, modifyMode);
+}
+
 CLab2Doc* CLab2View::GetDocument() const // non-debug version is inline
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CLab2Doc)));
@@ -306,11 +476,11 @@ void CLab2View::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 		Invalidate();
 		break;
 	case 0x41: // A
-		leftCactusPartDeg = mod((rightCactusPartDeg - 6), 360);
+		leftCactusPartDeg = mod((leftCactusPartDeg - 6), 360);
 		Invalidate();
 		break;
 	case 0x44: // D
-		leftCactusPartDeg = mod((rightCactusPartDeg + 6), 360);
+		leftCactusPartDeg = mod((leftCactusPartDeg + 6), 360);
 		Invalidate();
 		break;
 	}

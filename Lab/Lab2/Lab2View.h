@@ -52,6 +52,11 @@ private:
 	void DrawGrid(CDC*);
 	int mod(int k, int n);
 
+	void ModifyWorldTransformRotate(CDC* pDC, double radians, DWORD modifyMode);
+	void ModifyWorldTransformTranslate(CDC* pDC, float eDx, float eDy, DWORD modifyMode);
+	void SetWorldTransformRotate(CDC* pDC, double radians);
+	void SetWorldTransformTranslate(CDC* pDC, float eDx, float eDy);
+
 protected:
 
 // Generated message map functions
