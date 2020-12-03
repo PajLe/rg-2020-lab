@@ -446,8 +446,35 @@ void CLab2View::DrawFlowerPot(CDC* pDC)
 	orangeBrush.DeleteObject();
 }
 
-void CLab2View::DrawStudentInfo(CDC*)
+void CLab2View::DrawStudentInfo(CDC* pDC)
 {
+	int oldBkMode = pDC->SetBkMode(TRANSPARENT);
+
+	int nHeight = 1.4 * gridSquareSize ;
+	CString sFaceName("Arial");
+	CFont font;
+	font.CreateFontW(nHeight, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, sFaceName);
+	CFont* oldFont = pDC->SelectObject(&font);
+
+	XFORM xformOld;
+	GetWorldTransform(pDC->m_hDC, &xformOld);
+	CPoint autographPosition(mainRect.right - 0.8 * gridSquareSize, mainRect.top + gridSquareSize);
+	SetWorldTransformTranslate(pDC, autographPosition.x, autographPosition.y);
+	ModifyWorldTransformRotate(pDC, M_PI / 2.0, MWT_LEFTMULTIPLY);
+	ModifyWorldTransformTranslate(pDC, -autographPosition.x, -autographPosition.y, MWT_LEFTMULTIPLY);
+
+	CString autograph("16466 Pavle Aleksov");
+	pDC->TextOutW(autographPosition.x, autographPosition.y, autograph); // shadow
+	COLORREF oldTextColor = pDC->SetTextColor(RGB(255, 255, 0));
+	pDC->TextOutW(autographPosition.x - 2, autographPosition.y + 2, autograph);
+
+	// restore old transform 
+	SetWorldTransform(pDC->m_hDC, &xformOld);
+
+	pDC->SetBkMode(oldBkMode);
+	pDC->SetTextColor(oldTextColor);
+	pDC->SelectObject(oldFont);
+	font.DeleteObject();
 }
 
 void CLab2View::DrawGrid(CDC* pDC)
