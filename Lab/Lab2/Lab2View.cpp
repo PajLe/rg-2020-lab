@@ -414,8 +414,36 @@ void CLab2View::DrawRightMovingPartOfTheCactus(CDC* pDC)
 	DeleteEnhMetaFile(rotatingCactusPart);
 }
 
-void CLab2View::DrawFlowerPot(CDC*)
+void CLab2View::DrawFlowerPot(CDC* pDC)
 {
+	CPoint polygonPartOfThePot[4] = {
+		{mainRect.left + 8 * gridSquareSize, mainRect.bottom - 2 * gridSquareSize},
+		{int(mainRect.left + 8.4 * gridSquareSize), mainRect.bottom - 1},
+		{int(mainRect.right - 8.4 * gridSquareSize), mainRect.bottom - 1},
+		{mainRect.right - 8 * gridSquareSize, mainRect.bottom - 2 * gridSquareSize}
+	};
+
+	CRect flatPartOfThePot(
+		mainRect.left + 7.6 * gridSquareSize,
+		mainRect.bottom - 2.8 * gridSquareSize,
+		mainRect.right - 7.6 * gridSquareSize,
+		mainRect.bottom - 2 * gridSquareSize
+	);
+
+	CBrush orangeBrush(RGB(222, 148, 0));
+	CBrush* oldBrush = pDC->SelectObject(&orangeBrush);
+	pDC->Rectangle(flatPartOfThePot);
+
+	CPen* oldPen = (CPen*)pDC->SelectStockObject(NULL_PEN);
+	pDC->Polygon(polygonPartOfThePot, 4);
+	pDC->SelectObject(oldPen);
+	pDC->MoveTo(int(mainRect.left + 8.4 * gridSquareSize), mainRect.bottom - 2);
+	pDC->LineTo(mainRect.left + 8 * gridSquareSize, mainRect.bottom - 2 * gridSquareSize);
+	pDC->LineTo(mainRect.right - 8 * gridSquareSize, mainRect.bottom - 2 * gridSquareSize);
+	pDC->LineTo(int(mainRect.right - 8.4 * gridSquareSize), mainRect.bottom - 1);
+
+	pDC->SelectObject(oldBrush);
+	orangeBrush.DeleteObject();
 }
 
 void CLab2View::DrawStudentInfo(CDC*)
