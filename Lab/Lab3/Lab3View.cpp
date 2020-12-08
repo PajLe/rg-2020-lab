@@ -38,8 +38,9 @@ END_MESSAGE_MAP()
 
 CLab3View::CLab3View() noexcept
 {
-	// TODO: add construction code here
-
+	mainRectSideSize = 500;
+	gridSquareSize = mainRectSideSize / 20;
+	mainRect = CRect(0, 0, mainRectSideSize, mainRectSideSize);
 }
 
 CLab3View::~CLab3View()
@@ -58,45 +59,18 @@ BOOL CLab3View::PreCreateWindow(CREATESTRUCT& cs)
 
 void CLab3View::OnDraw(CDC* pDC)
 {
-	DImage testImage;
-	testImage.Load(CString("res/22.dib"));
-	int w = testImage.Width();
-	int h = testImage.Height();
-	CBitmap* bmpImage = testImage.GetCBitmap();
-	
-	CBitmap bmpMask;
-	bmpMask.CreateBitmap(w, h, 1, 1, NULL);
+	CDC* memDC = new CDC();
+	memDC->CreateCompatibleDC(pDC);
+	CBitmap a;
+	a.CreateCompatibleBitmap(pDC, mainRect.Width(), mainRect.Height());
+	memDC->SelectObject(&a);
+	a.DeleteObject();
+	memDC->BitBlt(0, 0, mainRect.Width(), mainRect.Height(), pDC, 0, 0, SRCCOPY);
 
-	CDC SrcDC;
-	SrcDC.CreateCompatibleDC(pDC);
-	CDC DstDC; 
-	DstDC.CreateCompatibleDC(pDC);
-	CBitmap* pOldSrcBmp = SrcDC.SelectObject(bmpImage);
-	CBitmap* pOldDstBmp = DstDC.SelectObject(&bmpMask);
-
-	COLORREF clrTopLeft = SrcDC.GetPixel(0, 0);
-	SrcDC.SetBkColor(clrTopLeft);
-	DstDC.BitBlt(0, 0, w, h, &SrcDC, 0, 0, SRCCOPY);
-
-	SrcDC.SetTextColor(RGB(255, 255, 255)); 
-	SrcDC.SetBkColor(RGB(0, 0, 0)); 
-	SrcDC.BitBlt(0, 0, w, h, &DstDC, 0, 0, SRCAND);
-	SrcDC.DeleteDC();
-	DstDC.DeleteDC();
-
-	CDC* MemDC = new CDC();
-	MemDC->CreateCompatibleDC(pDC); 
-	CBitmap* bmpOldT = MemDC->SelectObject(&bmpMask);
-	pDC->BitBlt(0, 0, w, h, MemDC, 0, 0, SRCAND);
-	MemDC->SelectObject(bmpImage);
-	pDC->BitBlt(0, 0, w, h, MemDC, 0, 0, SRCPAINT);
-	MemDC->SelectObject(bmpOldT); 
-	delete MemDC;
-	//pDC->BitBlt(0, 0, w, h, &SrcDC, 0, 0, SRCCOPY);
-
-	
-
-	bmpMask.DeleteObject();
+	DrawInMemDC(memDC);
+	pDC->BitBlt(0, 0, 500, 500, memDC, 0, 0, SRCCOPY);
+	memDC->DeleteDC();
+	delete memDC;
 }
 
 
@@ -130,6 +104,97 @@ void CLab3View::AssertValid() const
 void CLab3View::Dump(CDumpContext& dc) const
 {
 	CView::Dump(dc);
+}
+
+void CLab3View::DrawInMemDC(CDC* pDC)
+{
+	DrawGrid(pDC);
+	DrawTopLeft(pDC);
+	DrawTopMiddle(pDC);
+	DrawTopRight(pDC);
+	DrawCenterLeft(pDC);
+	DrawCenterMiddle(pDC);
+	DrawCenterRight(pDC);
+	DrawBottomLeft(pDC);
+	DrawBottomMiddle(pDC);
+	DrawBottomRight(pDC);
+}
+
+void CLab3View::DrawGrid(CDC* pDC)
+{
+}
+
+void CLab3View::DrawTopLeft(CDC* pDC)
+{
+	DImage dimg;
+	dimg.Load(CString("res/12.dib"));
+	int w = dimg.Width();
+	int h = dimg.Height();
+	CBitmap* bmpImage = dimg.GetCBitmap();
+
+	/////////////////////////////////////// modify
+	CBitmap bmpMask;
+	bmpMask.CreateBitmap(w, h, 1, 1, NULL);
+	CDC SrcDC;
+	SrcDC.CreateCompatibleDC(pDC);
+	CDC DstDC;
+	DstDC.CreateCompatibleDC(pDC);
+	CBitmap* pOldSrcBmp = SrcDC.SelectObject(bmpImage);
+	CBitmap* pOldDstBmp = DstDC.SelectObject(&bmpMask);
+
+	COLORREF clrTopLeft = SrcDC.GetPixel(0, 0);
+	SrcDC.SetBkColor(clrTopLeft);
+	DstDC.BitBlt(0, 0, w, h, &SrcDC, 0, 0, SRCCOPY);
+
+	SrcDC.SetTextColor(RGB(255, 255, 255));
+	SrcDC.SetBkColor(RGB(0, 0, 0));
+	SrcDC.BitBlt(0, 0, w, h, &DstDC, 0, 0, SRCAND);
+	SrcDC.DeleteDC();
+	DstDC.DeleteDC();
+	/////////////
+	CDC* MemDC = new CDC();
+	MemDC->CreateCompatibleDC(pDC);
+	CBitmap* bmpOldT = MemDC->SelectObject(&bmpMask);
+	pDC->BitBlt(0, 0, w, h, MemDC, 0, 0, SRCAND);
+	MemDC->SelectObject(bmpImage);
+	pDC->BitBlt(0, 0, w, h, MemDC, 0, 0, SRCPAINT);
+	MemDC->SelectObject(bmpOldT);
+	delete MemDC;
+	//pDC->BitBlt(0, 0, w, h, &SrcDC, 0, 0, SRCCOPY);
+
+	bmpMask.DeleteObject();
+}
+
+void CLab3View::DrawTopMiddle(CDC* pDC)
+{
+}
+
+void CLab3View::DrawTopRight(CDC* pDC)
+{
+}
+
+void CLab3View::DrawCenterLeft(CDC* pDC)
+{
+}
+
+void CLab3View::DrawCenterMiddle(CDC* pDC)
+{
+}
+
+void CLab3View::DrawCenterRight(CDC* pDC)
+{
+}
+
+void CLab3View::DrawBottomLeft(CDC* pDC)
+{
+}
+
+void CLab3View::DrawBottomMiddle(CDC* pDC)
+{
+}
+
+void CLab3View::DrawBottomRight(CDC* pDC)
+{
 }
 
 void CLab3View::ModifyWorldTransformRotate(CDC* pDC, float angle, bool rightMultiply)

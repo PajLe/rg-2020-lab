@@ -14,6 +14,10 @@ protected: // create from serialization only
 // Attributes
 public:
 	CLab3Doc* GetDocument() const;
+private:
+	CRect mainRect;
+	int mainRectSideSize;
+	int gridSquareSize;
 
 // Operations
 public:
@@ -35,6 +39,19 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 private:
+	void DrawInMemDC(CDC* pDC);
+
+	void DrawGrid(CDC* pDC);
+	void DrawTopLeft(CDC* pDC);
+	void DrawTopMiddle(CDC* pDC);
+	void DrawTopRight(CDC* pDC);
+	void DrawCenterLeft(CDC* pDC);
+	void DrawCenterMiddle(CDC* pDC);
+	void DrawCenterRight(CDC* pDC);
+	void DrawBottomLeft(CDC* pDC);
+	void DrawBottomMiddle(CDC* pDC);
+	void DrawBottomRight(CDC* pDC);
+
 	void ModifyWorldTransformRotate(CDC* pDC, float angle, bool rightMultiply);
 	void ModifyWorldTransformTranslate(CDC* pDC, float eDx, float eDy, bool rightMultiply);
 	void ModifyWorldTransformScale(CDC* pDC, float sX, float sY, bool rightMultiply);
