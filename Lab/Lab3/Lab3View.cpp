@@ -21,6 +21,7 @@
 #define _USE_MATH_DEFINES
 #endif // !_USE_MATH_DEFINES
 #include <math.h>
+#include "DImage.h"
 
 // CLab3View
 
@@ -57,7 +58,45 @@ BOOL CLab3View::PreCreateWindow(CREATESTRUCT& cs)
 
 void CLab3View::OnDraw(CDC* pDC)
 {
+	DImage testImage;
+	testImage.Load(CString("res/22.dib"));
+	int w = testImage.Width();
+	int h = testImage.Height();
+	CBitmap* bmpImage = testImage.GetCBitmap();
 	
+	CBitmap bmpMask;
+	bmpMask.CreateBitmap(w, h, 1, 1, NULL);
+
+	CDC SrcDC;
+	SrcDC.CreateCompatibleDC(pDC);
+	CDC DstDC; 
+	DstDC.CreateCompatibleDC(pDC);
+	CBitmap* pOldSrcBmp = SrcDC.SelectObject(bmpImage);
+	CBitmap* pOldDstBmp = DstDC.SelectObject(&bmpMask);
+
+	COLORREF clrTopLeft = SrcDC.GetPixel(0, 0);
+	SrcDC.SetBkColor(clrTopLeft);
+	DstDC.BitBlt(0, 0, w, h, &SrcDC, 0, 0, SRCCOPY);
+
+	SrcDC.SetTextColor(RGB(255, 255, 255)); 
+	SrcDC.SetBkColor(RGB(0, 0, 0)); 
+	SrcDC.BitBlt(0, 0, w, h, &DstDC, 0, 0, SRCAND);
+	SrcDC.DeleteDC();
+	DstDC.DeleteDC();
+
+	CDC* MemDC = new CDC();
+	MemDC->CreateCompatibleDC(pDC); 
+	CBitmap* bmpOldT = MemDC->SelectObject(&bmpMask);
+	pDC->BitBlt(0, 0, w, h, MemDC, 0, 0, SRCAND);
+	MemDC->SelectObject(bmpImage);
+	pDC->BitBlt(0, 0, w, h, MemDC, 0, 0, SRCPAINT);
+	MemDC->SelectObject(bmpOldT); 
+	delete MemDC;
+	//pDC->BitBlt(0, 0, w, h, &SrcDC, 0, 0, SRCCOPY);
+
+	
+
+	bmpMask.DeleteObject();
 }
 
 
