@@ -94,6 +94,54 @@ void CLab3View::Dump(CDumpContext& dc) const
 	CView::Dump(dc);
 }
 
+void CLab3View::ModifyWorldTransformRotate(CDC* pDC, double radians, bool rightMultiply)
+{
+	XFORM xform;
+	xform.eM11 = float(cos(radians));
+	xform.eM12 = float(sin(radians));
+	xform.eM21 = float(-sin(radians));
+	xform.eM22 = float(cos(radians));
+	xform.eDx = 0.0f;
+	xform.eDy = 0.0f;
+	ModifyWorldTransform(pDC->m_hDC, &xform, rightMultiply ? MWT_RIGHTMULTIPLY : MWT_LEFTMULTIPLY);
+}
+
+void CLab3View::ModifyWorldTransformTranslate(CDC* pDC, float eDx, float eDy, bool rightMultiply)
+{
+	XFORM xform;
+	xform.eM11 = 1.0f;
+	xform.eM12 = 0.0f;
+	xform.eM21 = 0.0f;
+	xform.eM22 = 1.0f;
+	xform.eDx = eDx;
+	xform.eDy = eDy;
+	ModifyWorldTransform(pDC->m_hDC, &xform, rightMultiply ? MWT_RIGHTMULTIPLY : MWT_LEFTMULTIPLY);
+}
+
+void CLab3View::ModifyWorldTransformScale(CDC* pDC, float sX, float sY, bool rightMultiply)
+{
+	XFORM xform;
+	xform.eM11 = sX;
+	xform.eM12 = 0.0f;
+	xform.eM21 = 0.0f;
+	xform.eM22 = sY;
+	xform.eDx = 0.f;
+	xform.eDy = 0.f;
+	ModifyWorldTransform(pDC->m_hDC, &xform, rightMultiply ? MWT_RIGHTMULTIPLY : MWT_LEFTMULTIPLY);
+}
+
+void CLab3View::ModifyWorldTransformMirror(CDC* pDC, bool mx, bool my, bool rightMultiply)
+{
+	XFORM xform;
+	xform.eM11 = mx ? -1.0f : 1.0f;
+	xform.eM12 = 0.0f;
+	xform.eM21 = 0.0f;
+	xform.eM22 = my ? -1.0f : 1.0f;
+	xform.eDx = 0.f;
+	xform.eDy = 0.f;
+	ModifyWorldTransform(pDC->m_hDC, &xform, rightMultiply ? MWT_RIGHTMULTIPLY : MWT_LEFTMULTIPLY);
+}
+
 CLab3Doc* CLab3View::GetDocument() const // non-debug version is inline
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CLab3Doc)));

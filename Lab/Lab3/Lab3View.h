@@ -34,7 +34,11 @@ public:
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
-
+private:
+	void ModifyWorldTransformRotate(CDC* pDC, double radians, bool rightMultiply);
+	void ModifyWorldTransformTranslate(CDC* pDC, float eDx, float eDy, bool rightMultiply);
+	void ModifyWorldTransformScale(CDC* pDC, float sX, float sY, bool rightMultiply);
+	void ModifyWorldTransformMirror(CDC* pDC, bool mx, bool my, bool rightMultiply);
 protected:
 
 // Generated message map functions
