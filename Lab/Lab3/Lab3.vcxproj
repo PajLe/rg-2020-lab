@@ -213,6 +213,15 @@
     <None Include="res\Lab3.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\1.dib" />
+    <Image Include="res\12.dib" />
+    <Image Include="res\2.dib" />
+    <Image Include="res\22.dib" />
+    <Image Include="res\3.dib" />
+    <Image Include="res\4.dib" />
+    <Image Include="res\5.dib" />
+    <Image Include="res\6.dib" />
+    <Image Include="res\7.dib" />
     <Image Include="res\Lab3.ico" />
     <Image Include="res\Lab3Doc.ico" />
     <Image Include="res\Toolbar.bmp" />

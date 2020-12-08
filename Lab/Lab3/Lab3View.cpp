@@ -55,14 +55,9 @@ BOOL CLab3View::PreCreateWindow(CREATESTRUCT& cs)
 
 // CLab3View drawing
 
-void CLab3View::OnDraw(CDC* /*pDC*/)
+void CLab3View::OnDraw(CDC* pDC)
 {
-	CLab3Doc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-	if (!pDoc)
-		return;
-
-	// TODO: add draw code for native data here
+	
 }
 
 
