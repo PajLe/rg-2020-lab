@@ -17,6 +17,10 @@
 #define new DEBUG_NEW
 #endif
 
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif // !_USE_MATH_DEFINES
+#include <math.h>
 
 // CLab3View
 
@@ -94,8 +98,9 @@ void CLab3View::Dump(CDumpContext& dc) const
 	CView::Dump(dc);
 }
 
-void CLab3View::ModifyWorldTransformRotate(CDC* pDC, double radians, bool rightMultiply)
+void CLab3View::ModifyWorldTransformRotate(CDC* pDC, float angle, bool rightMultiply)
 {
+	double radians = angle * M_PI / 180.0;
 	XFORM xform;
 	xform.eM11 = float(cos(radians));
 	xform.eM12 = float(sin(radians));
