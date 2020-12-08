@@ -22,7 +22,7 @@ public:
 	// Direktne izmene
 	unsigned char* GetDIBBits(){return m_pBuf;} // Vraca pointer na prvi bajt sa pikselima
 	void	Update();		// Pozvati nakon direktne izmene bafera.
-	
+	CBitmap* GetCBitmap();
 protected:
 	void Flip();
 	void Convert(int oldBPP, int newBPP);

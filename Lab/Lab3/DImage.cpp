@@ -4824,6 +4824,11 @@ void DImage::Update()
     m_pBmp->SetBitmapBits(m_nWidth * m_nHeight * m_nBPP, m_pBuf);
 }
 
+CBitmap* DImage::GetCBitmap()
+{
+    return m_pBmp;
+}
+
 /*void DImage::Unpack()
 {
     unsigned int lineWidth = GetScanlineWidth();
