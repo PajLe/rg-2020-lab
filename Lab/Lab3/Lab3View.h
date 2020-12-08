@@ -41,6 +41,8 @@ public:
 private:
 	void DrawInMemDC(CDC* pDC);
 
+	CBitmap* MakeImageTransparentAndReturnMask(CDC* pDC, CBitmap* image, int width, int height);
+
 	void DrawGrid(CDC* pDC);
 	void DrawTopLeft(CDC* pDC);
 	void DrawTopMiddle(CDC* pDC);

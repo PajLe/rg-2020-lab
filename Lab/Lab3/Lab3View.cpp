@@ -120,6 +120,30 @@ void CLab3View::DrawInMemDC(CDC* pDC)
 	DrawBottomRight(pDC);
 }
 
+CBitmap* CLab3View::MakeImageTransparentAndReturnMask(CDC* pDC, CBitmap* image, int width, int height)
+{
+	CBitmap* bmpMask = new CBitmap();
+	bmpMask->CreateBitmap(width, height, 1, 1, NULL);
+	CDC SrcDC;
+	SrcDC.CreateCompatibleDC(pDC);
+	CDC DstDC;
+	DstDC.CreateCompatibleDC(pDC);
+	CBitmap* pOldSrcBmp = SrcDC.SelectObject(image);
+	CBitmap* pOldDstBmp = DstDC.SelectObject(bmpMask);
+
+	COLORREF clrTopLeft = SrcDC.GetPixel(0, 0);
+	SrcDC.SetBkColor(clrTopLeft);
+	DstDC.BitBlt(0, 0, width, height, &SrcDC, 0, 0, SRCCOPY);
+
+	SrcDC.SetTextColor(RGB(255, 255, 255));
+	SrcDC.SetBkColor(RGB(0, 0, 0));
+	SrcDC.BitBlt(0, 0, width, height, &DstDC, 0, 0, SRCAND);
+	SrcDC.DeleteDC();
+	DstDC.DeleteDC();
+
+	return bmpMask;
+}
+
 void CLab3View::DrawGrid(CDC* pDC)
 {
 }
@@ -132,37 +156,21 @@ void CLab3View::DrawTopLeft(CDC* pDC)
 	int h = dimg.Height();
 	CBitmap* bmpImage = dimg.GetCBitmap();
 
-	/////////////////////////////////////// modify
-	CBitmap bmpMask;
-	bmpMask.CreateBitmap(w, h, 1, 1, NULL);
-	CDC SrcDC;
-	SrcDC.CreateCompatibleDC(pDC);
-	CDC DstDC;
-	DstDC.CreateCompatibleDC(pDC);
-	CBitmap* pOldSrcBmp = SrcDC.SelectObject(bmpImage);
-	CBitmap* pOldDstBmp = DstDC.SelectObject(&bmpMask);
+	// transparency
+	CBitmap* mask = MakeImageTransparentAndReturnMask(pDC, bmpImage, w, h);
 
-	COLORREF clrTopLeft = SrcDC.GetPixel(0, 0);
-	SrcDC.SetBkColor(clrTopLeft);
-	DstDC.BitBlt(0, 0, w, h, &SrcDC, 0, 0, SRCCOPY);
+	CDC* memDC = new CDC();
+	memDC->CreateCompatibleDC(pDC);
+	memDC->SelectObject(mask);
+	pDC->BitBlt(0, 0, w, h, memDC, 0, 0, SRCAND);
+	memDC->SelectObject(bmpImage);
+	pDC->BitBlt(0, 0, w, h, memDC, 0, 0, SRCPAINT);
 
-	SrcDC.SetTextColor(RGB(255, 255, 255));
-	SrcDC.SetBkColor(RGB(0, 0, 0));
-	SrcDC.BitBlt(0, 0, w, h, &DstDC, 0, 0, SRCAND);
-	SrcDC.DeleteDC();
-	DstDC.DeleteDC();
-	/////////////
-	CDC* MemDC = new CDC();
-	MemDC->CreateCompatibleDC(pDC);
-	CBitmap* bmpOldT = MemDC->SelectObject(&bmpMask);
-	pDC->BitBlt(0, 0, w, h, MemDC, 0, 0, SRCAND);
-	MemDC->SelectObject(bmpImage);
-	pDC->BitBlt(0, 0, w, h, MemDC, 0, 0, SRCPAINT);
-	MemDC->SelectObject(bmpOldT);
-	delete MemDC;
-	//pDC->BitBlt(0, 0, w, h, &SrcDC, 0, 0, SRCCOPY);
+	memDC->DeleteDC();
+	delete memDC;
 
-	bmpMask.DeleteObject();
+	mask->DeleteObject();
+	delete mask;
 }
 
 void CLab3View::DrawTopMiddle(CDC* pDC)
