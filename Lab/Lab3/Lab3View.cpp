@@ -151,7 +151,7 @@ void CLab3View::DrawGrid(CDC* pDC)
 void CLab3View::DrawTopLeft(CDC* pDC)
 {
 	DImage dimg;
-	dimg.Load(CString("res/12.dib"));
+	dimg.Load(CString("res/11.dib"));
 	int w = dimg.Width();
 	int h = dimg.Height();
 	CBitmap* bmpImage = dimg.GetCBitmap();
@@ -159,6 +159,13 @@ void CLab3View::DrawTopLeft(CDC* pDC)
 	// transparency
 	CBitmap* mask = MakeImageTransparentAndReturnMask(pDC, bmpImage, w, h);
 
+	XFORM oldTransform;
+	GetWorldTransform(pDC->m_hDC, &oldTransform);
+
+	int prevMode = SetGraphicsMode(pDC->m_hDC, GM_ADVANCED);
+	ModifyWorldTransformTranslate(pDC, w / 2, h / 2, false);
+	ModifyWorldTransformRotate(pDC, 57, false);
+	ModifyWorldTransformTranslate(pDC, -w / 2, -h / 2, false);
 	CDC* memDC = new CDC();
 	memDC->CreateCompatibleDC(pDC);
 	memDC->SelectObject(mask);
@@ -171,6 +178,8 @@ void CLab3View::DrawTopLeft(CDC* pDC)
 
 	mask->DeleteObject();
 	delete mask;
+	SetWorldTransform(pDC->m_hDC, &oldTransform);
+	SetGraphicsMode(pDC->m_hDC, prevMode);
 }
 
 void CLab3View::DrawTopMiddle(CDC* pDC)
