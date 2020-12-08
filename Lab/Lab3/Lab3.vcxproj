@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DImage.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Lab3.h" />
     <ClInclude Include="Lab3Doc.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DImage.cpp" />
     <ClCompile Include="Lab3.cpp" />
     <ClCompile Include="Lab3Doc.cpp" />
     <ClCompile Include="Lab3View.cpp" />
