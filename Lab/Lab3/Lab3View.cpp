@@ -68,6 +68,7 @@ void CLab3View::OnDraw(CDC* pDC)
 	memDC->BitBlt(0, 0, mainRect.Width(), mainRect.Height(), pDC, 0, 0, SRCCOPY);
 
 	DrawInMemDC(memDC);
+
 	pDC->BitBlt(0, 0, 500, 500, memDC, 0, 0, SRCCOPY);
 	memDC->DeleteDC();
 	delete memDC;
@@ -146,6 +147,33 @@ CBitmap* CLab3View::MakeImageTransparentAndReturnMask(CDC* pDC, CBitmap* image, 
 
 void CLab3View::DrawGrid(CDC* pDC)
 {
+	CPen gridWhitePen(PS_SOLID, 2, RGB(221, 221, 221));
+	POINT verticalGridlinePoints[42];
+	POINT horizontalGridlinePoints[42];
+	DWORD pointCount[42];
+	for (int i = 0; i < 42; i++)
+		pointCount[i] = 2; // all polyLines have 2 points
+
+	for (int i = 0; i < 42 - 1; i += 2)
+	{
+		verticalGridlinePoints[i] = { mainRect.left + i / 2 * gridSquareSize, mainRect.top }; // top points
+		verticalGridlinePoints[i + 1] = { mainRect.left + i / 2 * gridSquareSize, mainRect.bottom }; // bottom points
+		horizontalGridlinePoints[i] = { mainRect.left, mainRect.top + i / 2 * gridSquareSize }; // left points
+		horizontalGridlinePoints[i + 1] = { mainRect.right, mainRect.top + i / 2 * gridSquareSize }; // right points
+	}
+
+	POINT allPoints[84];
+	for (int i = 0; i < 42; i++)
+	{
+		allPoints[i] = verticalGridlinePoints[i];
+		allPoints[42 + i] = horizontalGridlinePoints[i];
+	}
+
+	CPen* oldPen = pDC->SelectObject(&gridWhitePen);
+	pDC->PolyPolyline(allPoints, pointCount, 42);
+
+	pDC->SelectObject(oldPen);
+	gridWhitePen.DeleteObject();
 }
 
 void CLab3View::DrawTopLeft(CDC* pDC)
