@@ -263,7 +263,7 @@ void CLab3View::DrawTopRight(CDC* pDC)
 	GetWorldTransform(pDC->m_hDC, &oldTransform);
 
 	int prevMode = SetGraphicsMode(pDC->m_hDC, GM_ADVANCED);
-	ModifyWorldTransformTranslate(pDC, 11 * gridSquareSize, -0.8 * gridSquareSize, false);
+	ModifyWorldTransformTranslate(pDC, 11.1 * gridSquareSize, -0.8 * gridSquareSize, false);
 	ModifyWorldTransformTranslate(pDC, w / 2, h / 2, false);
 	ModifyWorldTransformMirror(pDC, false, true, false);
 	ModifyWorldTransformRotate(pDC, 16, false);
@@ -322,6 +322,38 @@ void CLab3View::DrawCenterLeft(CDC* pDC)
 
 void CLab3View::DrawCenterMiddle(CDC* pDC)
 {
+	DImage dimg;
+	dimg.Load(CString("res/22.dib"));
+	int w = dimg.Width();
+	int h = dimg.Height();
+	CBitmap* bmpImage = dimg.GetCBitmap();
+
+	// transparency
+	CBitmap* mask = MakeImageTransparentAndReturnMask(pDC, bmpImage, w, h);
+
+	XFORM oldTransform;
+	GetWorldTransform(pDC->m_hDC, &oldTransform);
+
+	int prevMode = SetGraphicsMode(pDC->m_hDC, GM_ADVANCED);
+	ModifyWorldTransformTranslate(pDC, 4.75 * gridSquareSize, 5.25 * gridSquareSize, false);
+	ModifyWorldTransformTranslate(pDC, w / 2, h / 2, false);
+	ModifyWorldTransformMirror(pDC, true, false, false);
+	ModifyWorldTransformRotate(pDC, 132, false);
+	ModifyWorldTransformTranslate(pDC, -w / 2, -h / 2, false);
+	CDC* memDC = new CDC();
+	memDC->CreateCompatibleDC(pDC);
+	memDC->SelectObject(mask);
+	pDC->BitBlt(0, 0, w, h, memDC, 0, 0, SRCAND);
+	memDC->SelectObject(bmpImage);
+	pDC->BitBlt(0, 0, w, h, memDC, 0, 0, SRCPAINT);
+
+	memDC->DeleteDC();
+	delete memDC;
+
+	mask->DeleteObject();
+	delete mask;
+	SetWorldTransform(pDC->m_hDC, &oldTransform);
+	SetGraphicsMode(pDC->m_hDC, prevMode);
 }
 
 void CLab3View::DrawCenterRight(CDC* pDC)
