@@ -190,8 +190,11 @@ void CLab3View::DrawTopLeft(CDC* pDC)
 	XFORM oldTransform;
 	GetWorldTransform(pDC->m_hDC, &oldTransform);
 
+	CPoint puzzlePieceCenterPoint(mainRect.left + 4 * gridSquareSize, mainRect.top + 4 * gridSquareSize);
 	int prevMode = SetGraphicsMode(pDC->m_hDC, GM_ADVANCED);
+	ModifyWorldTransformTranslate(pDC, -0.8 * gridSquareSize, -gridSquareSize, false);
 	ModifyWorldTransformTranslate(pDC, w / 2, h / 2, false);
+	ModifyWorldTransformMirror(pDC, false, true, false);
 	ModifyWorldTransformRotate(pDC, 57, false);
 	ModifyWorldTransformTranslate(pDC, -w / 2, -h / 2, false);
 	CDC* memDC = new CDC();
