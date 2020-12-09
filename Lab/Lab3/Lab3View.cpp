@@ -479,9 +479,10 @@ void CLab3View::DrawBottomRight(CDC* pDC)
 	GetWorldTransform(pDC->m_hDC, &oldTransform);
 
 	int prevMode = SetGraphicsMode(pDC->m_hDC, GM_ADVANCED);
-	ModifyWorldTransformTranslate(pDC, 11.25 * gridSquareSize, 10.95 * gridSquareSize, false);
+	ModifyWorldTransformTranslate(pDC, 10.95 * gridSquareSize, 11.2 * gridSquareSize, false);
 	ModifyWorldTransformTranslate(pDC, w / 2, h / 2, false);
-	ModifyWorldTransformRotate(pDC, 74, false);
+	ModifyWorldTransformMirror(pDC, true, false, false);
+	ModifyWorldTransformRotate(pDC, 164, false);
 	ModifyWorldTransformTranslate(pDC, -w / 2, -h / 2, false);
 	CDC* memDC = new CDC();
 	memDC->CreateCompatibleDC(pDC);
