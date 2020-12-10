@@ -5,3 +5,6 @@
 
 ## Lab 2
 <img src="Zadaci/lab2.png" />
+
+## Lab 3
+<img src="Zadaci/lab3.png" />
