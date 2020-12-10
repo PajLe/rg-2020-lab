@@ -21,7 +21,6 @@
 #define _USE_MATH_DEFINES
 #endif // !_USE_MATH_DEFINES
 #include <math.h>
-#include "DImage.h"
 
 // CLab3View
 
@@ -145,6 +144,27 @@ CBitmap* CLab3View::MakeImageTransparentAndReturnMask(CDC* pDC, CBitmap* image, 
 	return bmpMask;
 }
 
+void CLab3View::MakeImageGrayscale(DImage* dimg)
+{
+	BITMAP b;
+	dimg->GetCBitmap()->GetBitmap(&b);
+	u_char* bits = new u_char[b.bmWidthBytes * b.bmHeight];
+	delete[] bits;
+	bits = dimg->GetDIBBits();
+	for (int i = 0; i < b.bmWidthBytes * b.bmHeight; i += 4)
+	{
+		u_int bts = bits[i] + bits[i + 1] + bits[i + 2];
+		u_char newPixel = (bts) / 3;
+		bits[i] = newPixel;
+		bits[i + 1] = newPixel;
+		bits[i + 2] = newPixel;
+	}
+	dimg->Update();
+	//bitmap->SetBitmapBits(b.bmWidthBytes * b.bmHeight, bits);
+	//delete[] bits;
+	
+}
+
 void CLab3View::DrawGrid(CDC* pDC)
 {
 	CPen gridWhitePen(PS_SOLID, 2, RGB(221, 221, 221));
@@ -178,11 +198,12 @@ void CLab3View::DrawGrid(CDC* pDC)
 
 void CLab3View::DrawTopLeft(CDC* pDC)
 {
-	DImage dimg;
-	dimg.Load(CString("res/11.dib"));
-	int w = dimg.Width();
-	int h = dimg.Height();
-	CBitmap* bmpImage = dimg.GetCBitmap();
+	DImage* dimg = new DImage();
+	dimg->Load(CString("res/11.dib"));
+	int w = dimg->Width();
+	int h = dimg->Height();
+	CBitmap* bmpImage = dimg->GetCBitmap();
+	MakeImageGrayscale(dimg);
 
 	// transparency
 	CBitmap* mask = MakeImageTransparentAndReturnMask(pDC, bmpImage, w, h);
@@ -210,6 +231,7 @@ void CLab3View::DrawTopLeft(CDC* pDC)
 	delete mask;
 	SetWorldTransform(pDC->m_hDC, &oldTransform);
 	SetGraphicsMode(pDC->m_hDC, prevMode);
+	delete dimg;
 }
 
 void CLab3View::DrawTopMiddle(CDC* pDC)
@@ -219,7 +241,7 @@ void CLab3View::DrawTopMiddle(CDC* pDC)
 	int w = dimg.Width();
 	int h = dimg.Height();
 	CBitmap* bmpImage = dimg.GetCBitmap();
-
+	MakeImageGrayscale(&dimg);
 	// transparency
 	CBitmap* mask = MakeImageTransparentAndReturnMask(pDC, bmpImage, w, h);
 

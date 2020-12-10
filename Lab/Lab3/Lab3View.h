@@ -3,7 +3,7 @@
 //
 
 #pragma once
-
+#include "DImage.h"
 
 class CLab3View : public CView
 {
@@ -42,6 +42,7 @@ private:
 	void DrawInMemDC(CDC* pDC);
 
 	CBitmap* MakeImageTransparentAndReturnMask(CDC* pDC, CBitmap* image, int width, int height);
+	void MakeImageGrayscale(DImage* dimg);
 
 	void DrawGrid(CDC* pDC);
 	void DrawTopLeft(CDC* pDC);
