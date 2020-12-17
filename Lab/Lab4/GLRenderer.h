@@ -15,4 +15,6 @@ public:
 protected:
 	HGLRC	 m_hrc; //OpenGL Rendering Context 
 
+private:
+	void DrawGrid();
 };
