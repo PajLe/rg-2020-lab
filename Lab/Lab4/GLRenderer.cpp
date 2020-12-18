@@ -100,7 +100,8 @@ void CGLRenderer::DrawScene(CDC* pDC)
 		glVertex3f(1.0, 1.0, -3.0);
 	}
 	glEnd();
-
+	DrawWholeFlower();
+	
 	glFlush();
 	//---------------------------------
 	SwapBuffers(pDC->m_hDC);
@@ -209,7 +210,7 @@ void CGLRenderer::DrawGrid()
 		currPoint++;
 	}
 
-	u_short indices[pointCount + 4];
+	u_char indices[pointCount + 4];
 	int currPos = 0;
 	for (int i = 0; i < cols; i++)
 	{
@@ -233,7 +234,17 @@ void CGLRenderer::DrawGrid()
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glColor3f(1.0, 1.0, 1.0);
-	glDrawElements(GL_LINES, pointCount + 4, GL_UNSIGNED_SHORT, indices);
+	glDrawElements(GL_LINES, pointCount + 4, GL_UNSIGNED_BYTE, indices);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
+
+//void CGLRenderer::DrawWholeFlower()
+//{
+//	DrawFlowerpot();
+//}
+//
+//void CGLRenderer::DrawFlowerpot()
+//{
+//
+//}
