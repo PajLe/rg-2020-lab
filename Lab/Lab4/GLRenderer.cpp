@@ -5,9 +5,19 @@
 #include "GL\glaux.h"
 #include "GL\glut.h"
 //#pragma comment(lib, "GL\\glut32.lib")
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif // !_USE_MATH_DEFINES
+#include <math.h>
 
-CGLRenderer::CGLRenderer(void)
+CGLRenderer::CGLRenderer()
 {
+	firstMouse = true;
+	cameraX = 10.0;
+	cameraY = 10.0;
+	cameraZ = 0.0;
+	cameraYaw = 0.0f;
+	cameraPitch = asin(cameraY / sqrt(pow(cameraX, 2) + pow(cameraY, 2))) * 180 / M_PI;
 }
 
 CGLRenderer::~CGLRenderer(void)
@@ -61,10 +71,10 @@ void CGLRenderer::DrawScene(CDC* pDC)
 	glMatrixMode(GL_MODELVIEW);
 	glEnable(GL_DEPTH_TEST);
 	glLoadIdentity();
-	gluLookAt(10.0, 10.0, 0.0,
+	
+	gluLookAt(cameraX, cameraY, cameraZ,
 		0.0, 2.0, 0.0,
 		0.0, 1.0, 0.0);
-
 
 	glBegin(GL_LINES);
 	{
@@ -121,6 +131,45 @@ void CGLRenderer::DestroyScene(CDC* pDC)
 		wglDeleteContext(m_hrc);
 		m_hrc = NULL;
 	}
+}
+
+void CGLRenderer::MoveCamera(CPoint cursorPoint) // https://learnopengl.com/Getting-started/Camera
+{
+	if (firstMouse)
+	{
+		lastPoint.x = cursorPoint.x;
+		lastPoint.y = cursorPoint.y;
+		firstMouse = false;
+	}
+	
+	float xoffset = lastPoint.x - cursorPoint.x; // moving left moves camera to the right
+	float yoffset = cursorPoint.y - lastPoint.y; // moving up moves camera down (mouse y grows going down)
+	lastPoint.x = cursorPoint.x;
+	lastPoint.y = cursorPoint.y;
+	
+	float sensitivity = 0.5f;
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+
+	cameraYaw += xoffset;
+	cameraPitch += yoffset;
+
+	if (cameraPitch > 89.0f)
+		cameraPitch = 89.0f;
+	if (cameraPitch < -89.0f)
+		cameraPitch = -89.0f;
+
+	double xPos = cos(cameraYaw * M_PI / 180.0) * cos(cameraPitch * M_PI / 180.0);
+	double yPos = sin(cameraPitch * M_PI / 180.0);
+	double zPos = -sin(cameraYaw * M_PI / 180.0) * cos(cameraPitch * M_PI / 180.0);
+	cameraX = 14.0 * xPos;
+	cameraY = 14.0 * yPos;
+	cameraZ = 14.0 * zPos;
+}
+
+void CGLRenderer::StopMovingCamera()
+{
+	firstMouse = true;
 }
 
 void CGLRenderer::DrawGrid()

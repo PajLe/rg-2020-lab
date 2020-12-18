@@ -11,10 +11,21 @@ public:
 	void Reshape(CDC* pDC, int w, int h);	// kod koji treba da se izvrsi svaki put kada se promeni velicina prozora ili pogleda i
 	void DrawScene(CDC* pDC);				// iscrtava scenu
 	void DestroyScene(CDC* pDC);			// dealocira resurse alocirane u drugim funkcijama ove klase,
+	void MoveCamera(CPoint cursorPoint);
+	void StopMovingCamera();
 
 protected:
 	HGLRC	 m_hrc; //OpenGL Rendering Context 
 
 private:
+	CPoint lastPoint;
+	bool firstMouse;
+	float cameraPitch;
+	float cameraYaw;
+	float cameraX;
+	float cameraY;
+	float cameraZ;
+
 	void DrawGrid();
+
 };

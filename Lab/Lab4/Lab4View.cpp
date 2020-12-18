@@ -31,6 +31,8 @@ BEGIN_MESSAGE_MAP(CLab4View, CView)
 	ON_WM_SIZE()
 	ON_WM_DESTROY()
 	ON_WM_ERASEBKGND()
+	ON_WM_MOUSEMOVE()
+	ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 // CLab4View construction/destruction
@@ -156,4 +158,24 @@ void CLab4View::OnInitialUpdate()
 	CDC* pDC = GetDC();
 	m_glRenderer.PrepareScene(pDC);
 	ReleaseDC(pDC);
+}
+
+
+void CLab4View::OnMouseMove(UINT nFlags, CPoint point)
+{
+	if (nFlags & MK_LBUTTON)
+	{
+		m_glRenderer.MoveCamera(point);
+		Invalidate();
+	}
+
+	CView::OnMouseMove(nFlags, point);
+}
+
+
+void CLab4View::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	m_glRenderer.StopMovingCamera();
+
+	CView::OnLButtonUp(nFlags, point);
 }
