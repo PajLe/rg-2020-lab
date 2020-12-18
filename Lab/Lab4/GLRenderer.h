@@ -27,5 +27,6 @@ private:
 	float cameraZ;
 
 	void DrawGrid();
-
+	void DrawWholeFlower();
+	void DrawFlowerpot();
 };

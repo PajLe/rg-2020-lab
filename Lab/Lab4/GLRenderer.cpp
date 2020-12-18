@@ -71,7 +71,7 @@ void CGLRenderer::DrawScene(CDC* pDC)
 	glMatrixMode(GL_MODELVIEW);
 	glEnable(GL_DEPTH_TEST);
 	glLoadIdentity();
-	
+
 	gluLookAt(cameraX, cameraY, cameraZ,
 		0.0, 2.0, 0.0,
 		0.0, 1.0, 0.0);
@@ -101,7 +101,7 @@ void CGLRenderer::DrawScene(CDC* pDC)
 	}
 	glEnd();
 	DrawWholeFlower();
-	
+
 	glFlush();
 	//---------------------------------
 	SwapBuffers(pDC->m_hDC);
@@ -142,12 +142,12 @@ void CGLRenderer::MoveCamera(CPoint cursorPoint) // https://learnopengl.com/Gett
 		lastPoint.y = cursorPoint.y;
 		firstMouse = false;
 	}
-	
+
 	float xoffset = lastPoint.x - cursorPoint.x; // moving left moves camera to the right
 	float yoffset = cursorPoint.y - lastPoint.y; // moving up moves camera down (mouse y grows going down)
 	lastPoint.x = cursorPoint.x;
 	lastPoint.y = cursorPoint.y;
-	
+
 	float sensitivity = 0.5f;
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
@@ -239,12 +239,103 @@ void CGLRenderer::DrawGrid()
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-//void CGLRenderer::DrawWholeFlower()
-//{
-//	DrawFlowerpot();
-//}
-//
-//void CGLRenderer::DrawFlowerpot()
-//{
-//
-//}
+void CGLRenderer::DrawWholeFlower()
+{
+	DrawFlowerpot();
+}
+
+void CGLRenderer::DrawFlowerpot()
+{
+	const int octagonPoints = 8;
+	const float octagonAngle = 360.0f / octagonPoints;
+
+	float bottomBase[octagonPoints * 3];
+	float topBase[octagonPoints * 3];
+	float topOctaPrismBases[octagonPoints * 3];
+
+	float currAngle = 0.0f;
+	float rBottom = 1.0f;
+	float rTop = 1.2f;
+	float rTopOctaPrismBases = 1.5f;
+	for (int i = 0; i < octagonPoints * 3; i += 3)
+	{
+		bottomBase[i] = rBottom * cos(currAngle * M_PI / 180.0); // x
+		bottomBase[i + 1] = 0.0f; // y
+		bottomBase[i + 2] = -rBottom * sin(currAngle * M_PI / 180.0); // z
+
+		topBase[i] = rTop * cos(currAngle * M_PI / 180.0); // x
+		topBase[i + 1] = 0.0f; // y
+		topBase[i + 2] = -rTop * sin(currAngle * M_PI / 180.0); // z
+
+		topOctaPrismBases[i] = rTopOctaPrismBases * cos(currAngle * M_PI / 180.0); // x
+		topOctaPrismBases[i + 1] = 0.0f; // y
+		topOctaPrismBases[i + 2] = -rTopOctaPrismBases * sin(currAngle * M_PI / 180.0); // z
+		currAngle += octagonAngle;
+	}
+
+	float sides[2 * octagonPoints * 3];
+	float bottomPrismHeight = 1.4f;
+	for (int i = 0; i < octagonPoints * 3; i += 3)
+	{
+		sides[i] = bottomBase[i];
+		sides[i + 1] = bottomBase[i + 1];
+		sides[i + 2] = bottomBase[i + 2];
+		sides[3 * octagonPoints + i] = topBase[i];
+		sides[3 * octagonPoints + i + 1] = topBase[i + 1] + bottomPrismHeight;
+		sides[3 * octagonPoints + i + 2] = topBase[i + 2];
+	}
+
+	float topSides[2 * octagonPoints * 3];
+	float topPrismHeight = 0.6f;
+	for (int i = 0; i < octagonPoints * 3; i += 3)
+	{
+		topSides[i] = topOctaPrismBases[i];
+		topSides[i + 1] = topOctaPrismBases[i + 1];
+		topSides[i + 2] = topOctaPrismBases[i + 2];
+		topSides[3 * octagonPoints + i] = topOctaPrismBases[i];
+		topSides[3 * octagonPoints + i + 1] = topOctaPrismBases[i + 1] + topPrismHeight;
+		topSides[3 * octagonPoints + i + 2] = topOctaPrismBases[i + 2];
+	}
+
+	u_char baseIndices[octagonPoints];
+	for (int i = 0; i < octagonPoints; i++)
+		baseIndices[i] = octagonPoints - 1 - i;
+
+	u_char sidesIndices[2 * octagonPoints + 2]
+	{
+		0, 8, 1, 9,
+		2, 10,
+		3, 11,
+		4, 12,
+		5, 13,
+		6, 14,
+		7, 15,
+		0, 8
+	};
+
+	glColor4f(163 / 255.0, 93 / 255.0, 29 / 255.0, 0.0);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, bottomBase);
+	glDrawElements(GL_POLYGON, octagonPoints, GL_UNSIGNED_BYTE, baseIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, sides);
+	glDrawElements(GL_QUAD_STRIP, 2 * octagonPoints + 2, GL_UNSIGNED_BYTE, sidesIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, topBase);
+	glTranslatef(0.0f, bottomPrismHeight, 0.0f);
+	glDrawElements(GL_POLYGON, octagonPoints, GL_UNSIGNED_BYTE, baseIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, topOctaPrismBases);
+	glDrawElements(GL_POLYGON, octagonPoints, GL_UNSIGNED_BYTE, baseIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, topSides);
+	glDrawElements(GL_QUAD_STRIP, 2 * octagonPoints + 2, GL_UNSIGNED_BYTE, sidesIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, topOctaPrismBases);
+	glTranslatef(0.0f, topPrismHeight, 0.0f);
+	glDrawElements(GL_POLYGON, octagonPoints, GL_UNSIGNED_BYTE, baseIndices);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
