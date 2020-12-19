@@ -17,6 +17,8 @@ public:
 protected:
 	HGLRC	 m_hrc; //OpenGL Rendering Context 
 
+	void DrawSphere(float r);
+
 private:
 	CPoint lastPoint;
 	bool firstMouse;
@@ -30,5 +32,5 @@ private:
 	void DrawWholeFlower();
 	void DrawFlowerpot();
 	void DrawBottomRectPrism();
-
+	void DrawBottomSphere();
 };

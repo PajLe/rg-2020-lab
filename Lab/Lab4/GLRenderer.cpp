@@ -173,6 +173,44 @@ void CGLRenderer::StopMovingCamera()
 	firstMouse = true;
 }
 
+void CGLRenderer::DrawSphere(float r)
+{
+	glBegin(GL_QUAD_STRIP);
+	for (float alpha = -90.0f; alpha < 90.0f; alpha++)
+	{
+		double alphaRadians = alpha * M_PI / 180.0;
+		double alphaPlusOneRadians = (alpha + 1.0) * M_PI / 180.0;
+
+		for (float beta = 0.0f; beta <= 360.0f; beta++)
+		{
+			double betaRadians = beta * M_PI / 180.0;
+
+			float x1 = r * cos(alphaRadians) * cos(betaRadians);
+			float y1 = r * sin(alphaRadians);
+			float z1 = r * cos(alphaRadians) * sin(betaRadians);
+
+			float normal1X = cos(betaRadians);
+			float normal1Y = sin(alphaRadians);
+			float normal1Z = sin(betaRadians);
+
+			float x2 = r * cos(alphaPlusOneRadians) * cos(betaRadians);
+			float y2 = r * sin(alphaPlusOneRadians);
+			float z2 = r * cos(alphaPlusOneRadians) * sin(betaRadians);
+
+			float normal2X = cos(betaRadians);
+			float normal2Y = sin(alphaPlusOneRadians);
+			float normal2Z = sin(betaRadians);
+
+			glNormal3f(normal1X, normal1Y, normal1Z); // for lightning
+			glVertex3f(x1, y1, z1);
+
+			glNormal3f(normal2X, normal2Y, normal2Z); // for lightning
+			glVertex3f(x2, y2, z2);
+		}
+	}
+	glEnd();
+}
+
 void CGLRenderer::DrawGrid()
 {
 	float topLeftX = -5.0f;
@@ -243,6 +281,7 @@ void CGLRenderer::DrawWholeFlower()
 {
 	DrawFlowerpot();
 	DrawBottomRectPrism();
+	DrawBottomSphere();
 }
 
 void CGLRenderer::DrawFlowerpot()
@@ -392,4 +431,11 @@ void CGLRenderer::DrawBottomRectPrism()
 	glDrawElements(GL_POLYGON, rectPoints, GL_UNSIGNED_BYTE, baseIndices);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void CGLRenderer::DrawBottomSphere()
+{
+	glTranslatef(0.0f, 0.3f, 0.0f);
+	DrawSphere(0.3);
+	glTranslatef(0.0f, 0.3f, 0.0f);
 }
