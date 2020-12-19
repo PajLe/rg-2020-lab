@@ -242,6 +242,7 @@ void CGLRenderer::DrawGrid()
 void CGLRenderer::DrawWholeFlower()
 {
 	DrawFlowerpot();
+	DrawBottomRectPrism();
 }
 
 void CGLRenderer::DrawFlowerpot()
@@ -336,6 +337,59 @@ void CGLRenderer::DrawFlowerpot()
 	glVertexPointer(3, GL_FLOAT, 0, topOctaPrismBases);
 	glTranslatef(0.0f, topPrismHeight, 0.0f);
 	glDrawElements(GL_POLYGON, octagonPoints, GL_UNSIGNED_BYTE, baseIndices);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void CGLRenderer::DrawBottomRectPrism()
+{
+	const int rectPoints = 4;
+	const float rectAngle = 360.0f / rectPoints;
+
+	float base[rectPoints * 3]{
+		0.5f, 0.0f, 0.5f,
+		0.5f, 0.0f, -0.5f,
+		-0.5f, 0.0f, -0.5f,
+		-0.5f, 0.0f, 0.5f
+	};
+
+	float sides[2 * rectPoints * 3];
+	float quadPrismHeight = 1.45f;
+	for (int i = 0; i < rectPoints * 3; i += 3)
+	{
+		sides[i] = base[i];
+		sides[i + 1] = base[i + 1];
+		sides[i + 2] = base[i + 2];
+		sides[3 * rectPoints + i] = base[i];
+		sides[3 * rectPoints + i + 1] = base[i + 1] + quadPrismHeight;
+		sides[3 * rectPoints + i + 2] = base[i + 2];
+	}
+
+	u_char baseIndices[rectPoints];
+	for (int i = 0; i < rectPoints; i++)
+		baseIndices[i] = i;
+
+	u_char sidesIndices[2 * rectPoints + 2]
+	{
+		0, 4, 1, 5,
+		2, 6,
+		3, 7,
+		0, 4
+	};
+
+	glColor4f(0 / 255.0, 188 / 255.0, 0 / 255.0, 0.0f);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, base);
+	glDrawElements(GL_POLYGON, rectPoints, GL_UNSIGNED_BYTE, baseIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, sides);
+	glDrawElements(GL_QUAD_STRIP, 2 * rectPoints + 2, GL_UNSIGNED_BYTE, sidesIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, base);
+	glTranslatef(0.0f, quadPrismHeight, 0.0f);
+	glDrawElements(GL_POLYGON, rectPoints, GL_UNSIGNED_BYTE, baseIndices);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 }

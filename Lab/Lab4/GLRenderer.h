@@ -29,4 +29,6 @@ private:
 	void DrawGrid();
 	void DrawWholeFlower();
 	void DrawFlowerpot();
+	void DrawBottomRectPrism();
+
 };
