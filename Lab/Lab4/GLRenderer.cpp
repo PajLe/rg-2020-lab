@@ -286,15 +286,10 @@ void CGLRenderer::DrawWholeFlower()
 	// left cactus side
 	glPushMatrix();
 
-	GLfloat matrix[16];
-	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
-	glLoadIdentity();
-	glMultMatrixf(matrix);
 	glTranslatef(0.0f, -0.3f, 0.0f);
 	glRotatef(45.0f, 1.0, 0.0, 0.0);
 	glTranslatef(0.0f, 0.3f, 0.0f);
 	DrawLeftCylinder();
-
 	DrawFirstLeftSphere();
 	DrawLeftRectPrism();
 	DrawSecondLeftSphere();
