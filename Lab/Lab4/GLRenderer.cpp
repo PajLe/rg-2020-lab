@@ -294,6 +294,7 @@ void CGLRenderer::DrawWholeFlower()
 	glRotatef(45.0f, 1.0, 0.0, 0.0);
 	glTranslatef(0.0f, 0.3f, 0.0f);
 	DrawLeftCylinder();
+
 	DrawFirstLeftSphere();
 	DrawLeftRectPrism();
 	DrawSecondLeftSphere();
@@ -515,11 +516,16 @@ void CGLRenderer::DrawLeftCylinder()
 	glVertexPointer(3, GL_FLOAT, 0, topBase);
 	glDrawElements(GL_POLYGON, cylPoints, GL_UNSIGNED_SHORT, baseIndices);
 
+	glTranslatef(0.0f, cylHeight, 0.0f);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void CGLRenderer::DrawFirstLeftSphere()
 {
+	glTranslatef(0.0f, 0.3f, 0.0f);
+	DrawSphere(0.3);
+	glTranslatef(0.0f, 0.3f, 0.0f);
 }
 
 void CGLRenderer::DrawLeftRectPrism()
