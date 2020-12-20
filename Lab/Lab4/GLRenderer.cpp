@@ -307,9 +307,9 @@ void CGLRenderer::DrawWholeFlower()
 		glPushMatrix(); // "turn right"
 		{
 			glTranslatef(0.0f, -0.3f, 0.0f);
-			glRotatef(-90.0f, 1.0, 0.0, 0.0);
+			glRotatef(-45.0f, 1.0, 0.0, 0.0);
 			glTranslatef(0.0f, 0.3f, 0.0f);
-			DrawSecondRightCylinder();
+			DrawSecondRightOctaPrism();
 			DrawSecondRightSphere();
 		}
 		glPopMatrix();
@@ -669,8 +669,62 @@ void CGLRenderer::DrawFirstRightSphere()
 	glTranslatef(0.0f, 0.3f, 0.0f);
 }
 
-void CGLRenderer::DrawSecondRightCylinder()
+void CGLRenderer::DrawSecondRightOctaPrism()
 {
+	const int octagonPoints = 8;
+	const float octagonAngle = 360.0f / octagonPoints;
+	const float octaPrismHeight = 1.4f;
+
+	float base[octagonPoints * 3];
+
+	float currAngle = 0.0f;
+	float r = .5f;
+	for (int i = 0; i < octagonPoints * 3; i += 3)
+	{
+		base[i] = r * cos(currAngle * M_PI / 180.0); // x
+		base[i + 1] = 0.0f; // y
+		base[i + 2] = -r * sin(currAngle * M_PI / 180.0); // z
+
+		currAngle += octagonAngle;
+	}
+
+	float sides[2 * octagonPoints * 3];
+	for (int i = 0; i < octagonPoints * 3; i += 3)
+	{
+		sides[i] = base[i];
+		sides[i + 1] = base[i + 1];
+		sides[i + 2] = base[i + 2];
+		sides[3 * octagonPoints + i] = base[i];
+		sides[3 * octagonPoints + i + 1] = base[i + 1] + octaPrismHeight;
+		sides[3 * octagonPoints + i + 2] = base[i + 2];
+	}
+
+	u_short baseIndices[octagonPoints];
+	for (int i = 0; i < octagonPoints; i++)
+		baseIndices[i] = i;
+
+	u_short sidesIndices[2 * octagonPoints + 2];
+	for (int i = 0; i < 2 * octagonPoints; i += 2)
+	{
+		sidesIndices[i] = i / 2;
+		sidesIndices[i + 1] = i / 2 + octagonPoints;
+	}
+	sidesIndices[2 * octagonPoints + 2 - 2] = sidesIndices[0];
+	sidesIndices[2 * octagonPoints + 2 - 1] = sidesIndices[1];
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, base);
+	glDrawElements(GL_POLYGON, octagonPoints, GL_UNSIGNED_SHORT, baseIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, sides);
+	glDrawElements(GL_QUAD_STRIP, 2 * octagonPoints + 2, GL_UNSIGNED_SHORT, sidesIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, base);
+	glTranslatef(0.0f, octaPrismHeight, 0.0f);
+	glDrawElements(GL_POLYGON, octagonPoints, GL_UNSIGNED_SHORT, baseIndices);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void CGLRenderer::DrawSecondRightSphere()
