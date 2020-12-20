@@ -285,16 +285,18 @@ void CGLRenderer::DrawWholeFlower()
 
 	// left cactus side
 	glPushMatrix();
-
-	glTranslatef(0.0f, -0.3f, 0.0f);
-	glRotatef(45.0f, 1.0, 0.0, 0.0);
-	glTranslatef(0.0f, 0.3f, 0.0f);
-	DrawLeftCylinder();
-	DrawFirstLeftSphere();
-	DrawLeftRectPrism();
-	DrawSecondLeftSphere();
-
+	{
+		glTranslatef(0.0f, -0.3f, 0.0f);
+		glRotatef(45.0f, 1.0, 0.0, 0.0);
+		glTranslatef(0.0f, 0.3f, 0.0f);
+		DrawLeftCylinder();
+		DrawFirstLeftSphere();
+		DrawLeftRectPrism();
+		DrawSecondLeftSphere();
+	}
 	glPopMatrix();
+
+
 }
 
 void CGLRenderer::DrawFlowerpot()
