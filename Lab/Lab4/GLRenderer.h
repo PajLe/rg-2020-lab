@@ -33,4 +33,8 @@ private:
 	void DrawFlowerpot();
 	void DrawBottomRectPrism();
 	void DrawBottomSphere();
+	void DrawLeftCylinder();
+	void DrawFirstLeftSphere();
+	void DrawLeftRectPrism();
+	void DrawSecondLeftSphere();
 };

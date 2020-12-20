@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "GLRenderer.h"
 #include "GL\gl.h"
 #include "GL\glu.h"
@@ -163,9 +163,9 @@ void CGLRenderer::MoveCamera(CPoint cursorPoint) // https://learnopengl.com/Gett
 	double xPos = cos(cameraYaw * M_PI / 180.0) * cos(cameraPitch * M_PI / 180.0);
 	double yPos = sin(cameraPitch * M_PI / 180.0);
 	double zPos = -sin(cameraYaw * M_PI / 180.0) * cos(cameraPitch * M_PI / 180.0);
-	cameraX = 14.0 * xPos;
-	cameraY = 14.0 * yPos;
-	cameraZ = 14.0 * zPos;
+	cameraX = 14.1 * xPos; // 14.1 = 10*sqrt(2) == initial diag
+	cameraY = 14.1 * yPos;
+	cameraZ = 14.1 * zPos;
 }
 
 void CGLRenderer::StopMovingCamera()
@@ -282,6 +282,23 @@ void CGLRenderer::DrawWholeFlower()
 	DrawFlowerpot();
 	DrawBottomRectPrism();
 	DrawBottomSphere();
+
+	// left cactus side
+	glPushMatrix();
+
+	GLfloat matrix[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+	glLoadIdentity();
+	glMultMatrixf(matrix);
+	glTranslatef(0.0f, -0.3f, 0.0f);
+	glRotatef(45.0f, 1.0, 0.0, 0.0);
+	glTranslatef(0.0f, 0.3f, 0.0f);
+	DrawLeftCylinder();
+	DrawFirstLeftSphere();
+	DrawLeftRectPrism();
+	DrawSecondLeftSphere();
+
+	glPopMatrix();
 }
 
 void CGLRenderer::DrawFlowerpot()
@@ -339,7 +356,7 @@ void CGLRenderer::DrawFlowerpot()
 
 	u_char baseIndices[octagonPoints];
 	for (int i = 0; i < octagonPoints; i++)
-		baseIndices[i] = octagonPoints - 1 - i;
+		baseIndices[i] = i;
 
 	u_char sidesIndices[2 * octagonPoints + 2]
 	{
@@ -438,4 +455,77 @@ void CGLRenderer::DrawBottomSphere()
 	glTranslatef(0.0f, 0.3f, 0.0f);
 	DrawSphere(0.3);
 	glTranslatef(0.0f, 0.3f, 0.0f);
+}
+
+void CGLRenderer::DrawLeftCylinder()
+{
+	const int cylPoints = 360;
+	const float cylAngle = 360.0f / cylPoints;
+	const float cylHeight = 1.45f;
+
+	float bottomBase[cylPoints * 3];
+	float topBase[cylPoints * 3];
+
+	float currAngle = 0.0f;
+	float r = 0.3f;
+	for (int i = 0; i < cylPoints * 3; i += 3)
+	{
+		bottomBase[i] = r * cos(currAngle * M_PI / 180.0); // x
+		bottomBase[i + 1] = 0.0f; // y
+		bottomBase[i + 2] = -r * sin(currAngle * M_PI / 180.0); // z
+
+		topBase[i] = bottomBase[i]; // x
+		topBase[i + 1] = cylHeight; // y
+		topBase[i + 2] = bottomBase[i + 2]; // z
+		currAngle += cylAngle;
+	}
+
+	float sides[2 * cylPoints * 3];
+	for (int i = 0; i < cylPoints * 3; i += 3)
+	{
+		sides[i] = bottomBase[i];
+		sides[i + 1] = bottomBase[i + 1];
+		sides[i + 2] = bottomBase[i + 2];
+		sides[3 * cylPoints + i] = topBase[i];
+		sides[3 * cylPoints + i + 1] = topBase[i + 1];
+		sides[3 * cylPoints + i + 2] = topBase[i + 2];
+	}
+
+	u_short baseIndices[cylPoints];
+	for (int i = 0; i < cylPoints; i++)
+		baseIndices[i] = i;
+
+	u_short sidesIndices[2 * cylPoints + 2];
+	for (int i = 0; i < 2 * cylPoints; i += 2)
+	{
+		sidesIndices[i] = i / 2;
+		sidesIndices[i + 1] = i / 2 + cylPoints;
+	}
+	sidesIndices[2 * cylPoints + 2 - 2] = sidesIndices[0];
+	sidesIndices[2 * cylPoints + 2 - 1] = sidesIndices[1];
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, bottomBase);
+	glDrawElements(GL_POLYGON, cylPoints, GL_UNSIGNED_SHORT, baseIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, sides);
+	glDrawElements(GL_QUAD_STRIP, 2 * cylPoints + 2, GL_UNSIGNED_SHORT, sidesIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, topBase);
+	glDrawElements(GL_POLYGON, cylPoints, GL_UNSIGNED_SHORT, baseIndices);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void CGLRenderer::DrawFirstLeftSphere()
+{
+}
+
+void CGLRenderer::DrawLeftRectPrism()
+{
+}
+
+void CGLRenderer::DrawSecondLeftSphere()
+{
 }
