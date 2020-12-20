@@ -664,6 +664,9 @@ void CGLRenderer::DrawFirstRightCylinder()
 
 void CGLRenderer::DrawFirstRightSphere()
 {
+	glTranslatef(0.0f, 0.3f, 0.0f);
+	DrawSphere(0.3);
+	glTranslatef(0.0f, 0.3f, 0.0f);
 }
 
 void CGLRenderer::DrawSecondRightCylinder()
