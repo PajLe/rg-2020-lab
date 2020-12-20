@@ -486,32 +486,28 @@ void CGLRenderer::DrawLeftCylinder()
 	const float cylAngle = 360.0f / cylPoints;
 	const float cylHeight = 1.45f;
 
-	float bottomBase[cylPoints * 3];
-	float topBase[cylPoints * 3];
+	float base[cylPoints * 3];
 
 	float currAngle = 0.0f;
 	float r = 0.3f;
 	for (int i = 0; i < cylPoints * 3; i += 3)
 	{
-		bottomBase[i] = r * cos(currAngle * M_PI / 180.0); // x
-		bottomBase[i + 1] = 0.0f; // y
-		bottomBase[i + 2] = -r * sin(currAngle * M_PI / 180.0); // z
+		base[i] = r * cos(currAngle * M_PI / 180.0); // x
+		base[i + 1] = 0.0f; // y
+		base[i + 2] = -r * sin(currAngle * M_PI / 180.0); // z
 
-		topBase[i] = bottomBase[i]; // x
-		topBase[i + 1] = cylHeight; // y
-		topBase[i + 2] = bottomBase[i + 2]; // z
 		currAngle += cylAngle;
 	}
 
 	float sides[2 * cylPoints * 3];
 	for (int i = 0; i < cylPoints * 3; i += 3)
 	{
-		sides[i] = bottomBase[i];
-		sides[i + 1] = bottomBase[i + 1];
-		sides[i + 2] = bottomBase[i + 2];
-		sides[3 * cylPoints + i] = topBase[i];
-		sides[3 * cylPoints + i + 1] = topBase[i + 1];
-		sides[3 * cylPoints + i + 2] = topBase[i + 2];
+		sides[i] = base[i];
+		sides[i + 1] = base[i + 1];
+		sides[i + 2] = base[i + 2];
+		sides[3 * cylPoints + i] = base[i];
+		sides[3 * cylPoints + i + 1] = base[i + 1] + cylHeight;
+		sides[3 * cylPoints + i + 2] = base[i + 2];
 	}
 
 	u_short baseIndices[cylPoints];
@@ -529,16 +525,15 @@ void CGLRenderer::DrawLeftCylinder()
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glVertexPointer(3, GL_FLOAT, 0, bottomBase);
+	glVertexPointer(3, GL_FLOAT, 0, base);
 	glDrawElements(GL_POLYGON, cylPoints, GL_UNSIGNED_SHORT, baseIndices);
 
 	glVertexPointer(3, GL_FLOAT, 0, sides);
 	glDrawElements(GL_QUAD_STRIP, 2 * cylPoints + 2, GL_UNSIGNED_SHORT, sidesIndices);
 
-	glVertexPointer(3, GL_FLOAT, 0, topBase);
-	glDrawElements(GL_POLYGON, cylPoints, GL_UNSIGNED_SHORT, baseIndices);
-
+	glVertexPointer(3, GL_FLOAT, 0, base);
 	glTranslatef(0.0f, cylHeight, 0.0f);
+	glDrawElements(GL_POLYGON, cylPoints, GL_UNSIGNED_SHORT, baseIndices);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
