@@ -37,4 +37,11 @@ private:
 	void DrawFirstLeftSphere();
 	void DrawLeftRectPrism();
 	void DrawSecondLeftSphere();
+	void DrawFirstRightCylinder();
+	void DrawFirstRightSphere();
+	void DrawSecondRightCylinder();
+	void DrawSecondRightSphere();
+	void DrawRightRectPrism();
+	void DrawRightTopmostSphere();
+
 };

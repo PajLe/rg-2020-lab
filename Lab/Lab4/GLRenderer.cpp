@@ -296,7 +296,33 @@ void CGLRenderer::DrawWholeFlower()
 	}
 	glPopMatrix();
 
+	// right cactus side
+	glPushMatrix();
+	{
+		glTranslatef(0.0f, -0.3f, 0.0f);
+		glRotatef(-45.0f, 1.0, 0.0, 0.0);
+		glTranslatef(0.0f, 0.3f, 0.0f);
+		DrawFirstRightCylinder();
+		DrawFirstRightSphere();
+		glPushMatrix(); // "turn right"
+		{
+			glTranslatef(0.0f, -0.3f, 0.0f);
+			glRotatef(-90.0f, 1.0, 0.0, 0.0);
+			glTranslatef(0.0f, 0.3f, 0.0f);
+			DrawSecondRightCylinder();
+			DrawSecondRightSphere();
+		}
+		glPopMatrix();
 
+		// "turn left(top)"
+		glPushMatrix();
+		{
+			DrawRightRectPrism();
+			DrawRightTopmostSphere();
+		}
+		glPopMatrix();
+	}
+	glPopMatrix();
 }
 
 void CGLRenderer::DrawFlowerpot()
@@ -581,4 +607,82 @@ void CGLRenderer::DrawSecondLeftSphere()
 	glTranslatef(0.0f, 0.3f, 0.0f);
 	DrawSphere(0.3);
 	glTranslatef(0.0f, 0.3f, 0.0f);
+}
+
+void CGLRenderer::DrawFirstRightCylinder()
+{
+	const int cylPoints = 360;
+	const float cylAngle = 360.0f / cylPoints;
+	const float cylHeight = 1.45f;
+
+	float base[cylPoints * 3];
+
+	float currAngle = 0.0f;
+	float r = 0.3f;
+	for (int i = 0; i < cylPoints * 3; i += 3)
+	{
+		base[i] = r * cos(currAngle * M_PI / 180.0); // x
+		base[i + 1] = 0.0f; // y
+		base[i + 2] = -r * sin(currAngle * M_PI / 180.0); // z
+
+		currAngle += cylAngle;
+	}
+
+	float sides[2 * cylPoints * 3];
+	for (int i = 0; i < cylPoints * 3; i += 3)
+	{
+		sides[i] = base[i];
+		sides[i + 1] = base[i + 1];
+		sides[i + 2] = base[i + 2];
+		sides[3 * cylPoints + i] = base[i];
+		sides[3 * cylPoints + i + 1] = base[i + 1] + cylHeight;
+		sides[3 * cylPoints + i + 2] = base[i + 2];
+	}
+
+	u_short baseIndices[cylPoints];
+	for (int i = 0; i < cylPoints; i++)
+		baseIndices[i] = i;
+
+	u_short sidesIndices[2 * cylPoints + 2];
+	for (int i = 0; i < 2 * cylPoints; i += 2)
+	{
+		sidesIndices[i] = i / 2;
+		sidesIndices[i + 1] = i / 2 + cylPoints;
+	}
+	sidesIndices[2 * cylPoints + 2 - 2] = sidesIndices[0];
+	sidesIndices[2 * cylPoints + 2 - 1] = sidesIndices[1];
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, base);
+	glDrawElements(GL_POLYGON, cylPoints, GL_UNSIGNED_SHORT, baseIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, sides);
+	glDrawElements(GL_QUAD_STRIP, 2 * cylPoints + 2, GL_UNSIGNED_SHORT, sidesIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, base);
+	glTranslatef(0.0f, cylHeight, 0.0f);
+	glDrawElements(GL_POLYGON, cylPoints, GL_UNSIGNED_SHORT, baseIndices);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void CGLRenderer::DrawFirstRightSphere()
+{
+}
+
+void CGLRenderer::DrawSecondRightCylinder()
+{
+}
+
+void CGLRenderer::DrawSecondRightSphere()
+{
+}
+
+void CGLRenderer::DrawRightRectPrism()
+{
+}
+
+void CGLRenderer::DrawRightTopmostSphere()
+{
 }
