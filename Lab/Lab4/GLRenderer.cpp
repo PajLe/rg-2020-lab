@@ -317,6 +317,9 @@ void CGLRenderer::DrawWholeFlower()
 		// "turn left(top)"
 		glPushMatrix();
 		{
+			glTranslatef(0.0f, -0.3f, 0.0f);
+			glRotatef(45.0f, 1.0, 0.0, 0.0);
+			glTranslatef(0.0f, 0.3f, 0.0f);
 			DrawRightRectPrism();
 			DrawRightTopmostSphere();
 		}
@@ -736,8 +739,12 @@ void CGLRenderer::DrawSecondRightSphere()
 
 void CGLRenderer::DrawRightRectPrism()
 {
+	DrawBottomRectPrism();
 }
 
 void CGLRenderer::DrawRightTopmostSphere()
 {
+	glTranslatef(0.0f, 0.3f, 0.0f);
+	DrawSphere(0.3);
+	glTranslatef(0.0f, 0.3f, 0.0f);
 }
