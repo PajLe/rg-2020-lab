@@ -18,6 +18,8 @@ CGLRenderer::CGLRenderer()
 	cameraZ = 0.0;
 	cameraYaw = 0.0f;
 	cameraPitch = asin(cameraY / sqrt(pow(cameraX, 2) + pow(cameraY, 2))) * 180 / M_PI;
+	rotateX = 0.0f;
+	rotateY = 0.0f;
 }
 
 CGLRenderer::~CGLRenderer(void)
@@ -172,6 +174,20 @@ void CGLRenderer::StopMovingCamera()
 {
 	firstMouse = true;
 }
+
+void CGLRenderer::RotateX(float angle)
+{
+	rotateX += angle;
+	rotateX = mod(rotateX, 360);
+}
+
+void CGLRenderer::RotateY(float angle)
+{
+	rotateY += angle;
+	rotateY = mod(rotateY, 360);
+}
+
+int CGLRenderer::mod(int k, int n) { return ((k %= n) < 0) ? k + n : k; }
 
 void CGLRenderer::DrawSphere(float r)
 {
@@ -357,6 +373,36 @@ void CGLRenderer::DrawWholeFlower()
 			DrawRightTopmostSphere();
 		}
 		glPopMatrix();
+	}
+	glPopMatrix();
+
+	// middle cactus part
+	glTranslatef(0.0f, -0.3f, 0.0f);
+	glRotatef(rotateX, 1.0f, 0.0f, 0.0f);
+	glTranslatef(0.0f, 0.3f, 0.0f);
+	glRotatef(rotateY, 0.0f, 1.0f, 0.0f);
+	DrawRotatingRectPrism();
+	DrawFirstRotatingSphere();
+	glPushMatrix();
+	{
+		glTranslatef(0.0f, -0.3f, 0.0f);
+		glRotatef(45.0f, 1.0f, 0.0f, 0.0f);
+		glTranslatef(0.0f, 0.3f, 0.0f);
+		DrawFirstLeftCone();
+		DrawFirstLeftConeSphere();
+		DrawSecondLeftCone();
+		DrawSecondLeftConeSphere();
+	}
+	glPopMatrix();
+	glPushMatrix();
+	{
+		glTranslatef(0.0f, -0.3f, 0.0f);
+		glRotatef(-45.0f, 1.0f, 0.0f, 0.0f);
+		glTranslatef(0.0f, 0.3f, 0.0f);
+		DrawRightOctaPrism();
+		DrawRightSphere();
+		DrawRightCone();
+		DrawTopRightSphere();
 	}
 	glPopMatrix();
 }
@@ -773,6 +819,94 @@ void CGLRenderer::DrawSecondRightSphere()
 void CGLRenderer::DrawRightRectPrism()
 {
 	DrawBottomRectPrism();
+}
+
+void CGLRenderer::DrawRotatingRectPrism()
+{
+	const int rectPoints = 4;
+
+	float base[rectPoints * 3]{
+		0.3f, 0.0f, 0.3f,
+		0.3f, 0.0f, -0.3f,
+		-0.3f, 0.0f, -0.3f,
+		-0.3f, 0.0f, 0.3f
+	};
+
+	float sides[2 * rectPoints * 3];
+	float quadPrismHeight = 1.45f;
+	for (int i = 0; i < rectPoints * 3; i += 3)
+	{
+		sides[i] = base[i];
+		sides[i + 1] = base[i + 1];
+		sides[i + 2] = base[i + 2];
+		sides[3 * rectPoints + i] = base[i];
+		sides[3 * rectPoints + i + 1] = base[i + 1] + quadPrismHeight;
+		sides[3 * rectPoints + i + 2] = base[i + 2];
+	}
+
+	u_char baseIndices[rectPoints];
+	for (int i = 0; i < rectPoints; i++)
+		baseIndices[i] = i;
+
+	u_char sidesIndices[2 * rectPoints + 2]
+	{
+		0, 4, 1, 5,
+		2, 6,
+		3, 7,
+		0, 4
+	};
+
+	glColor4f(188 / 255.0, 188 / 255.0, 0 / 255.0, 0.0f);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, base);
+	glDrawElements(GL_POLYGON, rectPoints, GL_UNSIGNED_BYTE, baseIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, sides);
+	glDrawElements(GL_QUAD_STRIP, 2 * rectPoints + 2, GL_UNSIGNED_BYTE, sidesIndices);
+
+	glVertexPointer(3, GL_FLOAT, 0, base);
+	glTranslatef(0.0f, quadPrismHeight, 0.0f);
+	glDrawElements(GL_POLYGON, rectPoints, GL_UNSIGNED_BYTE, baseIndices);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void CGLRenderer::DrawFirstRotatingSphere()
+{
+}
+
+void CGLRenderer::DrawFirstLeftCone()
+{
+}
+
+void CGLRenderer::DrawFirstLeftConeSphere()
+{
+}
+
+void CGLRenderer::DrawSecondLeftCone()
+{
+}
+
+void CGLRenderer::DrawSecondLeftConeSphere()
+{
+}
+
+void CGLRenderer::DrawRightOctaPrism()
+{
+}
+
+void CGLRenderer::DrawRightSphere()
+{
+}
+
+void CGLRenderer::DrawRightCone()
+{
+}
+
+void CGLRenderer::DrawTopRightSphere()
+{
 }
 
 void CGLRenderer::DrawRightTopmostSphere()

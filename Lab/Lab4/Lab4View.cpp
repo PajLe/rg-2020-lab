@@ -33,6 +33,7 @@ BEGIN_MESSAGE_MAP(CLab4View, CView)
 	ON_WM_ERASEBKGND()
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONUP()
+	ON_WM_KEYUP()
 END_MESSAGE_MAP()
 
 // CLab4View construction/destruction
@@ -178,4 +179,30 @@ void CLab4View::OnLButtonUp(UINT nFlags, CPoint point)
 	m_glRenderer.StopMovingCamera();
 
 	CView::OnLButtonUp(nFlags, point);
+}
+
+
+void CLab4View::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	switch (nChar)
+	{
+	case VK_LEFT:
+		m_glRenderer.RotateX(-10.0f);
+		Invalidate();
+		break;
+	case VK_RIGHT:
+		m_glRenderer.RotateX(10.0f);
+		Invalidate();
+		break;
+	case 0x41: // A
+		m_glRenderer.RotateY(-10.0f);
+		Invalidate();
+		break;
+	case 0x44: // D
+		m_glRenderer.RotateY(10.0f);
+		Invalidate();
+		break;
+	}
+
+	CView::OnKeyUp(nChar, nRepCnt, nFlags);
 }

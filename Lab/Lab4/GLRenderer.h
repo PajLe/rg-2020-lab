@@ -13,9 +13,15 @@ public:
 	void DestroyScene(CDC* pDC);			// dealocira resurse alocirane u drugim funkcijama ove klase,
 	void MoveCamera(CPoint cursorPoint);
 	void StopMovingCamera();
+	void RotateX(float angle);
+	void RotateY(float angle);
+
+	int mod(int k, int n);
 
 protected:
 	HGLRC	 m_hrc; //OpenGL Rendering Context 
+	short rotateX;
+	short rotateY;
 
 	void DrawSphere(float r);
 
@@ -43,5 +49,14 @@ private:
 	void DrawSecondRightSphere();
 	void DrawRightRectPrism();
 	void DrawRightTopmostSphere();
-
+	void DrawRotatingRectPrism();
+	void DrawFirstRotatingSphere();
+	void DrawFirstLeftCone();
+	void DrawFirstLeftConeSphere();
+	void DrawSecondLeftCone();
+	void DrawSecondLeftConeSphere();
+	void DrawRightOctaPrism();
+	void DrawRightSphere();
+	void DrawRightCone();
+	void DrawTopRightSphere();
 };
