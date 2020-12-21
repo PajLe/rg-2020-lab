@@ -73,7 +73,7 @@ void CGLRenderer::DrawScene(CDC* pDC)
 	glLoadIdentity();
 
 	gluLookAt(cameraX, cameraY, cameraZ,
-		0.0, 2.0, 0.0,
+		0.0, 3.4, 0.0,
 		0.0, 1.0, 0.0);
 
 	glBegin(GL_LINES);
