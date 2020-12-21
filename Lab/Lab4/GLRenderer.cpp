@@ -932,14 +932,65 @@ void CGLRenderer::DrawFirstLeftCone()
 
 void CGLRenderer::DrawFirstLeftConeSphere()
 {
+	glTranslatef(0.0f, 0.3f, 0.0f);
+	DrawSphere(0.3);
+	glTranslatef(0.0f, 0.3f, 0.0f);
 }
 
 void CGLRenderer::DrawSecondLeftCone()
 {
+	const int conePoints = 360;
+	const float coneAngle = 360.0f / conePoints;
+	const float coneHeight = 1.6f;
+
+	float base[(conePoints + 1) * 3];
+	u_short indices[conePoints + 1];
+	for (int i = 0; i < conePoints + 1; i++)
+		indices[i] = i;
+
+	float currAngle = 0.0f;
+	float r = .5f;
+	base[0] = 0.0f;
+	base[1] = 0.0f;
+	base[2] = 0.0f;
+	for (int i = 3; i < conePoints * 3 + 3; i += 3)
+	{
+		base[i] = r * cos(currAngle * M_PI / 180.0); // x
+		base[i + 1] = 0.0f; // y
+		base[i + 2] = r * sin(currAngle * M_PI / 180.0); // z
+
+		currAngle += coneAngle;
+	}
+
+	float side[(conePoints + 1) * 3];
+	side[0] = 0.0f;
+	side[1] = coneHeight;
+	side[2] = 0.0f;
+	for (int i = 3; i < conePoints * 3 + 3; i += 3)
+	{
+		side[i] = base[i];
+		side[i + 1] = base[i + 1];
+		side[i + 2] = base[i + 2];
+	}
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, base);
+	glDrawElements(GL_TRIANGLE_FAN, (conePoints + 1), GL_UNSIGNED_SHORT, indices);
+
+	glVertexPointer(3, GL_FLOAT, 0, side);
+	glDrawElements(GL_TRIANGLE_FAN, (conePoints + 1), GL_UNSIGNED_SHORT, indices);
+
+	glTranslatef(0.0f, coneHeight, 0.0f);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void CGLRenderer::DrawSecondLeftConeSphere()
 {
+	glTranslatef(0.0f, 0.3f, 0.0f);
+	DrawSphere(0.3);
+	glTranslatef(0.0f, 0.3f, 0.0f);
 }
 
 void CGLRenderer::DrawRightOctaPrism()
