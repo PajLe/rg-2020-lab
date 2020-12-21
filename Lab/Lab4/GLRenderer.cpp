@@ -175,15 +175,39 @@ void CGLRenderer::StopMovingCamera()
 
 void CGLRenderer::DrawSphere(float r)
 {
-	glBegin(GL_QUAD_STRIP);
-	for (float alpha = -90.0f; alpha < 90.0f; alpha++)
+	const u_short pointsPerAlpha = 360;
+	const u_char alphaRange = 180;
+
+	u_int* sphereIndices = new u_int[(pointsPerAlpha * 2 + 2) * (alphaRange - 1)];
+	u_int alphaIndicesArrayPos = 0;
+	for (char alpha = -90; alphaIndicesArrayPos < (pointsPerAlpha * 2 + 2) * (alphaRange - 1); alpha++)
+	{
+		u_short alphaPoint = (alpha + 90) * pointsPerAlpha;
+		u_short alphaPointNext = (alpha + 1 + 90) * pointsPerAlpha;
+
+		u_short beta;
+		for (beta = 0; beta < pointsPerAlpha * 2; beta += 2)
+		{
+			sphereIndices[alphaIndicesArrayPos + beta] = alphaPoint + beta / 2;
+			sphereIndices[alphaIndicesArrayPos + beta + 1] = alphaPointNext + beta / 2;
+		}
+		sphereIndices[alphaIndicesArrayPos + beta] = sphereIndices[alphaIndicesArrayPos];
+		sphereIndices[alphaIndicesArrayPos + beta + 1] = sphereIndices[alphaIndicesArrayPos + 1];
+
+		alphaIndicesArrayPos += pointsPerAlpha * 2 + 2;
+	}
+	
+	float* spherePoints = new float[3 * pointsPerAlpha * alphaRange];
+	float* normalsPoints = new float[3 * pointsPerAlpha * alphaRange];
+
+	for (char alpha = -90; alpha < 90; alpha++)
 	{
 		double alphaRadians = alpha * M_PI / 180.0;
-		double alphaPlusOneRadians = (alpha + 1.0) * M_PI / 180.0;
+		u_int alphaArrayPos = (alpha + 90) * pointsPerAlpha * 3;
 
-		for (float beta = 0.0f; beta <= 360.0f; beta++)
+		for (u_short beta = 0; beta < 3 * pointsPerAlpha; beta += 3)
 		{
-			double betaRadians = beta * M_PI / 180.0;
+			double betaRadians = (beta / 3) * M_PI / 180.0;
 
 			float x1 = r * cos(alphaRadians) * cos(betaRadians);
 			float y1 = r * sin(alphaRadians);
@@ -193,22 +217,31 @@ void CGLRenderer::DrawSphere(float r)
 			float normal1Y = sin(alphaRadians);
 			float normal1Z = sin(betaRadians);
 
-			float x2 = r * cos(alphaPlusOneRadians) * cos(betaRadians);
-			float y2 = r * sin(alphaPlusOneRadians);
-			float z2 = r * cos(alphaPlusOneRadians) * sin(betaRadians);
-
-			float normal2X = cos(betaRadians);
-			float normal2Y = sin(alphaPlusOneRadians);
-			float normal2Z = sin(betaRadians);
-
-			glNormal3f(normal1X, normal1Y, normal1Z); // for lightning
-			glVertex3f(x1, y1, z1);
-
-			glNormal3f(normal2X, normal2Y, normal2Z); // for lightning
-			glVertex3f(x2, y2, z2);
+			spherePoints[alphaArrayPos + beta] = x1;
+			spherePoints[alphaArrayPos + beta + 1] = y1;
+			spherePoints[alphaArrayPos + beta + 2] = z1;
+			
+			normalsPoints[alphaArrayPos + beta] = normal1X;
+			normalsPoints[alphaArrayPos + beta + 1] = normal1Y;
+			normalsPoints[alphaArrayPos + beta + 2] = normal1Z;
 		}
 	}
-	glEnd();
+
+	glColor4f(0 / 255.0, 188 / 255.0, 0 / 255.0, 0.0f);
+	glVertexPointer(3, GL_FLOAT, 0, spherePoints);
+	glNormalPointer(GL_FLOAT, 0, normalsPoints);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	glDrawElements(GL_QUAD_STRIP, (pointsPerAlpha * 2 + 2) * (alphaRange - 1), GL_UNSIGNED_INT, sphereIndices);
+
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	delete[] normalsPoints;
+	delete[] spherePoints;
+	delete[] sphereIndices;
 }
 
 void CGLRenderer::DrawGrid()
