@@ -8,3 +8,6 @@
 
 ## Lab 3
 <img src="Zadaci/lab3.png" />
+
+## Lab 4
+<img src="Zadaci/lab4.png" />
