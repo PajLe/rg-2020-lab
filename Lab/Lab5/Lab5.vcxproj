@@ -184,6 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GLMaterial.h" />
     <ClInclude Include="GLRenderer.h" />
     <ClInclude Include="Lab5.h" />
     <ClInclude Include="Lab5Doc.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GLMaterial.cpp" />
     <ClCompile Include="GLRenderer.cpp" />
     <ClCompile Include="Lab5.cpp" />
     <ClCompile Include="Lab5Doc.cpp" />
