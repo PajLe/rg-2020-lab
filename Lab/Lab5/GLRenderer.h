@@ -24,7 +24,7 @@ protected:
 	short rotateY;
 	double cameraDistanceFromCoordinateOrigin;
 
-	void DrawSphere(float r);
+	void DrawBase(float r);
 
 private:
 	CPoint lastPoint;

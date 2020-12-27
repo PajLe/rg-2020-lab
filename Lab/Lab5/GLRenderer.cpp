@@ -59,7 +59,7 @@ void CGLRenderer::PrepareScene(CDC* pDC)
 {
 	wglMakeCurrent(pDC->m_hDC, m_hrc);
 	//---------------------------------
-	glClearColor(1.0, 1.0, 1.0, 0.0);
+	glClearColor(1.0, 1.0, 1.0, 1.0);
 	//---------------------------------
 	wglMakeCurrent(NULL, NULL);
 }
@@ -80,6 +80,7 @@ void CGLRenderer::DrawScene(CDC* pDC)
 	SetRoomLightning();
 	DrawCoordinateLines();
 	DrawRoom();
+	DrawBase(1.5);
 
 	glFlush();
 	//---------------------------------
@@ -166,41 +167,24 @@ void CGLRenderer::RotateY(float angle)
 
 int CGLRenderer::mod(int k, int n) { return ((k %= n) < 0) ? k + n : k; }
 
-void CGLRenderer::DrawSphere(float r)
+void CGLRenderer::DrawBase(float r)
 {
-	const u_short pointsPerAlpha = 360;
-	const u_char alphaRange = 180;
+	GLMaterial sphereMat;
+	sphereMat.SetAmbient(0.4f, 0.4f, 0.4f, 1.0f);
+	sphereMat.SetDiffuse(0.4f, 0.4f, 0.4f, 1.0f);
+	sphereMat.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
+	sphereMat.SetEmission(0.0f, 0.0f, 0.0f, 1.0f);
 
-	u_int* sphereIndices = new u_int[(pointsPerAlpha * 2 + 2) * (alphaRange - 1)];
-	u_int alphaIndicesArrayPos = 0;
-	for (char alpha = -90; alphaIndicesArrayPos < (pointsPerAlpha * 2 + 2) * (alphaRange - 1); alpha++)
-	{
-		u_short alphaPoint = (alpha + 90) * pointsPerAlpha;
-		u_short alphaPointNext = (alpha + 1 + 90) * pointsPerAlpha;
-
-		u_short beta;
-		for (beta = 0; beta < pointsPerAlpha * 2; beta += 2)
-		{
-			sphereIndices[alphaIndicesArrayPos + beta] = alphaPoint + beta / 2;
-			sphereIndices[alphaIndicesArrayPos + beta + 1] = alphaPointNext + beta / 2;
-		}
-		sphereIndices[alphaIndicesArrayPos + beta] = sphereIndices[alphaIndicesArrayPos];
-		sphereIndices[alphaIndicesArrayPos + beta + 1] = sphereIndices[alphaIndicesArrayPos + 1];
-
-		alphaIndicesArrayPos += pointsPerAlpha * 2 + 2;
-	}
-	
-	float* spherePoints = new float[3 * pointsPerAlpha * alphaRange];
-	float* normalsPoints = new float[3 * pointsPerAlpha * alphaRange];
-
-	for (char alpha = -90; alpha < 90; alpha++)
+	sphereMat.SelectFront();
+	glBegin(GL_QUAD_STRIP);
+	for (float alpha = 0.0f; alpha < 90.0f; alpha++)
 	{
 		double alphaRadians = alpha * M_PI / 180.0;
-		u_int alphaArrayPos = (alpha + 90) * pointsPerAlpha * 3;
+		double alphaPlusOneRadians = (alpha + 1.0) * M_PI / 180.0;
 
-		for (u_short beta = 0; beta < 3 * pointsPerAlpha; beta += 3)
+		for (float beta = 0.0f; beta <= 360.0f; beta++)
 		{
-			double betaRadians = (beta / 3) * M_PI / 180.0;
+			double betaRadians = beta * M_PI / 180.0;
 
 			float x1 = r * cos(alphaRadians) * cos(betaRadians);
 			float y1 = r * sin(alphaRadians);
@@ -210,31 +194,22 @@ void CGLRenderer::DrawSphere(float r)
 			float normal1Y = sin(alphaRadians);
 			float normal1Z = sin(betaRadians);
 
-			spherePoints[alphaArrayPos + beta] = x1;
-			spherePoints[alphaArrayPos + beta + 1] = y1;
-			spherePoints[alphaArrayPos + beta + 2] = z1;
-			
-			normalsPoints[alphaArrayPos + beta] = normal1X;
-			normalsPoints[alphaArrayPos + beta + 1] = normal1Y;
-			normalsPoints[alphaArrayPos + beta + 2] = normal1Z;
+			float x2 = r * cos(alphaPlusOneRadians) * cos(betaRadians);
+			float y2 = r * sin(alphaPlusOneRadians);
+			float z2 = r * cos(alphaPlusOneRadians) * sin(betaRadians);
+
+			float normal2X = cos(betaRadians);
+			float normal2Y = sin(alphaPlusOneRadians);
+			float normal2Z = sin(betaRadians);
+
+			glNormal3f(normal1X, normal1Y, normal1Z); // for lightning
+			glVertex3f(x1, y1, z1);
+
+			glNormal3f(normal2X, normal2Y, normal2Z); // for lightning
+			glVertex3f(x2, y2, z2);
 		}
 	}
-
-	glColor4f(0 / 255.0, 188 / 255.0, 0 / 255.0, 0.0f);
-	glVertexPointer(3, GL_FLOAT, 0, spherePoints);
-	glNormalPointer(GL_FLOAT, 0, normalsPoints);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-
-	glDrawElements(GL_QUAD_STRIP, (pointsPerAlpha * 2 + 2) * (alphaRange - 1), GL_UNSIGNED_INT, sphereIndices);
-
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	delete[] normalsPoints;
-	delete[] spherePoints;
-	delete[] sphereIndices;
+	glEnd();
 }
 
 void CGLRenderer::DrawRoom()
@@ -457,21 +432,21 @@ void CGLRenderer::DrawBottomWall()
 
 void CGLRenderer::SetRoomLightning()
 {
-	GLfloat lmodel_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+	GLfloat lmodel_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
 
 	float light_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
 	float light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-	float light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	float light_specular[] = { 0.0f, 0.0f, 0.0f, 1.0 };
 	float light_position[] = { 6.0f, 20.0f, 8.0f, 0.0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	GLfloat spot_direction[] = { -1.0f, -1.0f, -1.0f };
-	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spot_direction);
+	//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spot_direction);
 	//glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 45);
 
 	glEnable(GL_LIGHTING);
@@ -484,10 +459,13 @@ void CGLRenderer::DrawCoordinateLines()
 	GLMaterial xMat, yMat, zMat;
 	xMat.SetDiffuse(1.0f, 0.0f, 0.0f, 1.0f);
 	xMat.SetAmbient(1.0f, 0.0f, 0.0f, 1.0f);
+	xMat.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
 	yMat.SetDiffuse(0.0f, 1.0f, 0.0f, 1.0f);
 	yMat.SetAmbient(0.0f, 1.0f, 0.0f, 1.0f);
+	yMat.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
 	zMat.SetDiffuse(0.0f, 0.0f, 1.0f, 1.0f);
 	zMat.SetAmbient(0.0f, 0.0f, 1.0f, 1.0f);
+	zMat.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
 	glBegin(GL_LINES);
 	{
 		xMat.SelectFront();
