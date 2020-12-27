@@ -245,59 +245,214 @@ void CGLRenderer::DrawRoom()
 	DrawBackWall();
 	DrawTopWall();
 	DrawBottomWall();
-	/*const u_char cubePoints = 8;
-	float height = 20.f;
-	
-	float vertices[cubePoints * 3];
-	u_char indices[cubePoints * 3];
-
-	vertices[0] = -height / 2; vertices[1] = 0; vertices[2] = height / 2;
-	vertices[3] = height / 2; vertices[4] = 0; vertices[5] = height / 2;
-	vertices[6] = height / 2; vertices[7] = height; vertices[8] = height / 2;
-	vertices[9] = -height / 2; vertices[10] = height; vertices[11] = height / 2;
-	vertices[12] = -height / 2; vertices[13] = 0; vertices[14] = -height / 2;
-	vertices[15] = height / 2; vertices[16] = 0; vertices[17] = -height / 2;
-	vertices[18] = height / 2; vertices[19] = height; vertices[20] = -height / 2;
-	vertices[21] = -height / 2; vertices[22] = height; vertices[23] = -height / 2;
-
-	indices[0] = 0; indices[1] = 1; indices[2] = 2; indices[3] = 3;
-	indices[4] = 1; indices[5] = 5; indices[6] = 6; indices[7] = 2;
-	indices[8] = 7; indices[9] = 6; indices[10] = 5; indices[11] = 4;
-	indices[12] = 0; indices[13] = 3; indices[14] = 7; indices[15] = 4;
-	indices[16] = 7; indices[17] = 3; indices[18] = 2; indices[19] = 6;
-	indices[20] = 0; indices[21] = 4; indices[22] = 5; indices[23] = 1;
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glVertexPointer(3, GL_FLOAT, 0, vertices);
-	glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, indices);
-
-	glDisableClientState(GL_VERTEX_ARRAY);*/
 }
 
 void CGLRenderer::DrawLeftWall()
 {
+	float side = 20.0f;
 	u_short resolution = 100;
+	float topLeftX = 10.0f;
+	float topLeftY = 20.0f;
+	float topLeftZ = 10.0f;
+	GLMaterial wallMat;
+	wallMat.SetAmbient(0.8f, 0.8f, 0.8f, 1.0f);
+	wallMat.SetDiffuse(0.8f, 0.8f, 0.8f, 1.0f);
+
+	float step = side / resolution;
+
+	wallMat.SelectFront();
+	glBegin(GL_QUADS);
+	{
+		for (u_short i = 0; i < resolution; i++)
+		{
+			for (u_short j = 0; j < resolution; j++)
+			{
+				glNormal3f(0.0f, 0.0f, -1.0f);
+				glVertex3f(topLeftX - step * j, topLeftY - step * i, topLeftZ);
+				glNormal3f(0.0f, 0.0f, -1.0f);
+				glVertex3f(topLeftX - step * (j + 1), topLeftY - step * i, topLeftZ);
+				glNormal3f(0.0f, 0.0f, -1.0f);
+				glVertex3f(topLeftX - step * (j + 1), topLeftY - step * (i + 1), topLeftZ);
+				glNormal3f(0.0f, 0.0f, -1.0f);
+				glVertex3f(topLeftX - step * j, topLeftY - step * (i + 1), topLeftZ);
+			}
+		}
+	}
+	glEnd();
 }
 
 void CGLRenderer::DrawFrontWall()
 {
+	float side = 20.0f;
+	u_short resolution = 100;
+	float topLeftX = -10.0f;
+	float topLeftY = 20.0f;
+	float topLeftZ = 10.0f;
+	GLMaterial wallMat;
+	wallMat.SetAmbient(0.8f, 0.8f, 0.8f, 1.0f);
+	wallMat.SetDiffuse(0.8f, 0.8f, 0.8f, 1.0f);
+
+	float step = side / resolution;
+
+	wallMat.SelectFront();
+	glBegin(GL_QUADS);
+	{
+		for (u_short i = 0; i < resolution; i++)
+		{
+			for (u_short j = 0; j < resolution; j++)
+			{
+				glNormal3f(1.0f, 0.0f, 0.0f);
+				glVertex3f(topLeftX, topLeftY - step * i, topLeftZ - step * j);
+				glNormal3f(1.0f, 0.0f, 0.0f);
+				glVertex3f(topLeftX, topLeftY - step * i, topLeftZ - step * (j + 1));
+				glNormal3f(1.0f, 0.0f, 0.0f);
+				glVertex3f(topLeftX, topLeftY - step * (i + 1), topLeftZ - step * (j + 1));
+				glNormal3f(1.0f, 0.0f, 0.0f);
+				glVertex3f(topLeftX, topLeftY - step * (i + 1), topLeftZ - step * j);
+			}
+		}
+	}
+	glEnd();
 }
 
 void CGLRenderer::DrawRightWall()
 {
+	float side = 20.0f;
+	u_short resolution = 100;
+	float topLeftX = -10.0f;
+	float topLeftY = 20.0f;
+	float topLeftZ = -10.0f;
+	GLMaterial wallMat;
+	wallMat.SetAmbient(0.8f, 0.8f, 0.8f, 1.0f);
+	wallMat.SetDiffuse(0.8f, 0.8f, 0.8f, 1.0f);
+
+	float step = side / resolution;
+
+	wallMat.SelectFront();
+	glBegin(GL_QUADS);
+	{
+		for (u_short i = 0; i < resolution; i++)
+		{
+			for (u_short j = 0; j < resolution; j++)
+			{
+				glNormal3f(0.0f, 0.0f, 1.0f);
+				glVertex3f(topLeftX + step * j, topLeftY - step * i, topLeftZ);
+				glNormal3f(0.0f, 0.0f, 1.0f);
+				glVertex3f(topLeftX + step * (j + 1), topLeftY - step * i, topLeftZ);
+				glNormal3f(0.0f, 0.0f, 1.0f);
+				glVertex3f(topLeftX + step * (j + 1), topLeftY - step * (i + 1), topLeftZ);
+				glNormal3f(0.0f, 0.0f, 1.0f);
+				glVertex3f(topLeftX + step * j, topLeftY - step * (i + 1), topLeftZ);
+			}
+		}
+	}
+	glEnd();
 }
 
 void CGLRenderer::DrawBackWall()
 {
+	float side = 20.0f;
+	u_short resolution = 100;
+	float topLeftX = 10.0f;
+	float topLeftY = 20.0f;
+	float topLeftZ = -10.0f;
+	GLMaterial wallMat;
+	wallMat.SetAmbient(0.8f, 0.8f, 0.8f, 1.0f);
+	wallMat.SetDiffuse(0.8f, 0.8f, 0.8f, 1.0f);
+
+	float step = side / resolution;
+
+	wallMat.SelectFront();
+	glBegin(GL_QUADS);
+	{
+		for (u_short i = 0; i < resolution; i++)
+		{
+			for (u_short j = 0; j < resolution; j++)
+			{
+				glNormal3f(-1.0f, 0.0f, 0.0f);
+				glVertex3f(topLeftX, topLeftY - step * i, topLeftZ + step * j);
+				glNormal3f(-1.0f, 0.0f, 0.0f);
+				glVertex3f(topLeftX, topLeftY - step * i, topLeftZ + step * (j + 1));
+				glNormal3f(-1.0f, 0.0f, 0.0f);
+				glVertex3f(topLeftX, topLeftY - step * (i + 1), topLeftZ + step * (j + 1));
+				glNormal3f(-1.0f, 0.0f, 0.0f);
+				glVertex3f(topLeftX, topLeftY - step * (i + 1), topLeftZ + step * j);
+			}
+		}
+	}
+	glEnd();
 }
 
 void CGLRenderer::DrawTopWall()
 {
+	float side = 20.0f;
+	u_short resolution = 100;
+	float topLeftX = 10.0f;
+	float topLeftY = 20.0f;
+	float topLeftZ = 10.0f;
+	GLMaterial wallMat;
+	wallMat.SetAmbient(0.3f, 0.3f, 0.3f, 1.0f);
+	wallMat.SetDiffuse(0.3f, 0.3f, 0.3f, 1.0f);
+
+	float step = side / resolution;
+
+	wallMat.SelectFront();
+	glBegin(GL_QUADS);
+	{
+		for (u_short i = 0; i < resolution; i++)
+		{
+			for (u_short j = 0; j < resolution; j++)
+			{
+				glNormal3f(0.0f, -1.0f, 0.0f);
+				glVertex3f(topLeftX - step * i, topLeftY, topLeftZ - step * j);
+				glNormal3f(0.0f, -1.0f, 0.0f);
+				glVertex3f(topLeftX - step * i, topLeftY, topLeftZ - step * (j + 1));
+				glNormal3f(0.0f, -1.0f, 0.0f);
+				glVertex3f(topLeftX - step * (i + 1), topLeftY, topLeftZ - step * (j + 1));
+				glNormal3f(0.0f, -1.0f, 0.0f);
+				glVertex3f(topLeftX - step * (i + 1), topLeftY, topLeftZ - step * j);
+			}
+		}
+	}
+	glEnd();
 }
 
 void CGLRenderer::DrawBottomWall()
 {
+	float side = 20.0f;
+	u_short resolution = 100;
+	float topLeftX = -10.0f;
+	float topLeftY = 0.0f;
+	float topLeftZ = 10.0f;
+	GLMaterial wallMat;
+	wallMat.SetAmbient(0.7f, 0.7f, 0.7f, 1.0f);
+	wallMat.SetDiffuse(0.7f, 0.7f, 0.7f, 1.0f);
+
+	GLMaterial transparentBack;
+	transparentBack.SetDiffuse(0.0f, 0.0f, 0.0f, 0.0f);
+
+	float step = side / resolution;
+
+	transparentBack.SelectBack();
+	wallMat.SelectFront();
+	glBegin(GL_QUADS);
+	{
+		for (u_short i = 0; i < resolution; i++)
+		{
+			for (u_short j = 0; j < resolution; j++)
+			{
+				glNormal3f(0.0f, 1.0f, 0.0f);
+				glVertex3f(topLeftX + step * i, topLeftY, topLeftZ - step * j);
+				glNormal3f(0.0f, 1.0f, 0.0f);
+				glVertex3f(topLeftX + step * i, topLeftY, topLeftZ - step * (j + 1));
+				glNormal3f(0.0f, 1.0f, 0.0f);
+				glVertex3f(topLeftX + step * (i + 1), topLeftY, topLeftZ - step * (j + 1));
+				glNormal3f(0.0f, 1.0f, 0.0f);
+				glVertex3f(topLeftX + step * (i + 1), topLeftY, topLeftZ - step * j);
+			}
+		}
+	}
+	glEnd();
 }
 
 void CGLRenderer::SetRoomLightning()
@@ -305,18 +460,19 @@ void CGLRenderer::SetRoomLightning()
 	GLfloat lmodel_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
-	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
 
-	float light_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
+	float light_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
 	float light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-	float light_specular[] = { 0.1, 0.1, 0.1, 1.0 };
-	float light_position[] = { 10.0, 20.0, 9.0, 0.0 };
+	float light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	float light_position[] = { 6.0f, 20.0f, 8.0f, 0.0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	GLfloat spot_direction[] = { 0.0, 0.0, 0.0 };
+	GLfloat spot_direction[] = { -1.0f, -1.0f, -1.0f };
 	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spot_direction);
+	//glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 45);
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
@@ -334,15 +490,15 @@ void CGLRenderer::DrawCoordinateLines()
 	zMat.SetAmbient(0.0f, 0.0f, 1.0f, 1.0f);
 	glBegin(GL_LINES);
 	{
-		xMat.Select();
+		xMat.SelectFront();
 		glVertex3f(0.0, 0.0, 0.0);
 		glVertex3f(10.0, 0.0, 0.0);
 
-		yMat.Select();
+		yMat.SelectFront();
 		glVertex3f(0.0, 0.0, 0.0);
 		glVertex3f(0.0, 10.0, 0.0);
 
-		zMat.Select();
+		zMat.SelectFront();
 		glVertex3f(0.0, 0.0, 0.0);
 		glVertex3f(0.0, 0.0, 10.0);
 	}
