@@ -22,6 +22,7 @@ protected:
 	HGLRC	 m_hrc; //OpenGL Rendering Context 
 	short rotateX;
 	short rotateY;
+	double cameraDistanceFromCoordinateOrigin;
 
 	void DrawSphere(float r);
 
@@ -59,4 +60,9 @@ private:
 	void DrawRightSphere();
 	void DrawRightCone();
 	void DrawTopRightSphere();
+
+	// lab 5
+	void SetRoomLightning();
+	void DrawCoordinateLines();
+	void DrawRoom();
 };
