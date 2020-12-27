@@ -202,10 +202,10 @@ void CGLRenderer::DrawBase(float r)
 			float normal2Y = sin(alphaPlusOneRadians);
 			float normal2Z = sin(betaRadians);
 
-			glNormal3f(normal1X, normal1Y, normal1Z); // for lightning
+			glNormal3f(normal1X, normal1Y, normal1Z); 
 			glVertex3f(x1, y1, z1);
 
-			glNormal3f(normal2X, normal2Y, normal2Z); // for lightning
+			glNormal3f(normal2X, normal2Y, normal2Z); 
 			glVertex3f(x2, y2, z2);
 		}
 	}
@@ -402,13 +402,8 @@ void CGLRenderer::DrawBottomWall()
 	GLMaterial wallMat;
 	wallMat.SetAmbient(0.7f, 0.7f, 0.7f, 1.0f);
 	wallMat.SetDiffuse(0.7f, 0.7f, 0.7f, 1.0f);
-
-	GLMaterial transparentBack;
-	transparentBack.SetDiffuse(0.0f, 0.0f, 0.0f, 0.0f);
-
 	float step = side / resolution;
 
-	transparentBack.SelectBack();
 	wallMat.SelectFront();
 	glBegin(GL_QUADS);
 	{
@@ -432,7 +427,7 @@ void CGLRenderer::DrawBottomWall()
 
 void CGLRenderer::SetRoomLightning()
 {
-	GLfloat lmodel_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
+	GLfloat lmodel_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
@@ -445,7 +440,7 @@ void CGLRenderer::SetRoomLightning()
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	GLfloat spot_direction[] = { -1.0f, -1.0f, -1.0f };
+	//GLfloat spot_direction[] = { -1.0f, -1.0f, -1.0f };
 	//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spot_direction);
 	//glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 45);
 
