@@ -13,8 +13,10 @@ public:
 	void DestroyScene(CDC* pDC);			// dealocira resurse alocirane u drugim funkcijama ove klase,
 	void MoveCamera(CPoint cursorPoint);
 	void StopMovingCamera();
-	void RotateX(float angle);
-	void RotateY(float angle);
+	void SwitchNormals();
+	void SwitchRedLight();
+	void SwitchGreenLight();
+	void SwitchBlueLight();
 
 	int mod(int k, int n);
 
@@ -23,8 +25,12 @@ protected:
 	short rotateX;
 	short rotateY;
 	double cameraDistanceFromCoordinateOrigin;
+	bool normalsOn;
+	bool redLightOn;
+	bool greenLightOn;
+	bool blueLightOn;
 
-	void DrawBase(float r);
+	void DrawHalfSphere(float r);
 
 private:
 	CPoint lastPoint;
@@ -35,33 +41,8 @@ private:
 	float cameraY;
 	float cameraZ;
 
-	void DrawGrid();
-	void DrawWholeFlower();
-	void DrawFlowerpot();
-	void DrawBottomRectPrism();
-	void DrawBottomSphere();
-	void DrawLeftCylinder();
-	void DrawFirstLeftSphere();
-	void DrawLeftRectPrism();
-	void DrawSecondLeftSphere();
-	void DrawFirstRightCylinder();
-	void DrawFirstRightSphere();
-	void DrawSecondRightOctaPrism();
-	void DrawSecondRightSphere();
-	void DrawRightRectPrism();
-	void DrawRightTopmostSphere();
-	void DrawRotatingRectPrism();
-	void DrawFirstRotatingSphere();
-	void DrawFirstLeftCone();
-	void DrawFirstLeftConeSphere();
-	void DrawSecondLeftCone();
-	void DrawSecondLeftConeSphere();
-	void DrawRightOctaPrism();
-	void DrawRightSphere();
-	void DrawRightCone();
-	void DrawTopRightSphere();
-
 	// lab 5
+	void DrawLights();
 	void SetRoomLightning();
 	void DrawCoordinateLines();
 	void DrawRoom();
@@ -71,5 +52,7 @@ private:
 	void DrawBackWall();
 	void DrawTopWall();
 	void DrawBottomWall();
+	void DrawBase();
 	void DrawCylinder();
+	void DrawBox();
 };

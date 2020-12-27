@@ -20,8 +20,10 @@ CGLRenderer::CGLRenderer()
 	cameraYaw = 0.0f;
 	cameraDistanceFromCoordinateOrigin = sqrt(pow(cameraX, 2) + pow(cameraY, 2));
 	cameraPitch = asin(cameraY / cameraDistanceFromCoordinateOrigin) * 180 / M_PI;
-	rotateX = 0.0f;
-	rotateY = 0.0f;
+	normalsOn = true;
+	redLightOn = true;
+	greenLightOn = true;
+	blueLightOn = true;
 }
 
 CGLRenderer::~CGLRenderer(void)
@@ -71,18 +73,24 @@ void CGLRenderer::DrawScene(CDC* pDC)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
 	glLoadIdentity();
 
 	gluLookAt(cameraX, cameraY, cameraZ,
 		0.0, 4.0, 0.0,
 		0.0, 1.0, 0.0);
 
+	glPushMatrix();
+	DrawLights();
+	glPopMatrix();
+
 	SetRoomLightning();
 	DrawCoordinateLines();
 	DrawRoom();
-	DrawBase(2);
+	DrawBase();
 	glTranslatef(0.0f, 1.5f, 0.0f);
 	DrawCylinder();
+	DrawBox();
 
 	glFlush();
 	//---------------------------------
@@ -155,21 +163,29 @@ void CGLRenderer::StopMovingCamera()
 	firstMouse = true;
 }
 
-void CGLRenderer::RotateX(float angle)
+void CGLRenderer::SwitchNormals()
 {
-	rotateX += angle;
-	rotateX = mod(rotateX, 360);
+	normalsOn = !normalsOn;
 }
 
-void CGLRenderer::RotateY(float angle)
+void CGLRenderer::SwitchRedLight()
 {
-	rotateY += angle;
-	rotateY = mod(rotateY, 360);
+	redLightOn = !redLightOn;
+}
+
+void CGLRenderer::SwitchGreenLight()
+{
+	greenLightOn = !greenLightOn;
+}
+
+void CGLRenderer::SwitchBlueLight()
+{
+	blueLightOn = !blueLightOn;
 }
 
 int CGLRenderer::mod(int k, int n) { return ((k %= n) < 0) ? k + n : k; }
 
-void CGLRenderer::DrawBase(float r)
+void CGLRenderer::DrawBase()
 {
 	GLMaterial sphereMat;
 	sphereMat.SetAmbient(0.7f, 0.7f, 0.7f, 1.0f);
@@ -177,6 +193,11 @@ void CGLRenderer::DrawBase(float r)
 	sphereMat.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
 
 	sphereMat.SelectFront();
+	DrawHalfSphere(2.0f);
+}
+
+void CGLRenderer::DrawHalfSphere(float r)
+{
 	glBegin(GL_QUAD_STRIP);
 	for (float alpha = 0.0f; alpha < 90.0f; alpha++)
 	{
@@ -203,10 +224,10 @@ void CGLRenderer::DrawBase(float r)
 			float normal2Y = sin(alphaPlusOneRadians);
 			float normal2Z = sin(betaRadians);
 
-			glNormal3f(normal1X, normal1Y, normal1Z); 
+			glNormal3f(normal1X, normal1Y, normal1Z);
 			glVertex3f(x1, y1, z1);
 
-			glNormal3f(normal2X, normal2Y, normal2Z); 
+			glNormal3f(normal2X, normal2Y, normal2Z);
 			glVertex3f(x2, y2, z2);
 		}
 	}
@@ -491,6 +512,114 @@ void CGLRenderer::DrawCylinder()
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
+void CGLRenderer::DrawBox()
+{
+
+}
+
+void CGLRenderer::DrawLights()
+{
+	glEnable(GL_LIGHTING);
+	if (redLightOn)
+	{
+		GLMaterial redLight;
+		redLight.SetEmission(1.0f, 0.0f, 0.0f, 1.0f);
+		redLight.SetAmbient(0.0f, 0.0f, 0.0f, 1.0f);
+		redLight.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
+		redLight.SetDiffuse(0.0f, 0.0f, 0.0f, 1.0f);
+		redLight.SelectFront();
+
+		GLfloat spot_direction[] = { 0.0f, 0.0f, -1.0f };
+		glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
+
+		glPushMatrix();
+		glTranslatef(0.0f, 10.0f, 9.0f);
+		glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+		DrawHalfSphere(.4f);
+		float light_ambient[] = { 0.1, 0.0, 0.0, 1.0 };
+		float light_diffuse[] = { 1.0, 0.0, 0.0, 1.0 };
+		float light_emission[] = { 1.0, 0.0, 0.0, 1.0 };
+		float light_specular[] = { 0.0f, 0.0f, 0.0f, 1.0 };
+		float light_position[] = { 0.0f, 0.0f, 0.0f, 1.0 };
+		glLightfv(GL_LIGHT1, GL_POSITION, light_position);
+		glLightfv(GL_LIGHT1, GL_EMISSION, light_emission);
+		glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
+		glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
+		glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
+		glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 25);
+
+		glEnable(GL_LIGHT1);
+		glPopMatrix();
+	}
+	else
+		glDisable(GL_LIGHT1);
+	if (greenLightOn)
+	{
+		GLMaterial greenLight;
+		greenLight.SetEmission(0.0f, 1.0f, 0.0f, 1.0f);
+		greenLight.SetAmbient(0.0f, 0.0f, 0.0f, 1.0f);
+		greenLight.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
+		greenLight.SetDiffuse(0.0f, 0.0f, 0.0f, 1.0f);
+		greenLight.SelectFront();
+
+		GLfloat spot_direction[] = { 0.0f, 0.0f, 1.0f };
+		glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
+
+		glPushMatrix();
+		glTranslatef(0.0f, 10.0f, -9.0f);
+		glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+		DrawHalfSphere(.4f);
+		float light_ambient[] = { 0.0, 0.1, 0.0, 1.0 };
+		float light_diffuse[] = { 0.0, 1.0, 0.0, 1.0 };
+		float light_emission[] = { 0.0, 1.0, 0.0, 1.0 };
+		float light_specular[] = { 0.0f, 0.0f, 0.0f, 1.0 };
+		float light_position[] = { 0.0f, 0.0f, 0.0f, 1.0 };
+		glLightfv(GL_LIGHT2, GL_POSITION, light_position);
+		glLightfv(GL_LIGHT2, GL_EMISSION, light_emission);
+		glLightfv(GL_LIGHT2, GL_AMBIENT, light_ambient);
+		glLightfv(GL_LIGHT2, GL_DIFFUSE, light_diffuse);
+		glLightfv(GL_LIGHT2, GL_SPECULAR, light_specular);
+		glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 25);
+
+		glEnable(GL_LIGHT2);
+		glPopMatrix();
+	}
+	else
+		glDisable(GL_LIGHT2);
+	if (blueLightOn)
+	{
+		GLMaterial blueLight;
+		blueLight.SetEmission(0.0f, 0.0f, 1.0f, 1.0f);
+		blueLight.SetAmbient(0.0f, 0.0f, 0.0f, 1.0f);
+		blueLight.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
+		blueLight.SetDiffuse(0.0f, 0.0f, 0.0f, 1.0f);
+		blueLight.SelectFront();
+
+		GLfloat spot_direction[] = { 0.0f, -1.0f, 0.0f };
+		glLightfv(GL_LIGHT3, GL_SPOT_DIRECTION, spot_direction);
+		glPushMatrix();
+		glTranslatef(0.0f, 20.0f, 0.0f);
+		glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+		DrawHalfSphere(.4f);
+		float light_ambient[] = { 0.0, 0.0, 0.1, 1.0 };
+		float light_diffuse[] = { 0.0, 0.0, 1.0, 1.0 };
+		float light_emission[] = { 0.0, 0.0, 1.0, 1.0 };
+		float light_specular[] = { 0.0f, 0.0f, 0.0f, 1.0 };
+		float light_position[] = { 0.0f, 0.0f, 0.0f, 1.0 };
+		glLightfv(GL_LIGHT3, GL_POSITION, light_position);
+		glLightfv(GL_LIGHT3, GL_EMISSION, light_emission);
+		glLightfv(GL_LIGHT3, GL_AMBIENT, light_ambient);
+		glLightfv(GL_LIGHT3, GL_DIFFUSE, light_diffuse);
+		glLightfv(GL_LIGHT3, GL_SPECULAR, light_specular);
+		glLightf(GL_LIGHT3, GL_SPOT_CUTOFF, 25);
+
+		glEnable(GL_LIGHT3);
+		glPopMatrix();
+	}
+	else
+		glDisable(GL_LIGHT3);
+}
+
 void CGLRenderer::SetRoomLightning()
 {
 	GLfloat lmodel_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
@@ -500,9 +629,11 @@ void CGLRenderer::SetRoomLightning()
 
 	float light_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
 	float light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	float light_emission[] = { 1.0, 1.0, 1.0, 1.0 };
 	float light_specular[] = { 0.0f, 0.0f, 0.0f, 1.0 };
 	float light_position[] = { 6.0f, 20.0f, 8.0f, 0.0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT0, GL_EMISSION, light_emission);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
@@ -510,7 +641,6 @@ void CGLRenderer::SetRoomLightning()
 	//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spot_direction);
 	//glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 45);
 
-	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 }
 

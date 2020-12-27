@@ -146,20 +146,20 @@ void CLab5View::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	switch (nChar) // TODO: other keys
 	{
-	case VK_LEFT:
-		m_glRenderer.RotateX(-10.0f);
+	case VK_RETURN:
+		m_glRenderer.SwitchNormals();
 		Invalidate();
 		break;
-	case VK_RIGHT:
-		m_glRenderer.RotateX(10.0f);
+	case 0x52: // R
+		m_glRenderer.SwitchRedLight();
 		Invalidate();
 		break;
-	case 0x41: // A
-		m_glRenderer.RotateY(-10.0f);
+	case 0x47: // G
+		m_glRenderer.SwitchGreenLight();
 		Invalidate();
 		break;
-	case 0x44: // D
-		m_glRenderer.RotateY(10.0f);
+	case 0x42: // B
+		m_glRenderer.SwitchBlueLight();
 		Invalidate();
 		break;
 	}
