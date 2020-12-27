@@ -5,7 +5,8 @@ public:
 	GLMaterial();
 	virtual ~GLMaterial();
 
-	void Select(void);
+	void SelectFront(void);
+	void SelectBack(void);
 
 	void SetAmbient(float r, float g, float b, float a);
 	void SetDiffuse(float r, float g, float b, float a);
