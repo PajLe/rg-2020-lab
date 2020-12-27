@@ -514,6 +514,64 @@ void CGLRenderer::DrawCylinder()
 
 void CGLRenderer::DrawBox()
 {
+	GLMaterial boxMat;
+	boxMat.SetAmbient(0.7f, 0.7f, 0.7f, 1.0f);
+	boxMat.SetDiffuse(0.7f, 0.7f, 0.7f, 1.0f);
+	boxMat.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
+	boxMat.SetEmission(0.0f, 0.0f, 0.0f, 1.0f);
+
+	boxMat.SelectFront();
+	float side = 2.3f;
+	glBegin(GL_QUADS);
+	{
+		// bottom side
+		glNormal3f(0.0f, -1.0f, 0.0f);
+		glVertex3f(side, 0.0f, side);
+		glVertex3f(side, 0.0f, -side);
+		glVertex3f(-side, 0.0f, -side);
+		glVertex3f(-side, 0.0f, side);
+
+		// left side
+		glNormal3f(0.0f, 0.0f, 1.0f);
+		glVertex3f(side, 0.0f, side);
+		glVertex3f(side, 1.0f, side);
+		glVertex3f(-side, 1.0f, side);
+		glVertex3f(-side, 0.0f, side);
+
+		// "front" side
+		glNormal3f(-1.0f, 0.0f, 0.0f);
+		glVertex3f(-side, 0.0f, -side);
+		glVertex3f(-side, 0.0f, side);
+		glVertex3f(-side, 1.0f, side);
+		glVertex3f(-side, 1.0f, -side);
+
+		// right side
+		glNormal3f(0.0f, 0.0f, -1.0f);
+		glVertex3f(side, 0.0f, -side);
+		glVertex3f(-side, 0.0f, -side);
+		glVertex3f(-side, 1.0f, -side);
+		glVertex3f(side, 1.0f, -side);
+
+		// back side
+		glNormal3f(1.0f, 0.0f, 0.0f);
+		glVertex3f(side, 0.0f, side);
+		glVertex3f(side, 0.0f, -side);
+		glVertex3f(side, 1.0f, -side);
+		glVertex3f(side, 1.0f, side);
+
+	}
+	glEnd();
+
+
+	// top side
+	glTranslatef(0.0f, 1.0f, 0.0f);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 1.0f, 0.0f);
+	glVertex3f(side, 0.0f, side);
+	glVertex3f(side, 0.0f, -side);
+	glVertex3f(-side, 0.0f, -side);
+	glVertex3f(-side, 0.0f, side);
+	glEnd();
 
 }
 
