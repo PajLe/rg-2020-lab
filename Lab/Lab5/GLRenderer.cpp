@@ -14,7 +14,7 @@
 CGLRenderer::CGLRenderer()
 {
 	firstMouse = true;
-	cameraX = 5.0;
+	cameraX = 5.4;
 	cameraY = 8.5;
 	cameraZ = 0.0;
 	cameraYaw = 0.0f;
@@ -80,7 +80,9 @@ void CGLRenderer::DrawScene(CDC* pDC)
 	SetRoomLightning();
 	DrawCoordinateLines();
 	DrawRoom();
-	DrawBase(1.5);
+	DrawBase(2);
+	glTranslatef(0.0f, 1.5f, 0.0f);
+	DrawCylinder();
 
 	glFlush();
 	//---------------------------------
@@ -170,10 +172,9 @@ int CGLRenderer::mod(int k, int n) { return ((k %= n) < 0) ? k + n : k; }
 void CGLRenderer::DrawBase(float r)
 {
 	GLMaterial sphereMat;
-	sphereMat.SetAmbient(0.4f, 0.4f, 0.4f, 1.0f);
-	sphereMat.SetDiffuse(0.4f, 0.4f, 0.4f, 1.0f);
+	sphereMat.SetAmbient(0.7f, 0.7f, 0.7f, 1.0f);
+	sphereMat.SetDiffuse(0.7f, 0.7f, 0.7f, 1.0f);
 	sphereMat.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
-	sphereMat.SetEmission(0.0f, 0.0f, 0.0f, 1.0f);
 
 	sphereMat.SelectFront();
 	glBegin(GL_QUAD_STRIP);
@@ -423,6 +424,71 @@ void CGLRenderer::DrawBottomWall()
 		}
 	}
 	glEnd();
+}
+
+void CGLRenderer::DrawCylinder()
+{
+	const int cylPoints = 360;
+	const float cylAngle = 360.0f / cylPoints;
+	const float cylHeight = 2.0f;
+
+	float base[cylPoints * 3];
+	float normals[cylPoints * 3];
+
+	float currAngle = 0.0f;
+	float r = 1.0f;
+	for (int i = 0; i < cylPoints * 3; i += 3)
+	{
+		base[i] = r * cos(currAngle * M_PI / 180.0); // x
+		base[i + 1] = 0.0f; // y
+		base[i + 2] = -r * sin(currAngle * M_PI / 180.0); // z
+
+		normals[i] = cos(currAngle * M_PI / 180.0); // x
+		normals[i + 1] = 0.0f; // y
+		normals[i + 2] = sin(currAngle * M_PI / 180.0); // z
+
+		currAngle += cylAngle;
+	}
+
+	float sides[2 * cylPoints * 3];
+	for (int i = 0; i < cylPoints * 3; i += 3)
+	{
+		sides[i] = base[i];
+		sides[i + 1] = base[i + 1];
+		sides[i + 2] = base[i + 2];
+		sides[3 * cylPoints + i] = base[i];
+		sides[3 * cylPoints + i + 1] = base[i + 1] + cylHeight;
+		sides[3 * cylPoints + i + 2] = base[i + 2];
+	}
+
+	u_short baseIndices[cylPoints];
+	for (int i = 0; i < cylPoints; i++)
+		baseIndices[i] = i;
+
+	u_short sidesIndices[2 * cylPoints + 2];
+	for (int i = 0; i < 2 * cylPoints; i += 2)
+	{
+		sidesIndices[i] = i / 2;
+		sidesIndices[i + 1] = i / 2 + cylPoints;
+	}
+	sidesIndices[2 * cylPoints + 2 - 2] = sidesIndices[0];
+	sidesIndices[2 * cylPoints + 2 - 1] = sidesIndices[1];
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	GLMaterial cylMat;
+	cylMat.SetAmbient(0.7f, 0.7f, 0.7f, 1.0f);
+	cylMat.SetDiffuse(0.7f, 0.7f, 0.7f, 1.0f);
+	cylMat.SelectFront();
+	glNormalPointer(GL_FLOAT, 0, normals);
+	glVertexPointer(3, GL_FLOAT, 0, sides);
+	glDrawElements(GL_QUAD_STRIP, 2 * cylPoints + 2, GL_UNSIGNED_SHORT, sidesIndices);
+
+	glTranslatef(0.0f, cylHeight, 0.0f);
+
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void CGLRenderer::SetRoomLightning()

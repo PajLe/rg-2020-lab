@@ -71,4 +71,5 @@ private:
 	void DrawBackWall();
 	void DrawTopWall();
 	void DrawBottomWall();
+	void DrawCylinder();
 };
