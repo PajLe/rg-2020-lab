@@ -239,6 +239,12 @@ void CGLRenderer::DrawSphere(float r)
 
 void CGLRenderer::DrawRoom()
 {
+	DrawLeftWall();
+	DrawFrontWall();
+	DrawRightWall();
+	DrawBackWall();
+	DrawTopWall();
+	DrawBottomWall();
 	/*const u_char cubePoints = 8;
 	float height = 20.f;
 	
@@ -269,6 +275,31 @@ void CGLRenderer::DrawRoom()
 	glDisableClientState(GL_VERTEX_ARRAY);*/
 }
 
+void CGLRenderer::DrawLeftWall()
+{
+	u_short resolution = 100;
+}
+
+void CGLRenderer::DrawFrontWall()
+{
+}
+
+void CGLRenderer::DrawRightWall()
+{
+}
+
+void CGLRenderer::DrawBackWall()
+{
+}
+
+void CGLRenderer::DrawTopWall()
+{
+}
+
+void CGLRenderer::DrawBottomWall()
+{
+}
+
 void CGLRenderer::SetRoomLightning()
 {
 	GLfloat lmodel_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
@@ -286,7 +317,6 @@ void CGLRenderer::SetRoomLightning()
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	GLfloat spot_direction[] = { 0.0, 0.0, 0.0 };
 	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spot_direction);
-	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 180.0f);
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);

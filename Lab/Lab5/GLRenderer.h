@@ -65,4 +65,10 @@ private:
 	void SetRoomLightning();
 	void DrawCoordinateLines();
 	void DrawRoom();
+	void DrawLeftWall();
+	void DrawFrontWall();
+	void DrawRightWall();
+	void DrawBackWall();
+	void DrawTopWall();
+	void DrawBottomWall();
 };
