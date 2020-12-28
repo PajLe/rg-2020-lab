@@ -611,6 +611,108 @@ void CGLRenderer::DrawVase()
 
 void CGLRenderer::DrawVasePart1()
 {
+	const u_short quads = 40;
+	float fullHeight = 2.0f;
+	float partHeight = 0.4f;
+	float otherPartHeight = fullHeight - partHeight;
+	float r = 2.0f;
+	float r1 = otherPartHeight * r / fullHeight; // r1/r == h1/h
+	float L = sqrt(pow(fullHeight, 2) + pow(r, 2));
+	float L1 = sqrt(pow(partHeight, 2) + pow(r1, 2));
+	float ny = r / L;
+	float nr = fullHeight / L;
+	float ny1 = r1 / L1;
+	float nr1 = otherPartHeight / L1;
+	GLMaterial partMaterial;
+	partMaterial.SetDiffuse(97 / 255.0, 97 / 255.0, 146 / 255.0, 1.0f);
+	partMaterial.SetAmbient(97 / 255.0, 97 / 255.0, 146 / 255.0, 1.0f);
+	partMaterial.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
+
+	GLMaterial lineMaterial;
+	lineMaterial.SetDiffuse(0.0f, 1.0f, 0.0f, 1.0f);
+	lineMaterial.SetAmbient(0.0f, 1.0f, 0.0f, 1.0f);
+	lineMaterial.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
+
+	float bottomNormalsStartX[quads];
+	float bottomNormalsStartY[quads];
+	float bottomNormalsStartZ[quads];
+	float bottomNormalsEndX[quads];
+	float bottomNormalsEndY[quads];
+	float bottomNormalsEndZ[quads];
+
+	float topNormalsStartX[quads];
+	float topNormalsStartY[quads];
+	float topNormalsStartZ[quads];
+	float topNormalsEndX[quads];
+	float topNormalsEndY[quads];
+	float topNormalsEndZ[quads];
+
+	int normalsIndex = 0;
+	partMaterial.SelectFront();
+	glBegin(GL_QUAD_STRIP);
+	{
+		for (float j = 0.0f; j <= 360.0f; j += 360.0f / quads)
+		{
+			float x1 = r * cos(j * M_PI / 180.0);
+			float y1 = 0.0f;
+			float z1 = r * sin(j * M_PI / 180.0);
+
+			float normal1X = nr * cos(j * M_PI / 180.0);
+			float normal1Y = ny;
+			float normal1Z = nr * sin(j * M_PI / 180.0);
+
+			float x2 = r1 * cos(j * M_PI / 180.0);
+			float y2 = partHeight;
+			float z2 = r1 * sin(j * M_PI / 180.0);
+
+			float normal2X = nr1 * cos(j * M_PI / 180.0);
+			float normal2Y = ny1;
+			float normal2Z = nr1 * sin(j * M_PI / 180.0);
+
+			glNormal3f(normal1X, normal1Y, normal1Z);
+			glVertex3f(x1, y1, z1);
+
+			glNormal3f(normal2X, normal2Y, normal2Z);
+			glVertex3f(x2, y2, z2);
+
+			if (normalsIndex < quads)
+			{
+				bottomNormalsStartX[normalsIndex] = x1;
+				bottomNormalsStartY[normalsIndex] = y1;
+				bottomNormalsStartZ[normalsIndex] = z1;
+				bottomNormalsEndX[normalsIndex] = x1 + normal1X / 4;
+				bottomNormalsEndY[normalsIndex] = y1 + normal1Y / 4;
+				bottomNormalsEndZ[normalsIndex] = z1 + normal1Z / 4;
+
+				topNormalsStartX[normalsIndex] = x2;
+				topNormalsStartY[normalsIndex] = y2;
+				topNormalsStartZ[normalsIndex] = z2;
+				topNormalsEndX[normalsIndex] = x2 + normal2X / 4;
+				topNormalsEndY[normalsIndex] = y2 + normal2Y / 4;
+				topNormalsEndZ[normalsIndex] = z2 + normal2Z / 4;
+			}
+
+			normalsIndex++;
+		}
+	}
+	glEnd();
+
+	if (normalsOn)
+	{
+		glBegin(GL_LINES);
+		lineMaterial.SelectFront();
+		for (int i = 0; i < normalsIndex - 1; i++)
+		{
+			// bottom normal
+			glVertex3f(bottomNormalsStartX[i], bottomNormalsStartY[i], bottomNormalsStartZ[i]);
+			glVertex3f(bottomNormalsEndX[i], bottomNormalsEndY[i], bottomNormalsEndZ[i]);
+
+			// top normal
+			glVertex3f(topNormalsStartX[i], topNormalsStartY[i], topNormalsStartZ[i]);
+			glVertex3f(topNormalsEndX[i], topNormalsEndY[i], topNormalsEndZ[i]);
+		}
+		glEnd();
+	}
 }
 
 void CGLRenderer::DrawVasePart2()
