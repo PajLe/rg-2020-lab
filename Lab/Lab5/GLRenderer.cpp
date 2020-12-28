@@ -828,11 +828,6 @@ float CGLRenderer::DrawUpsideDownConePart(float smallerR, float fullConeHeight, 
 	float nr = fullConeHeight / L;
 	float ny1 = r1 / L1;
 	float nr1 = otherPartHeight / L1;
-	
-	GLMaterial lineMaterial;
-	lineMaterial.SetDiffuse(0.0f, 1.0f, 0.0f, 1.0f);
-	lineMaterial.SetAmbient(0.0f, 1.0f, 0.0f, 1.0f);
-	lineMaterial.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
 
 	float bottomNormalsStartX[quads];
 	float bottomNormalsStartY[quads];
@@ -899,8 +894,9 @@ float CGLRenderer::DrawUpsideDownConePart(float smallerR, float fullConeHeight, 
 
 	if (normalsOn)
 	{
+		glDisable(GL_LIGHTING);
 		glBegin(GL_LINES);
-		lineMaterial.SelectFront();
+		glColor3f(0.0f, 1.0f, 0.0f);
 		for (int i = 0; i < normalsIndex - 1; i++)
 		{
 			// bottom normal
@@ -912,6 +908,7 @@ float CGLRenderer::DrawUpsideDownConePart(float smallerR, float fullConeHeight, 
 			glVertex3f(topNormalsEndX[i], topNormalsEndY[i], topNormalsEndZ[i]);
 		}
 		glEnd();
+		glEnable(GL_LIGHTING);
 	}
 
 	return r;
@@ -929,11 +926,6 @@ float CGLRenderer::DrawConePart(float baseR, float fullConeHeight, float partCon
 	float nr = fullConeHeight / L;
 	float ny1 = r1 / L1;
 	float nr1 = otherPartHeight / L1;
-	
-	GLMaterial lineMaterial;
-	lineMaterial.SetDiffuse(0.0f, 1.0f, 0.0f, 1.0f);
-	lineMaterial.SetAmbient(0.0f, 1.0f, 0.0f, 1.0f);
-	lineMaterial.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
 
 	float bottomNormalsStartX[quads];
 	float bottomNormalsStartY[quads];
@@ -1000,8 +992,9 @@ float CGLRenderer::DrawConePart(float baseR, float fullConeHeight, float partCon
 
 	if (normalsOn)
 	{
+		glDisable(GL_LIGHTING);
 		glBegin(GL_LINES);
-		lineMaterial.SelectFront();
+		glColor3f(0.0f, 1.0f, 0.0f);
 		for (int i = 0; i < normalsIndex - 1; i++)
 		{
 			// bottom normal
@@ -1013,6 +1006,7 @@ float CGLRenderer::DrawConePart(float baseR, float fullConeHeight, float partCon
 			glVertex3f(topNormalsEndX[i], topNormalsEndY[i], topNormalsEndZ[i]);
 		}
 		glEnd();
+		glEnable(GL_LIGHTING);
 	}
 
 	return r1;
@@ -1024,11 +1018,6 @@ float CGLRenderer::DrawCylinderPart(float baseR, float cylHeight)
 	float partHeight = cylHeight;
 	float r = baseR;
 	float r1 = baseR;
-	
-	GLMaterial lineMaterial;
-	lineMaterial.SetDiffuse(0.0f, 1.0f, 0.0f, 1.0f);
-	lineMaterial.SetAmbient(0.0f, 1.0f, 0.0f, 1.0f);
-	lineMaterial.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
 
 	float bottomNormalsStartX[quads];
 	float bottomNormalsStartY[quads];
@@ -1095,8 +1084,9 @@ float CGLRenderer::DrawCylinderPart(float baseR, float cylHeight)
 
 	if (normalsOn)
 	{
+		glDisable(GL_LIGHTING);
 		glBegin(GL_LINES);
-		lineMaterial.SelectFront();
+		glColor3f(0.0f, 1.0f, 0.0f);
 		for (int i = 0; i < normalsIndex - 1; i++)
 		{
 			// bottom normal
@@ -1108,6 +1098,7 @@ float CGLRenderer::DrawCylinderPart(float baseR, float cylHeight)
 			glVertex3f(topNormalsEndX[i], topNormalsEndY[i], topNormalsEndZ[i]);
 		}
 		glEnd();
+		glEnable(GL_LIGHTING);
 	}
 
 	return r1;
