@@ -20,6 +20,7 @@ CGLRenderer::CGLRenderer()
 	cameraYaw = 0.0f;
 	cameraDistanceFromCoordinateOrigin = sqrt(pow(cameraX, 2) + pow(cameraY, 2));
 	cameraPitch = asin(cameraY / cameraDistanceFromCoordinateOrigin) * 180 / M_PI;
+	cameraY *= 1.3;
 	normalsOn = true;
 	redLightOn = true;
 	greenLightOn = true;
@@ -91,6 +92,7 @@ void CGLRenderer::DrawScene(CDC* pDC)
 	glTranslatef(0.0f, 1.5f, 0.0f);
 	DrawCylinder();
 	DrawBox();
+	DrawVase();
 
 	glFlush();
 	//---------------------------------
@@ -154,7 +156,7 @@ void CGLRenderer::MoveCamera(CPoint cursorPoint) // https://learnopengl.com/Gett
 	double yPos = sin(cameraPitch * M_PI / 180.0);
 	double zPos = -sin(cameraYaw * M_PI / 180.0) * cos(cameraPitch * M_PI / 180.0);
 	cameraX = cameraDistanceFromCoordinateOrigin * xPos;
-	cameraY = cameraDistanceFromCoordinateOrigin * yPos;
+	cameraY = 1.3 * cameraDistanceFromCoordinateOrigin * yPos;
 	cameraZ = cameraDistanceFromCoordinateOrigin * zPos;
 }
 
@@ -575,6 +577,94 @@ void CGLRenderer::DrawBox()
 
 }
 
+void CGLRenderer::DrawVase()
+{
+	glTranslatef(0.0, -0.1f, 0.0f);
+	DrawVasePart1();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	DrawVasePart2();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	DrawVasePart3();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	DrawVasePart4();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	DrawVasePart5();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	DrawVasePart6();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	DrawVasePart7();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	DrawVasePart8();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	DrawVasePart9();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	DrawVasePart10();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	DrawVasePart11();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	DrawVasePart12();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	DrawVasePart13();
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	DrawVasePart14();
+}
+
+void CGLRenderer::DrawVasePart1()
+{
+}
+
+void CGLRenderer::DrawVasePart2()
+{
+}
+
+void CGLRenderer::DrawVasePart3()
+{
+}
+
+void CGLRenderer::DrawVasePart4()
+{
+}
+
+void CGLRenderer::DrawVasePart5()
+{
+}
+
+void CGLRenderer::DrawVasePart6()
+{
+}
+
+void CGLRenderer::DrawVasePart7()
+{
+}
+
+void CGLRenderer::DrawVasePart8()
+{
+}
+
+void CGLRenderer::DrawVasePart9()
+{
+}
+
+void CGLRenderer::DrawVasePart10()
+{
+}
+
+void CGLRenderer::DrawVasePart11()
+{
+}
+
+void CGLRenderer::DrawVasePart12()
+{
+}
+
+void CGLRenderer::DrawVasePart13()
+{
+}
+
+void CGLRenderer::DrawVasePart14()
+{
+}
+
 void CGLRenderer::DrawLights()
 {
 	glEnable(GL_LIGHTING);
@@ -593,8 +683,8 @@ void CGLRenderer::DrawLights()
 		glPushMatrix();
 		glTranslatef(0.0f, 10.0f, 9.0f);
 		glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
-		DrawHalfSphere(.4f);
 		float light_ambient[] = { 0.1, 0.0, 0.0, 1.0 };
+		DrawHalfSphere(.4f);
 		float light_diffuse[] = { 1.0, 0.0, 0.0, 1.0 };
 		float light_emission[] = { 1.0, 0.0, 0.0, 1.0 };
 		float light_specular[] = { 0.0f, 0.0f, 0.0f, 1.0 };
