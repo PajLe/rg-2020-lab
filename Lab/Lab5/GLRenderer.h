@@ -65,9 +65,9 @@ private:
 	float DrawVasePart7(float smallerR, float fullConeHeight, float partConeHeight);
 	float DrawVasePart8(float smallerR, float fullConeHeight, float partConeHeight);
 	float DrawVasePart9(float firstR, float fullConeHeight, float partConeHeight);
-	float DrawVasePart10(float firstR, float fullConeHeight, float partConeHeight);
-	float DrawVasePart11(float firstR, float fullConeHeight, float partConeHeight);
+	float DrawVasePart10(float smallerR, float fullConeHeight, float partConeHeight);
+	float DrawVasePart11(float smallerR, float fullConeHeight, float partConeHeight);
 	float DrawVasePart12(float firstR, float fullConeHeight, float partConeHeight);
-	float DrawVasePart13(float firstR, float fullConeHeight, float partConeHeight);
-	float DrawVasePart14(float firstR, float fullConeHeight, float partConeHeight);
+	float DrawVasePart13(float smallerR, float fullConeHeight, float partConeHeight);
+	float DrawVasePart14(float smallerR, float fullConeHeight, float partConeHeight);
 };
