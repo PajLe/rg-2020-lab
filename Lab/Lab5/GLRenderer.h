@@ -18,10 +18,8 @@ public:
 	void SwitchGreenLight();
 	void SwitchBlueLight();
 
-	int mod(int k, int n);
-
 protected:
-	HGLRC	 m_hrc; //OpenGL Rendering Context 
+	HGLRC m_hrc; //OpenGL Rendering Context 
 	short rotateX;
 	short rotateY;
 	double cameraDistanceFromCoordinateOrigin;
@@ -31,6 +29,9 @@ protected:
 	bool blueLightOn;
 
 	void DrawHalfSphere(float r);
+	float DrawUpsideDownConePart(float smallerR, float fullConeHeight, float partConeHeight);
+	float DrawConePart(float baseR, float fullConeHeight, float partConeHeight);
+	float DrawCylinderPart(float baseR, float cylHeight);
 
 private:
 	CPoint lastPoint;
@@ -41,33 +42,36 @@ private:
 	float cameraY;
 	float cameraZ;
 
-	// lab 5
+	// importants
 	void DrawLights();
 	void SetRoomLightning();
 	void DrawCoordinateLines();
 	void DrawRoom();
+	void DrawBase();
+	void DrawCylinderPartOfTheBase();
+	void DrawBox();
+	void DrawVase();
+
+	// helpers
 	void DrawLeftWall();
 	void DrawFrontWall();
 	void DrawRightWall();
 	void DrawBackWall();
 	void DrawTopWall();
 	void DrawBottomWall();
-	void DrawBase();
-	void DrawCylinder();
-	void DrawBox();
-	void DrawVase();
+
 	float DrawVasePart1(float fullConeHeight, float partConeHeight);
-	float DrawVasePart2(float firstR, float fullConeHeight, float partConeHeight);
-	float DrawVasePart3(float firstR, float partConeHeight);
-	float DrawVasePart4(float firstR, float partConeHeight);
+	float DrawVasePart2(float baseR, float fullConeHeight, float partConeHeight);
+	float DrawVasePart3(float baseR, float cylHeight);
+	float DrawVasePart4(float baseR, float cylHeight);
 	float DrawVasePart5(float smallerR, float fullConeHeight, float partConeHeight);
-	float DrawVasePart6(float firstR, float fullConeHeight, float partConeHeight);
+	float DrawVasePart6(float baseR, float fullConeHeight, float partConeHeight);
 	float DrawVasePart7(float smallerR, float fullConeHeight, float partConeHeight);
 	float DrawVasePart8(float smallerR, float fullConeHeight, float partConeHeight);
-	float DrawVasePart9(float firstR, float fullConeHeight, float partConeHeight);
+	float DrawVasePart9(float baseR, float fullConeHeight, float partConeHeight);
 	float DrawVasePart10(float smallerR, float fullConeHeight, float partConeHeight);
 	float DrawVasePart11(float smallerR, float fullConeHeight, float partConeHeight);
-	float DrawVasePart12(float firstR, float fullConeHeight, float partConeHeight);
+	float DrawVasePart12(float baseR, float fullConeHeight, float partConeHeight);
 	float DrawVasePart13(float smallerR, float fullConeHeight, float partConeHeight);
 	float DrawVasePart14(float smallerR, float fullConeHeight, float partConeHeight);
 };
