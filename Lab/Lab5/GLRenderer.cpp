@@ -481,7 +481,7 @@ void CGLRenderer::DrawCylinderPartOfTheBase()
 		currAngle += cylAngle;
 	}
 
-	float sides[2 * cylPoints * 3];
+	float* sides = new float[2 * cylPoints * 3];
 	for (int i = 0; i < cylPoints * 3; i += 3)
 	{
 		sides[i] = base[i];
@@ -520,6 +520,7 @@ void CGLRenderer::DrawCylinderPartOfTheBase()
 
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+	delete[] sides;
 }
 
 void CGLRenderer::DrawBox()
