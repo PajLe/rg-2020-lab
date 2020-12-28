@@ -252,7 +252,8 @@ void CGLRenderer::DrawRoom()
 	DrawRightWall();
 	DrawBackWall();
 	DrawTopWall();
-	DrawBottomWall();
+	if (cameraY >= 0.0f)
+		DrawBottomWall();
 }
 
 void CGLRenderer::DrawLeftWall()
