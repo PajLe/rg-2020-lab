@@ -11,3 +11,6 @@
 
 ## Lab 4
 <img src="Zadaci/lab4.png" />
+
+## Lab 5
+<img src="Zadaci/lab5.png" />
