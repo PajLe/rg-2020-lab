@@ -464,7 +464,7 @@ void CGLRenderer::DrawCylinder()
 	{
 		base[i] = r * cos(currAngle * M_PI / 180.0); // x
 		base[i + 1] = 0.0f; // y
-		base[i + 2] = -r * sin(currAngle * M_PI / 180.0); // z
+		base[i + 2] = r * sin(currAngle * M_PI / 180.0); // z
 
 		normals[i] = cos(currAngle * M_PI / 180.0); // x
 		normals[i + 1] = 0.0f; // y
