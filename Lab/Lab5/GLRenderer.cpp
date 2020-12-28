@@ -1234,29 +1234,21 @@ void CGLRenderer::SetRoomLightning()
 void CGLRenderer::DrawCoordinateLines()
 {
 	glLineWidth(2.0);
-	GLMaterial xMat, yMat, zMat;
-	xMat.SetDiffuse(1.0f, 0.0f, 0.0f, 1.0f);
-	xMat.SetAmbient(1.0f, 0.0f, 0.0f, 1.0f);
-	xMat.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
-	yMat.SetDiffuse(0.0f, 1.0f, 0.0f, 1.0f);
-	yMat.SetAmbient(0.0f, 1.0f, 0.0f, 1.0f);
-	yMat.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
-	zMat.SetDiffuse(0.0f, 0.0f, 1.0f, 1.0f);
-	zMat.SetAmbient(0.0f, 0.0f, 1.0f, 1.0f);
-	zMat.SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
+	glDisable(GL_LIGHTING);
 	glBegin(GL_LINES);
 	{
-		xMat.SelectFront();
+		glColor3f(1.0f, 0.0f, 0.0f);
 		glVertex3f(0.0, 0.0, 0.0);
 		glVertex3f(10.0, 0.0, 0.0);
 
-		yMat.SelectFront();
+		glColor3f(0.0f, 1.0f, 0.0f);
 		glVertex3f(0.0, 0.0, 0.0);
 		glVertex3f(0.0, 10.0, 0.0);
 
-		zMat.SelectFront();
+		glColor3f(0.0f, 0.0f, 1.0f);
 		glVertex3f(0.0, 0.0, 0.0);
 		glVertex3f(0.0, 0.0, 10.0);
 	}
 	glEnd();
+	glEnable(GL_LIGHTING);
 }
