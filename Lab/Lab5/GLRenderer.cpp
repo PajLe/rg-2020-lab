@@ -580,41 +580,43 @@ void CGLRenderer::DrawBox()
 void CGLRenderer::DrawVase()
 {
 	float partHeight = 0.4f;
+	float fullConeHeight = 1.5f;
+
 	glTranslatef(0.0, -0.1f, 0.0f);
-	float nextR = DrawVasePart1();
+	float nextR = DrawVasePart1(fullConeHeight, partHeight);
 	glTranslatef(0.0f, partHeight, 0.0f);
-	nextR = DrawVasePart2(nextR);
+	nextR = DrawVasePart2(nextR, fullConeHeight, partHeight);
 	glTranslatef(0.0f, partHeight, 0.0f);
-	nextR = DrawVasePart3(nextR);
+	nextR = DrawVasePart3(nextR, partHeight);
 	glTranslatef(0.0f, partHeight, 0.0f);
-	nextR = DrawVasePart4(nextR);
+	nextR = DrawVasePart4(nextR, partHeight);
 	glTranslatef(0.0f, partHeight, 0.0f);
-	nextR = DrawVasePart5(nextR);
+	nextR = DrawVasePart5(nextR, fullConeHeight, 0.3f);
+	glTranslatef(0.0f, 0.3f, 0.0f);
+	nextR = DrawVasePart6(nextR, fullConeHeight, 0.3f);
+	glTranslatef(0.0f, 0.3f, 0.0f);
+	nextR = DrawVasePart7(nextR, fullConeHeight, partHeight);
 	glTranslatef(0.0f, partHeight, 0.0f);
-	nextR = DrawVasePart6(nextR);
+	nextR = DrawVasePart8(nextR, fullConeHeight, partHeight);
 	glTranslatef(0.0f, partHeight, 0.0f);
-	nextR = DrawVasePart7(nextR);
+	nextR = DrawVasePart9(nextR, fullConeHeight, partHeight);
 	glTranslatef(0.0f, partHeight, 0.0f);
-	nextR = DrawVasePart8(nextR);
+	nextR = DrawVasePart10(nextR, fullConeHeight, partHeight);
 	glTranslatef(0.0f, partHeight, 0.0f);
-	nextR = DrawVasePart9(nextR);
+	nextR = DrawVasePart11(nextR, fullConeHeight, partHeight);
 	glTranslatef(0.0f, partHeight, 0.0f);
-	nextR = DrawVasePart10(nextR);
+	nextR = DrawVasePart12(nextR, fullConeHeight, partHeight);
 	glTranslatef(0.0f, partHeight, 0.0f);
-	nextR = DrawVasePart11(nextR);
+	nextR = DrawVasePart13(nextR, fullConeHeight, partHeight);
 	glTranslatef(0.0f, partHeight, 0.0f);
-	nextR = DrawVasePart12(nextR);
-	glTranslatef(0.0f, partHeight, 0.0f);
-	nextR = DrawVasePart13(nextR);
-	glTranslatef(0.0f, partHeight, 0.0f);
-	nextR = DrawVasePart14(nextR);
+	nextR = DrawVasePart14(nextR, fullConeHeight, partHeight);
 }
 
-float CGLRenderer::DrawVasePart1()
+float CGLRenderer::DrawVasePart1(float fullConeHeight, float partConeHeight)
 {
 	const u_short quads = 40;
-	float fullHeight = 2.0f;
-	float partHeight = 0.4f;
+	float fullHeight = fullConeHeight;
+	float partHeight = partConeHeight;
 	float otherPartHeight = fullHeight - partHeight;
 	float r = 1.5f;
 	float r1 = otherPartHeight * r / fullHeight; // r1/r == h1/h
@@ -718,13 +720,13 @@ float CGLRenderer::DrawVasePart1()
 	return r1;
 }
 
-float CGLRenderer::DrawVasePart2(float nextR)
+float CGLRenderer::DrawVasePart2(float firstR, float fullConeHeight, float partConeHeight)
 {
 	const u_short quads = 40;
-	float fullHeight = 2.0f;
-	float partHeight = 0.4f;
+	float fullHeight = fullConeHeight;
+	float partHeight = partConeHeight;
 	float otherPartHeight = fullHeight - partHeight;
-	float r = nextR;
+	float r = firstR;
 	float r1 = otherPartHeight * r / fullHeight; // r1/r == h1/h
 	float L = sqrt(pow(fullHeight, 2) + pow(r, 2));
 	float L1 = sqrt(pow(partHeight, 2) + pow(r1, 2));
@@ -826,12 +828,12 @@ float CGLRenderer::DrawVasePart2(float nextR)
 	return r1;
 }
 
-float CGLRenderer::DrawVasePart3(float nextR) // cylinder
+float CGLRenderer::DrawVasePart3(float firstR, float partConeHeight) // cylinder
 {
 	const u_short quads = 40;
-	float partHeight = 0.4f;
-	float r = nextR;
-	float r1 = nextR;
+	float partHeight = partConeHeight;
+	float r = firstR;
+	float r1 = firstR;
 
 	GLMaterial partMaterial;
 	partMaterial.SetDiffuse(97 / 255.0, 97 / 255.0, 146 / 255.0, 1.0f);
@@ -927,12 +929,12 @@ float CGLRenderer::DrawVasePart3(float nextR) // cylinder
 	return r1;
 }
 
-float CGLRenderer::DrawVasePart4(float nextR) // cylinder
+float CGLRenderer::DrawVasePart4(float firstR, float partConeHeight) // cylinder
 {
 	const u_short quads = 40;
-	float partHeight = 0.4f;
-	float r = nextR;
-	float r1 = nextR;
+	float partHeight = partConeHeight;
+	float r = firstR;
+	float r1 = firstR;
 
 	GLMaterial partMaterial;
 	partMaterial.SetDiffuse(67 / 255.0, 67 / 255.0, 144 / 255.0, 1.0f);
@@ -1028,14 +1030,14 @@ float CGLRenderer::DrawVasePart4(float nextR) // cylinder
 	return r1;
 }
 
-float CGLRenderer::DrawVasePart5(float nextR) // upside down
+float CGLRenderer::DrawVasePart5(float firstR, float fullConeHeight, float partConeHeight) // upside down
 {
 	const u_short quads = 40;
-	float fullHeight = 2.0f;
-	float partHeight = 0.4f;
+	float fullHeight = fullConeHeight;
+	float partHeight = partConeHeight;
 	float otherPartHeight = fullHeight - partHeight;
-	float r = nextR;
-	float r1 = 1.2f;
+	float r = firstR;
+	float r1 = 1.05f;
 	float L = sqrt(pow(fullHeight, 2) + pow(r, 2));
 	float L1 = sqrt(pow(partHeight, 2) + pow(r1, 2));
 	float ny = r / L;
@@ -1136,13 +1138,13 @@ float CGLRenderer::DrawVasePart5(float nextR) // upside down
 	return r1;
 }
 
-float CGLRenderer::DrawVasePart6(float nextR)
+float CGLRenderer::DrawVasePart6(float firstR, float fullConeHeight, float partConeHeight)
 {
 	const u_short quads = 40;
-	float fullHeight = 2.0f;
-	float partHeight = 0.4f;
+	float fullHeight = fullConeHeight;
+	float partHeight = partConeHeight;
 	float otherPartHeight = fullHeight - partHeight;
-	float r = nextR;
+	float r = firstR;
 	float r1 = otherPartHeight * r / fullHeight; // r1/r == h1/h
 	float L = sqrt(pow(fullHeight, 2) + pow(r, 2));
 	float L1 = sqrt(pow(partHeight, 2) + pow(r1, 2));
@@ -1244,51 +1246,51 @@ float CGLRenderer::DrawVasePart6(float nextR)
 	return r1;
 }
 
-float CGLRenderer::DrawVasePart7(float nextR)
+float CGLRenderer::DrawVasePart7(float firstR, float fullConeHeight, float partConeHeight)
 {
-	return nextR;
+	return firstR;
 
 }
 
-float CGLRenderer::DrawVasePart8(float nextR)
+float CGLRenderer::DrawVasePart8(float firstR, float fullConeHeight, float partConeHeight)
 {
-	return nextR;
+	return firstR;
 
 }
 
-float CGLRenderer::DrawVasePart9(float nextR)
+float CGLRenderer::DrawVasePart9(float firstR, float fullConeHeight, float partConeHeight)
 {
-	return nextR;
+	return firstR;
 
 }
 
-float CGLRenderer::DrawVasePart10(float nextR)
+float CGLRenderer::DrawVasePart10(float firstR, float fullConeHeight, float partConeHeight)
 {
-	return nextR;
+	return firstR;
 
 }
 
-float CGLRenderer::DrawVasePart11(float nextR)
+float CGLRenderer::DrawVasePart11(float firstR, float fullConeHeight, float partConeHeight)
 {
-	return nextR;
+	return firstR;
 
 }
 
-float CGLRenderer::DrawVasePart12(float nextR)
+float CGLRenderer::DrawVasePart12(float firstR, float fullConeHeight, float partConeHeight)
 {
-	return nextR;
+	return firstR;
 
 }
 
-float CGLRenderer::DrawVasePart13(float nextR)
+float CGLRenderer::DrawVasePart13(float firstR, float fullConeHeight, float partConeHeight)
 {
-	return nextR;
+	return firstR;
 
 }
 
-float CGLRenderer::DrawVasePart14(float nextR)
+float CGLRenderer::DrawVasePart14(float firstR, float fullConeHeight, float partConeHeight)
 {
-	return nextR;
+	return firstR;
 
 }
 
