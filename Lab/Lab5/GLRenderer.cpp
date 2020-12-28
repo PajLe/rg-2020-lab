@@ -21,6 +21,7 @@ CGLRenderer::CGLRenderer()
 	cameraDistanceFromCoordinateOrigin = sqrt(pow(cameraX, 2) + pow(cameraY, 2));
 	cameraPitch = asin(cameraY / cameraDistanceFromCoordinateOrigin) * 180 / M_PI;
 	cameraY *= 1.4;
+	cameraX *= 0.9;
 	normalsOn = true;
 	redLightOn = true;
 	greenLightOn = true;
@@ -155,11 +156,17 @@ void CGLRenderer::MoveCamera(CPoint cursorPoint) // https://learnopengl.com/Gett
 	double xPos = cos(cameraYaw * M_PI / 180.0) * cos(cameraPitch * M_PI / 180.0);
 	double yPos = sin(cameraPitch * M_PI / 180.0);
 	double zPos = -sin(cameraYaw * M_PI / 180.0) * cos(cameraPitch * M_PI / 180.0);
-	cameraX = 0.9 * cameraDistanceFromCoordinateOrigin * xPos;
-	if (cameraX >= 10.0f)
-		cameraX = 9.5f;
-	cameraY = 1.4 * cameraDistanceFromCoordinateOrigin * yPos;
+	cameraX = 0.9 * cameraDistanceFromCoordinateOrigin * xPos; // 0.9 - random factor to keep eye inside of the cube
+	if (cameraX >= 9.9f) // definitely keep eye inside of the cube x-wise
+		cameraX = 9.9f;
+	if (cameraX <= -9.9f)
+		cameraX = -9.9f;
+	cameraY = 1.4 * cameraDistanceFromCoordinateOrigin * yPos; // 1.4 - random factor so y can grow more
 	cameraZ = cameraDistanceFromCoordinateOrigin * zPos;
+	if (cameraZ >= 9.9f) // definitely keep eye inside of the cube z-wise
+		cameraZ = 9.9f;
+	if (cameraZ <= -9.9f)
+		cameraZ = -9.9f;
 }
 
 void CGLRenderer::StopMovingCamera()
