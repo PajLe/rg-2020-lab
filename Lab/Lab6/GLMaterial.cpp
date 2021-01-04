@@ -42,6 +42,15 @@ void GLMaterial::SelectBack(void)
 	glMaterialf(GL_BACK, GL_SHININESS, m_fShininess);
 }
 
+void GLMaterial::Select(void)
+{
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, m_vAmbient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, m_vDiffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, m_vSpecular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, m_vEmission);
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m_fShininess);
+}
+
 void GLMaterial::SetAmbient(float r, float g, float b, float a)
 {
 	m_vAmbient[0] = r;  m_vAmbient[1] = g;

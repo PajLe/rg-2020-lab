@@ -5,6 +5,7 @@ public:
 	GLMaterial();
 	virtual ~GLMaterial();
 
+	void Select(void);
 	void SelectFront(void);
 	void SelectBack(void);
 
