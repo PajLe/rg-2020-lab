@@ -45,6 +45,9 @@
     <ClInclude Include="GLRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lab6.cpp">
@@ -68,6 +71,9 @@
     <ClCompile Include="GLRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Lab6.rc">
@@ -87,6 +93,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\canvas.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\index.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

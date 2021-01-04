@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DImage.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GLMaterial.h" />
     <ClInclude Include="GLRenderer.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DImage.cpp" />
     <ClCompile Include="GLMaterial.cpp" />
     <ClCompile Include="GLRenderer.cpp" />
     <ClCompile Include="Lab6.cpp" />
@@ -215,6 +217,8 @@
     <None Include="res\Lab6.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\canvas.png" />
+    <Image Include="res\index.jpg" />
     <Image Include="res\Lab6.ico" />
     <Image Include="res\Lab6Doc.ico" />
     <Image Include="res\Toolbar.bmp" />
