@@ -48,6 +48,9 @@
     <ClInclude Include="DImage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GLTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lab6.cpp">
@@ -72,6 +75,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

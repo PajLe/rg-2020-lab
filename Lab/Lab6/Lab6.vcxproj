@@ -187,6 +187,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="GLMaterial.h" />
     <ClInclude Include="GLRenderer.h" />
+    <ClInclude Include="GLTexture.h" />
     <ClInclude Include="Lab6.h" />
     <ClInclude Include="Lab6Doc.h" />
     <ClInclude Include="Lab6View.h" />
@@ -199,6 +200,7 @@
     <ClCompile Include="DImage.cpp" />
     <ClCompile Include="GLMaterial.cpp" />
     <ClCompile Include="GLRenderer.cpp" />
+    <ClCompile Include="GLTexture.cpp" />
     <ClCompile Include="Lab6.cpp" />
     <ClCompile Include="Lab6Doc.cpp" />
     <ClCompile Include="Lab6View.cpp" />
