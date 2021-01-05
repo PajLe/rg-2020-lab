@@ -13,6 +13,7 @@
 
 CGLRenderer::CGLRenderer()
 {
+	// camera info
 	firstMouse = true;
 	cameraX = 5.4;
 	cameraY = 10.5;
@@ -22,10 +23,19 @@ CGLRenderer::CGLRenderer()
 	cameraPitch = asin(cameraY / cameraDistanceFromCoordinateOrigin) * 180 / M_PI;
 	cameraY *= 1.4;
 	cameraX *= 0.9;
+
+	// textures
+	truck = new GLTexture();
+	terrain = new GLTexture();
 }
 
 CGLRenderer::~CGLRenderer(void)
 {
+	// textures
+	truck->Release();
+	delete truck;
+	terrain->Release();
+	delete terrain;
 }
 
 bool CGLRenderer::CreateGLContext(CDC* pDC)
@@ -60,6 +70,11 @@ void CGLRenderer::PrepareScene(CDC* pDC)
 	wglMakeCurrent(pDC->m_hDC, m_hrc);
 	//---------------------------------
 	glClearColor(204 / 255.0, 204 / 255.0, 204 / 255.0, 1.0);
+
+	// textures
+	truck->LoadTexture(CString("res/canvas.png"));
+	terrain->LoadTexture(CString("res/index.jpg"));
+
 	//---------------------------------
 	wglMakeCurrent(NULL, NULL);
 }

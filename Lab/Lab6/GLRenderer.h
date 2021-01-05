@@ -1,4 +1,5 @@
 #pragma once
+#include "GLTexture.h"
 
 class CGLRenderer
 {
@@ -21,6 +22,7 @@ protected:
 	double cameraDistanceFromCoordinateOrigin;
 	
 private:
+	// camera
 	CPoint lastPoint;
 	bool firstMouse;
 	float cameraPitch;
@@ -28,6 +30,10 @@ private:
 	float cameraX;
 	float cameraY;
 	float cameraZ;
+
+	// textures
+	GLTexture* terrain;
+	GLTexture* truck;
 
 	// importants
 	void SetRoomLightning();
