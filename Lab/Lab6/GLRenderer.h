@@ -58,4 +58,6 @@ private:
 	void DrawBottomRightWheel();
 	void DrawTopRightWheel();
 	void DrawLeftTruckSide();
+	void DrawRightTruckSide();
+
 };
