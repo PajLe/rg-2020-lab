@@ -27,15 +27,24 @@ CGLRenderer::CGLRenderer()
 	// textures
 	truck = new GLTexture();
 	terrain = new GLTexture();
+
+	// materials
+	truckMat = new GLMaterial();
+	truckMat->SetSpecular(0.0f, 0.0f, 0.0f, 1.0f);
+	truckMat->SetAmbient(161 / 255.0, 161 / 255.0, 102 / 255.0, 1.0f);
+	truckMat->SetDiffuse(161 / 255.0, 161 / 255.0, 102 / 255.0, 1.0f);
 }
 
-CGLRenderer::~CGLRenderer(void)
+CGLRenderer::~CGLRenderer()
 {
 	// textures
 	truck->Release();
 	delete truck;
 	terrain->Release();
 	delete terrain;
+
+	// materials
+	delete truckMat;
 }
 
 bool CGLRenderer::CreateGLContext(CDC* pDC)
@@ -102,7 +111,7 @@ void CGLRenderer::DrawScene(CDC* pDC)
 
 	DrawCoordinateLines();
 	DrawTerrain();
-	
+	DrawWheels();
 
 	glFlush();
 	//---------------------------------
@@ -171,7 +180,7 @@ void CGLRenderer::MoveCamera(CPoint cursorPoint) // https://learnopengl.com/Gett
 	//if (cameraX <= -9.9f)
 	//	cameraX = -9.9f;
 	cameraY = 1.4 * cameraDistanceFromCoordinateOrigin * yPos; // 1.4 - random factor so y can grow more
-	cameraZ = 2.1* cameraDistanceFromCoordinateOrigin * zPos;
+	cameraZ = 2.1 * cameraDistanceFromCoordinateOrigin * zPos;
 	//if (cameraZ >= 9.9f) // definitely keep eye inside of the cube z-wise
 	//	cameraZ = 9.9f;
 	//if (cameraZ <= -9.9f)
@@ -198,13 +207,14 @@ void CGLRenderer::SetRoomLightning()
 
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glDisable(GL_LIGHTING);
 }
 
 void CGLRenderer::DrawCoordinateLines()
 {
 	glLineWidth(2.0);
-	glDisable(GL_LIGHTING);
+	bool lightingEnabled = glIsEnabled(GL_LIGHTING);
+	if (lightingEnabled);
+		glDisable(GL_LIGHTING);
 	glBegin(GL_LINES);
 	{
 		glColor3f(1.0f, 0.0f, 0.0f);
@@ -220,6 +230,8 @@ void CGLRenderer::DrawCoordinateLines()
 		glVertex3f(0.0, 0.0, 10.0);
 	}
 	glEnd();
+	if (lightingEnabled)
+		glEnable(GL_LIGHTING);
 }
 
 void CGLRenderer::DrawTerrain()
@@ -249,4 +261,91 @@ void CGLRenderer::DrawTerrain()
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
+}
+
+void CGLRenderer::DrawWheels()
+{
+	DrawWheel();
+}
+
+void CGLRenderer::DrawWheel()
+{
+	const u_char points = 16;
+	const float pointAngle = 360.f / points;
+	const float r = 1.5f;
+
+	truck->PrepareTexture(false);
+	truck->Select();
+	glEnable(GL_TEXTURE_2D);
+
+	// front base
+	glBegin(GL_POLYGON);
+	{
+		glNormal3f(0.0f, 0.0f, 1.0f);
+		float angle = 0.0f;
+		for (int i = 0; i < points; i++)
+		{
+			float x = r * cos(angle * M_PI / 180.0);
+			float y = r * sin(angle * M_PI / 180.0);
+
+			glTexCoord2f((10.0f + x) / 16.0f, (1.5f + y) / 16.0f);
+			glVertex3f(x, y, 0.0f);
+			angle += pointAngle;
+		}
+	}
+	glEnd();
+
+	// back base
+	glBegin(GL_POLYGON);
+	{
+		glNormal3f(0.0f, 0.0f, -1.0f);
+		float angle = 0.0f;
+		for (int i = 0; i < points; i++)
+		{
+			float x = r * cos(angle * M_PI / 180.0);
+			float y = r * sin(angle * M_PI / 180.0);
+
+			glTexCoord2f((10.0f + x) / 16.0f, (1.5f + y) / 16.0f);
+			glVertex3f(-x, y, -1.0f);
+			angle += pointAngle;
+		}
+	}
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+
+	// side
+	truckMat->Select();
+	glBegin(GL_QUAD_STRIP);
+	{
+		float angle = 0.0f;
+		for (int i = 0; i <= points; i++)
+		{
+			float x = r * cos(angle * M_PI / 180.0);
+			float y = r * sin(angle * M_PI / 180.0);
+
+			glNormal3f(x / r, y / r, 0.0f);
+			glVertex3f(x, y, 0.0f);
+			glNormal3f(x / r, y / r, 0.0f);
+			glVertex3f(x, y, -1.0f);
+			angle += pointAngle;
+		}
+	}
+	glEnd();
+}
+
+void CGLRenderer::DrawBottomLeftWheel()
+{
+}
+
+void CGLRenderer::DrawTopLeftWheel()
+{
+}
+
+void CGLRenderer::DrawBottomRightWheel()
+{
+}
+
+void CGLRenderer::DrawTopRightWheel()
+{
 }

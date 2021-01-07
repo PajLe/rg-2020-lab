@@ -1,11 +1,12 @@
 #pragma once
 #include "GLTexture.h"
+#include "GLMaterial.h"
 
 class CGLRenderer
 {
 public:
-	CGLRenderer(void);
-	virtual ~CGLRenderer(void);
+	CGLRenderer();
+	virtual ~CGLRenderer();
 		
 	bool CreateGLContext(CDC* pDC);			// kreira OpenGL Rendering Context
 	void PrepareScene(CDC* pDC);			// inicijalizuje scenu,
@@ -36,6 +37,8 @@ private:
 	GLTexture* terrain;
 	GLTexture* truck;
 
+	// materials
+	GLMaterial* truckMat;
 
 // functions
 private:
@@ -43,4 +46,12 @@ private:
 	void SetRoomLightning();
 	void DrawCoordinateLines();
 	void DrawTerrain();
+	void DrawWheels();
+
+	// helpers
+	void DrawWheel();
+	void DrawBottomLeftWheel();
+	void DrawTopLeftWheel();
+	void DrawBottomRightWheel();
+	void DrawTopRightWheel();
 };
