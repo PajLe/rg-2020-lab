@@ -20,7 +20,8 @@ protected:
 	short rotateX;
 	short rotateY;
 	double cameraDistanceFromCoordinateOrigin;
-	
+
+// attributes
 private:
 	// camera
 	CPoint lastPoint;
@@ -35,8 +36,11 @@ private:
 	GLTexture* terrain;
 	GLTexture* truck;
 
+
+// functions
+private:
 	// importants
 	void SetRoomLightning();
 	void DrawCoordinateLines();
-
+	void DrawTerrain();
 };

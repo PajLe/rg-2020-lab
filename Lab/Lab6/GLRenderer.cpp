@@ -99,11 +99,9 @@ void CGLRenderer::DrawScene(CDC* pDC)
 		0.0, 1.0, 0.0);
 
 	SetRoomLightning();
-	glPushMatrix();
-	glPopMatrix();
 
 	DrawCoordinateLines();
-	glTranslatef(0.0f, 1.5f, 0.0f);
+	DrawTerrain();
 	
 
 	glFlush();
@@ -198,7 +196,9 @@ void CGLRenderer::SetRoomLightning()
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 
+	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	glDisable(GL_LIGHTING);
 }
 
 void CGLRenderer::DrawCoordinateLines()
@@ -220,5 +220,33 @@ void CGLRenderer::DrawCoordinateLines()
 		glVertex3f(0.0, 0.0, 10.0);
 	}
 	glEnd();
-	glEnable(GL_LIGHTING);
+}
+
+void CGLRenderer::DrawTerrain()
+{
+	terrain->PrepareTexture(false);
+	terrain->Select();
+
+	glEnable(GL_TEXTURE_2D);
+
+	glBegin(GL_QUADS);
+	{
+		glNormal3f(0.0f, 1.0f, 0.0f);
+
+		glTexCoord2f(0.0f, 4.0f);
+		glVertex3f(-20.0f, -1.5f, 20.0f);
+
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(20.0f, -1.5f, 20.0f);
+
+		glTexCoord2f(2.0f, 0.0f);
+		glVertex3f(20.0f, -1.5f, -20.0f);
+
+		glTexCoord2f(2.0f, 4.0f);
+		glVertex3f(-20.0f, -1.5f, -20.0f);
+
+	}
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
 }
