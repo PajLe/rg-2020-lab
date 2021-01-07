@@ -108,10 +108,14 @@ void CGLRenderer::DrawScene(CDC* pDC)
 		0.0, 1.0, 0.0);
 
 	SetRoomLightning();
-
 	DrawCoordinateLines();
 	DrawTerrain();
+
+	glPushMatrix();
 	DrawWheels();
+	glPopMatrix();
+
+	DrawTruckBody();
 
 	glFlush();
 	//---------------------------------
@@ -271,6 +275,11 @@ void CGLRenderer::DrawWheels()
 	DrawBottomRightWheel();
 }
 
+void CGLRenderer::DrawTruckBody()
+{
+	DrawLeftTruckSide();
+}
+
 void CGLRenderer::DrawWheel()
 {
 	const u_char points = 16;
@@ -359,4 +368,325 @@ void CGLRenderer::DrawTopRightWheel()
 {
 	glTranslatef(0.0f, 0.0f, -4.0f);
 	DrawWheel();
+}
+
+void CGLRenderer::DrawLeftTruckSide()
+{
+	truck->PrepareTexture(false);
+	truck->Select();
+
+	glEnable(GL_TEXTURE_2D);
+
+	const float z = 3.0f;
+
+	// split concave polygon into multiple convex (check sketches.png)
+	// 1
+	glBegin(GL_POLYGON);
+	{
+		glNormal3f(0.0f, 0.0f, 1.0f);
+
+		// 0
+		glTexCoord2f(4.0f / 16.0f, 0.0f);
+		glVertex3f(-2.0f, 7.0f, z);
+
+		// 1
+		glTexCoord2f(2.0f / 16.0f, 0.0f);
+		glVertex3f(-4.0f, 7.0f, z);
+
+		// 2
+		glTexCoord2f(0.0f, 2.0f / 16.0f);
+		glVertex3f(-6.0f, 5.0f, z);
+
+		// 19
+		glTexCoord2f(0.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-6.0f, 2.0f, z);
+
+		// 20
+		glTexCoord2f(1.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-5.0f, 2.0f, z);
+
+		// 21
+		glTexCoord2f(2.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-4.0f, 2.0f, z);
+
+		// 22
+		glTexCoord2f(4.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-2.0f, 2.0f, z);
+	}
+	glEnd();
+
+	// 2
+	glBegin(GL_POLYGON);
+	{
+		glNormal3f(0.0f, 0.0f, 1.0f);
+
+		// 3
+		glTexCoord2f(0.0f, 7.0f / 16.0f);
+		glVertex3f(-6.0f, 0.0f, z);
+
+		// 4
+		glTexCoord2f(1.0f / 16.0f, 7.0f / 16.0f);
+		glVertex3f(-5.0f, 0.0f, z);
+
+		// 20
+		glTexCoord2f(1.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-5.0f, 2.0f, z);
+
+		// 19
+		glTexCoord2f(0.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-6.0f, 2.0f, z);
+	}
+	glEnd();
+
+	// 6
+	glBegin(GL_POLYGON);
+	{
+		glNormal3f(0.0f, 0.0f, 1.0f);
+
+		// 20
+		glTexCoord2f(1.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-5.0f, 2.0f, z);
+
+		// 5
+		glTexCoord2f(1.0f / 16.0f, 6.0f / 16.0f);
+		glVertex3f(-5.0f, 1.0f, z);
+
+		// 21
+		glTexCoord2f(2.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-4.0f, 2.0f, z);
+	}
+	glEnd();
+
+	// 7
+	glBegin(GL_POLYGON);
+	{
+		glNormal3f(0.0f, 0.0f, 1.0f);
+
+		// 7
+		glTexCoord2f(3.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-3.0f, 2.0f, z);
+
+		// 8
+		glTexCoord2f(4.0f / 16.0f, 6.0f / 16.0f);
+		glVertex3f(-2.0f, 1.0f, z);
+
+		// 22
+		glTexCoord2f(4.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-2.0f, 2.0f, z);
+	}
+	glEnd();
+
+	// 3
+	glBegin(GL_POLYGON);
+	{
+		glNormal3f(0.0f, 0.0f, 1.0f);
+
+		// 9
+		glTexCoord2f(4.0f / 16.0f, 7.0f / 16.0f);
+		glVertex3f(-2.0f, 0.0f, z);
+
+		// 10
+		glTexCoord2f(5.0f / 16.0f, 7.0f / 16.0f);
+		glVertex3f(-1.0f, 0.0f, z);
+
+		// 23
+		glTexCoord2f(5.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-1.0f, 2.0f, z);
+
+		// 22
+		glTexCoord2f(4.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-2.0f, 2.0f, z);
+	}
+	glEnd();
+
+	// 8
+	glBegin(GL_POLYGON);
+	{
+		glNormal3f(0.0f, 0.0f, 1.0f);
+
+		// 11
+		glTexCoord2f(5.0f / 16.0f, 6.0f / 16.0f);
+		glVertex3f(-1.0f, 1.0f, z);
+
+		// 12
+		glTexCoord2f(6.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(0.0f, 2.0f, z);
+
+		// 23
+		glTexCoord2f(5.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-1.0f, 2.0f, z);
+	}
+	glEnd();
+
+	// 9
+	glBegin(GL_POLYGON);
+	{
+		glNormal3f(0.0f, 0.0f, 1.0f);
+
+		// 13
+		glTexCoord2f(7.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(1.0f, 2.0f, z);
+
+		// 14
+		glTexCoord2f(8.0f / 16.0f, 6.0f / 16.0f);
+		glVertex3f(2.0f, 1.0f, z);
+
+		// 24
+		glTexCoord2f(8.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(2.0f, 2.0f, z);
+	}
+	glEnd();
+
+	// 4
+	glBegin(GL_POLYGON);
+	{
+		glNormal3f(0.0f, 0.0f, 1.0f);
+
+		// 15
+		glTexCoord2f(8.0f / 16.0f, 7.0f / 16.0f);
+		glVertex3f(2.0f, 0.0f, z);
+
+		// 16
+		glTexCoord2f(12.0f / 16.0f, 7.0f / 16.0f);
+		glVertex3f(6.0f, 0.0f, z);
+
+		// 25
+		glTexCoord2f(12.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(6.0f, 2.0f, z);
+
+		// 24
+		glTexCoord2f(8.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(2.0f, 2.0f, z);
+	}
+	glEnd();
+
+	// 5
+	glBegin(GL_POLYGON);
+	{
+		glNormal3f(0.0f, 0.0f, 1.0f);
+
+		// 17
+		glTexCoord2f(12.0f / 16.0f, 4.0f / 16.0f);
+		glVertex3f(6.0f, 3.0f, z);
+
+		// 18
+		glTexCoord2f(4.0f / 16.0f, 4.0f / 16.0f);
+		glVertex3f(-2.0f, 3.0f, z);
+
+		// 22
+		glTexCoord2f(4.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(-2.0f, 2.0f, z);
+
+		// 25
+		glTexCoord2f(12.0f / 16.0f, 5.0f / 16.0f);
+		glVertex3f(6.0f, 2.0f, z);
+	}
+	glEnd();
+
+	// points in sketches.png	
+	//// 0
+	//glTexCoord2f(4.0f / 16.0f, 0.0f);
+	//glVertex3f(-2.0f, 7.0f, z); 
+
+	//// 1
+	//glTexCoord2f(2.0f / 16.0f, 0.0f);
+	//glVertex3f(-4.0f, 7.0f, z);
+
+	//// 2
+	//glTexCoord2f(0.0f, 2.0f / 16.0f);
+	//glVertex3f(-6.0f, 5.0f, z);
+
+	//// 3
+	//glTexCoord2f(0.0f, 7.0f / 16.0f);
+	//glVertex3f(-6.0f, 0.0f, z);
+
+	//// 4
+	//glTexCoord2f(1.0f / 16.0f, 7.0f / 16.0f);
+	//glVertex3f(-5.0f, 0.0f, z);
+
+	//// 5
+	//glTexCoord2f(1.0f / 16.0f, 6.0f / 16.0f);
+	//glVertex3f(-5.0f, 1.0f, z);
+
+	//// 6
+	//glTexCoord2f(2.0f / 16.0f, 5.0f / 16.0f);
+	//glVertex3f(-4.0f, 2.0f, z);
+
+	//// 7
+	//glTexCoord2f(3.0f / 16.0f, 5.0f / 16.0f);
+	//glVertex3f(-3.0f, 2.0f, z);
+
+	//// 8
+	//glTexCoord2f(4.0f / 16.0f, 6.0f / 16.0f);
+	//glVertex3f(-2.0f, 1.0f, z);
+
+	//// 9
+	//glTexCoord2f(4.0f / 16.0f, 7.0f / 16.0f);
+	//glVertex3f(-2.0f, 0.0f, z);
+
+	//// 10
+	//glTexCoord2f(5.0f / 16.0f, 7.0f / 16.0f);
+	//glVertex3f(-1.0f, 0.0f, z);
+
+	//// 11
+	//glTexCoord2f(5.0f / 16.0f, 6.0f / 16.0f);
+	//glVertex3f(-1.0f, 1.0f, z);
+
+	//// 12
+	//glTexCoord2f(6.0f / 16.0f, 5.0f / 16.0f);
+	//glVertex3f(0.0f, 2.0f, z);
+
+	//// 13
+	//glTexCoord2f(7.0f / 16.0f, 5.0f / 16.0f);
+	//glVertex3f(1.0f, 2.0f, z);
+
+	//// 14
+	//glTexCoord2f(8.0f / 16.0f, 6.0f / 16.0f);
+	//glVertex3f(2.0f, 1.0f, z);
+
+	//// 15
+	//glTexCoord2f(8.0f / 16.0f, 7.0f / 16.0f);
+	//glVertex3f(2.0f, 0.0f, z);
+
+	//// 16
+	//glTexCoord2f(12.0f / 16.0f, 7.0f / 16.0f);
+	//glVertex3f(6.0f, 0.0f, z);
+
+	//// 17
+	//glTexCoord2f(12.0f / 16.0f, 4.0f / 16.0f);
+	//glVertex3f(6.0f, 3.0f, z);
+
+	//// 18
+	//glTexCoord2f(4.0f / 16.0f, 4.0f / 16.0f);
+	//glVertex3f(-2.0f, 3.0f, z);
+
+	//// 19
+	//glTexCoord2f(0.0f / 16.0f, 5.0f / 16.0f);
+	//glVertex3f(-6.0f, 2.0f, z);
+
+	//// 20
+	//glTexCoord2f(1.0f / 16.0f, 5.0f / 16.0f);
+	//glVertex3f(-5.0f, 2.0f, z);
+
+	//// 21
+	//glTexCoord2f(2.0f / 16.0f, 5.0f / 16.0f);
+	//glVertex3f(-4.0f, 2.0f, z);
+
+	//// 22
+	//glTexCoord2f(4.0f / 16.0f, 5.0f / 16.0f);
+	//glVertex3f(-2.0f, 2.0f, z);
+
+	//// 23
+	//glTexCoord2f(5.0f / 16.0f, 5.0f / 16.0f);
+	//glVertex3f(-1.0f, 2.0f, z);
+
+	//// 24
+	//glTexCoord2f(8.0f / 16.0f, 5.0f / 16.0f);
+	//glVertex3f(2.0f, 2.0f, z);
+
+	//// 25
+	//glTexCoord2f(12.0f / 16.0f, 5.0f / 16.0f);
+	//glVertex3f(6.0f, 2.0f, z);
+
+	glDisable(GL_TEXTURE_2D);
 }

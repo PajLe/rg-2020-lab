@@ -47,11 +47,15 @@ private:
 	void DrawCoordinateLines();
 	void DrawTerrain();
 	void DrawWheels();
+	void DrawTruckBody();
 
 	// helpers
 	void DrawWheel();
+
+	// function splitters
 	void DrawBottomLeftWheel();
 	void DrawTopLeftWheel();
 	void DrawBottomRightWheel();
 	void DrawTopRightWheel();
+	void DrawLeftTruckSide();
 };
