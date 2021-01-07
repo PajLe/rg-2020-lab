@@ -265,7 +265,10 @@ void CGLRenderer::DrawTerrain()
 
 void CGLRenderer::DrawWheels()
 {
-	DrawWheel();
+	DrawBottomLeftWheel();
+	DrawTopLeftWheel();
+	DrawTopRightWheel();
+	DrawBottomRightWheel();
 }
 
 void CGLRenderer::DrawWheel()
@@ -336,16 +339,24 @@ void CGLRenderer::DrawWheel()
 
 void CGLRenderer::DrawBottomLeftWheel()
 {
+	glTranslatef(0.5f, 0.0f, 2.5f);
+	DrawWheel();
 }
 
 void CGLRenderer::DrawTopLeftWheel()
 {
+	glTranslatef(-4.0f, 0.0f, 0.0f);
+	DrawWheel();
 }
 
 void CGLRenderer::DrawBottomRightWheel()
 {
+	glTranslatef(4.0f, 0.0f, 0.0f);
+	DrawWheel();
 }
 
 void CGLRenderer::DrawTopRightWheel()
 {
+	glTranslatef(0.0f, 0.0f, -4.0f);
+	DrawWheel();
 }
