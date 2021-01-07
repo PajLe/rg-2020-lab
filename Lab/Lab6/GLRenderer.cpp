@@ -193,7 +193,7 @@ void CGLRenderer::MoveCamera(CPoint cursorPoint) // https://learnopengl.com/Gett
 
 void CGLRenderer::SetRoomLightning()
 {
-	GLfloat lmodel_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+	GLfloat lmodel_ambient[] = { 0.4, 0.4, 0.4, 1.0 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
@@ -202,7 +202,7 @@ void CGLRenderer::SetRoomLightning()
 	float light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 	float light_emission[] = { 1.0, 1.0, 1.0, 1.0 };
 	float light_specular[] = { 0.0f, 0.0f, 0.0f, 1.0 };
-	float light_position[] = { 10.0f, 10.0f, 10.0f, 0.0 };
+	float light_position[] = { 5.0f, 20.0f, 8.0f, 0.0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glLightfv(GL_LIGHT0, GL_EMISSION, light_emission);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
@@ -373,7 +373,7 @@ void CGLRenderer::DrawTopRightWheel()
 
 void CGLRenderer::DrawLeftTruckSide()
 {
-	truck->PrepareTexture(false);
+	truck->PrepareTexture(true);
 	truck->Select();
 
 	glEnable(GL_TEXTURE_2D);
@@ -694,7 +694,7 @@ void CGLRenderer::DrawLeftTruckSide()
 
 void CGLRenderer::DrawRightTruckSide()
 {
-	truck->PrepareTexture(false);
+	truck->PrepareTexture(true);
 	truck->Select();
 
 	glEnable(GL_TEXTURE_2D);
