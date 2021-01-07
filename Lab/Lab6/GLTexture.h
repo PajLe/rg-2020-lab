@@ -7,5 +7,8 @@ public :
     void LoadTexture(CString fileName);
     void Select();
     void Release();
+
+    ~GLTexture();
+    GLTexture();
 };
 
