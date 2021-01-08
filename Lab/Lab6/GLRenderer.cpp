@@ -115,7 +115,7 @@ void CGLRenderer::DrawScene(CDC* pDC)
 	DrawWheels();
 	glPopMatrix();
 
-	DrawTruckBody();
+	DrawTruck();
 
 	glFlush();
 	//---------------------------------
@@ -202,7 +202,7 @@ void CGLRenderer::SetRoomLightning()
 	float light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 	float light_emission[] = { 1.0, 1.0, 1.0, 1.0 };
 	float light_specular[] = { 0.0f, 0.0f, 0.0f, 1.0 };
-	float light_position[] = { 5.0f, 20.0f, 8.0f, 0.0 };
+	float light_position[] = { 2.0f, 20.0f, 8.0f, 0.0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glLightfv(GL_LIGHT0, GL_EMISSION, light_emission);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
@@ -275,10 +275,11 @@ void CGLRenderer::DrawWheels()
 	DrawBottomRightWheel();
 }
 
-void CGLRenderer::DrawTruckBody()
+void CGLRenderer::DrawTruck()
 {
 	DrawLeftTruckSide();
 	DrawRightTruckSide();
+	DrawTruckBody();
 }
 
 void CGLRenderer::DrawWheel()
@@ -906,4 +907,118 @@ void CGLRenderer::DrawRightTruckSide()
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
+}
+
+void CGLRenderer::DrawTruckBody()
+{
+	truckMat->Select();
+
+	glBegin(GL_QUAD_STRIP);
+	{
+		const float rightSideZ = -3.0f;
+		const float leftSideZ = 3.0f;
+
+		// TODO fix arithmetic mean for normals
+		// 4
+		glNormal3f(0.0f, -1.0f, 0.0f);
+		glVertex3f(-5.0f, 0.0f, rightSideZ); // 0
+		glVertex3f(-5.0f, 0.0f, leftSideZ); // 1
+
+		// 3
+		glNormal3f(0.0f, -1.0f, 0.0f);
+		glVertex3f(-6.0f, 0.0f, rightSideZ); // 2
+		glVertex3f(-6.0f, 0.0f, leftSideZ); // 3
+
+		// 2
+		glNormal3f((-1.0f + (-1.0f / 1.41)), 1.0f / 1.41, 0.0f); // arithmetic mean of this quad and next quad
+		glVertex3f(-6.0f, 5.0f, rightSideZ); // 4
+		glVertex3f(-6.0f, 5.0f, leftSideZ); // 5
+		 
+		// 1
+		glNormal3f(-1.0f / 1.41, 1.0f / 1.41, 0.0f);
+		glVertex3f(-4.0f, 7.0f, rightSideZ); // 6
+		glVertex3f(-4.0f, 7.0f, leftSideZ); // 7
+
+		// 0
+		glNormal3f(1.0f / 1.41, 1.0f / 1.41, 0.0f); // arithmetic mean of this quad and next quad
+		glVertex3f(-2.0f, 7.0f, rightSideZ); // 8
+		glVertex3f(-2.0f, 7.0f, leftSideZ); // 9
+
+		// 18
+		glNormal3f(1.0f / 1.41, 1.0f / 1.41, 0.0f); // arithmetic mean of this quad and next quad
+		glVertex3f(-2.0f, 3.0f, rightSideZ); // 10
+		glVertex3f(-2.0f, 3.0f, leftSideZ); // 11
+
+		// 17
+		glNormal3f(1.0f / 1.41, 1.0f / 1.41, 0.0f); // arithmetic mean of this quad and next quad
+		glVertex3f(6.0f, 3.0f, rightSideZ); // 12
+		glVertex3f(6.0f, 3.0f, leftSideZ); // 13
+
+		// 16
+		glNormal3f(1.0f / 1.41, -1.0f / 1.41, 0.0f); // arithmetic mean of this quad and next quad
+		glVertex3f(6.0f, 0.0f, rightSideZ); // 14
+		glVertex3f(6.0f, 0.0f, leftSideZ); // 15
+
+		// 15
+		glNormal3f(0.0f, -1.0f, 0.0f);
+		glVertex3f(2.0f, 0.0f, rightSideZ); // 16
+		glVertex3f(2.0f, 0.0f, leftSideZ); // 17
+
+		// 14
+		glNormal3f(0.0f, -1.0f, 0.0f);
+		glVertex3f(2.0f, 1.0f, rightSideZ); // 18
+		glVertex3f(2.0f, 1.0f, leftSideZ); // 19
+
+		// 13
+		glNormal3f(0.0f, -1.0f, 0.0f);
+		glVertex3f(1.0f, 2.0f, rightSideZ); // 20
+		glVertex3f(1.0f, 2.0f, leftSideZ); // 21
+
+		// 12
+		glNormal3f(1.0f / 1.41, -1.0f / 1.41, 0.0f);
+		glVertex3f(0.0f, 2.0f, rightSideZ); // 22
+		glVertex3f(0.0f, 2.0f, leftSideZ); // 23
+
+		// 11
+		glNormal3f(1.0f, 0.0f, 0.0f);
+		glVertex3f(-1.0f, 1.0f, rightSideZ); // 24
+		glVertex3f(-1.0f, 1.0f, leftSideZ); // 25
+
+		// 10
+		glNormal3f(1.0f, 0.0f, 0.0f);
+		glVertex3f(-1.0f, 0.0f, rightSideZ); // 26
+		glVertex3f(-1.0f, 0.0f, leftSideZ); // 27
+
+		// 9
+		glNormal3f(0.0f, -1.0f, 0.0f);
+		glVertex3f(-2.0f, 0.0f, rightSideZ); // 28
+		glVertex3f(-2.0f, 0.0f, leftSideZ); // 29
+
+		// 8
+		glNormal3f(0.0f, -1.0f, 0.0f);
+		glVertex3f(-2.0f, 1.0f, rightSideZ); // 30
+		glVertex3f(-2.0f, 1.0f, leftSideZ); // 31
+
+		// 7
+		glNormal3f(0.0f, -1.0f, 0.0f);
+		glVertex3f(-3.0f, 2.0f, rightSideZ); // 32
+		glVertex3f(-3.0f, 2.0f, leftSideZ); // 33
+
+		// 6
+		glNormal3f(1.0f / 1.41, -1.0f / 1.41, 0.0f);
+		glVertex3f(-4.0f, 2.0f, rightSideZ); // 34
+		glVertex3f(-4.0f, 2.0f, leftSideZ); // 35
+
+		// 5
+		glNormal3f(1.0f / 1.41, -1.0f / 1.41, 0.0f);
+		glVertex3f(-5.0f, 1.0f, rightSideZ); // 36
+		glVertex3f(-5.0f, 1.0f, leftSideZ); // 37
+
+		// 4
+		glNormal3f(1.0f, 0.0f, 0.0f);
+		glVertex3f(-5.0f, 0.0f, rightSideZ); // 0
+		glVertex3f(-5.0f, 0.0f, leftSideZ); // 1
+	}
+
+	glEnd();
 }

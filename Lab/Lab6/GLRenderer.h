@@ -47,7 +47,7 @@ private:
 	void DrawCoordinateLines();
 	void DrawTerrain();
 	void DrawWheels();
-	void DrawTruckBody();
+	void DrawTruck();
 
 	// helpers
 	void DrawWheel();
@@ -59,5 +59,6 @@ private:
 	void DrawTopRightWheel();
 	void DrawLeftTruckSide();
 	void DrawRightTruckSide();
+	void DrawTruckBody();
 
 };
