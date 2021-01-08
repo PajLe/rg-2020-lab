@@ -36,6 +36,7 @@ private:
 	// textures
 	GLTexture* terrain;
 	GLTexture* truck;
+	GLTexture* vuzlinTex;
 
 	// materials
 	GLMaterial* truckMat;

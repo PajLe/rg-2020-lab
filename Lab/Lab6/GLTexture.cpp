@@ -53,7 +53,9 @@ void GLTexture::LoadTexture(CString fileName)
     DImage* img = new DImage();
     img->Load(fileName);
 
-    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, img->Width(), img->Height(), GL_RGBA, GL_UNSIGNED_BYTE, img->GetDIBBits());
+    u_char* bits = img->GetDIBBits();
+    
+    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, img->Width(), img->Height(), GL_BGRA_EXT, GL_UNSIGNED_BYTE, bits);
 
     delete img;
 }

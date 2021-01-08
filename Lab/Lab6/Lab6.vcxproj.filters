@@ -107,5 +107,8 @@
     <Image Include="res\index.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\vuzlin.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

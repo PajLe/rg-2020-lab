@@ -27,6 +27,7 @@ CGLRenderer::CGLRenderer()
 	// textures
 	truck = new GLTexture();
 	terrain = new GLTexture();
+	vuzlinTex = new GLTexture();
 
 	// materials
 	truckMat = new GLMaterial();
@@ -42,6 +43,8 @@ CGLRenderer::~CGLRenderer()
 	delete truck;
 	terrain->Release();
 	delete terrain;
+	vuzlinTex->Release();
+	delete vuzlinTex;
 
 	// materials
 	delete truckMat;
@@ -83,6 +86,7 @@ void CGLRenderer::PrepareScene(CDC* pDC)
 	// textures
 	truck->LoadTexture(CString("res/canvas.png"));
 	terrain->LoadTexture(CString("res/index.jpg"));
+	vuzlinTex->LoadTexture(CString("res/vuzlin.jpg"));
 
 	//---------------------------------
 	wglMakeCurrent(NULL, NULL);
@@ -291,8 +295,8 @@ void CGLRenderer::DrawEllipsoid()
 		const float ry = 2.0f;
 		const float rz = 2.5f;
 
-		truck->PrepareTexture(true);
-		truck->Select();
+		vuzlinTex->PrepareTexture(false);
+		vuzlinTex->Select();
 		glTranslatef(2.0f, 5.0f, 0.0f);
 
 		glEnable(GL_TEXTURE_2D);
@@ -301,8 +305,8 @@ void CGLRenderer::DrawEllipsoid()
 		{
 			double alphaRadians = alpha * M_PI / 180.0;
 			double alphaPlusOneRadians = (alpha + 1.0) * M_PI / 180.0;
-			float t = (16.0f - (alpha + 90.0f) * 8.0f / 180.0f) / 16.0f;
-			float tPlusOne = (16.0f - (alpha + 1.0f + 90.0f) * 8.0f / 180.0f) / 16.0f;
+			float t = (180.f - alpha + 90.0f) / 180.0f;
+			float tPlusOne = (180.f - alpha + 1.0f + 90.0f) / 180.0f;
 
 			for (float beta = 0.0f; beta <= 360.0f; beta++)
 			{

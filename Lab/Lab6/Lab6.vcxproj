@@ -224,6 +224,7 @@
     <Image Include="res\Lab6.ico" />
     <Image Include="res\Lab6Doc.ico" />
     <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\vuzlin.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
