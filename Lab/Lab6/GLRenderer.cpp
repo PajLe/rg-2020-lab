@@ -116,6 +116,7 @@ void CGLRenderer::DrawScene(CDC* pDC)
 	glPopMatrix();
 
 	DrawTruck();
+	DrawEllipsoid();
 
 	glFlush();
 	//---------------------------------
@@ -280,6 +281,67 @@ void CGLRenderer::DrawTruck()
 	DrawLeftTruckSide();
 	DrawRightTruckSide();
 	DrawTruckBody();
+}
+
+void CGLRenderer::DrawEllipsoid()
+{
+	glPushMatrix();
+	{
+		const float rx = 4.0f;
+		const float ry = 2.0f;
+		const float rz = 2.5f;
+
+		truck->PrepareTexture(true);
+		truck->Select();
+		glTranslatef(2.0f, 5.0f, 0.0f);
+
+		glEnable(GL_TEXTURE_2D);
+		glBegin(GL_QUAD_STRIP);
+		for (float alpha = -90.0f; alpha < 90.0f; alpha++)
+		{
+			double alphaRadians = alpha * M_PI / 180.0;
+			double alphaPlusOneRadians = (alpha + 1.0) * M_PI / 180.0;
+			float t = (16.0f - (alpha + 90.0f) * 8.0f / 180.0f) / 16.0f;
+			float tPlusOne = (16.0f - (alpha + 1.0f + 90.0f) * 8.0f / 180.0f) / 16.0f;
+
+			for (float beta = 0.0f; beta <= 360.0f; beta++)
+			{
+				double betaRadians = beta * M_PI / 180.0;
+
+				float s = beta / 360.0f;
+
+				// draw from -x for correct texture orientation
+				float x1 = -rx * cos(alphaRadians) * cos(betaRadians);
+				float y1 = ry * sin(alphaRadians);
+				float z1 = rz * cos(alphaRadians) * sin(betaRadians);
+
+				float normal1X = cos(betaRadians);
+				float normal1Y = sin(alphaRadians);
+				float normal1Z = sin(betaRadians);
+
+				float x2 = -rx * cos(alphaPlusOneRadians) * cos(betaRadians);
+				float y2 = ry * sin(alphaPlusOneRadians);
+				float z2 = rz * cos(alphaPlusOneRadians) * sin(betaRadians);
+
+				float normal2X = cos(betaRadians);
+				float normal2Y = sin(alphaPlusOneRadians);
+				float normal2Z = sin(betaRadians);
+
+				// first normal 2 then normal 1 (to keep the correct winding orientation for lighting)
+				glNormal3f(normal2X, normal2Y, normal2Z);
+				glTexCoord2f(s, tPlusOne);
+				glVertex3f(x2, y2, z2);
+
+				glNormal3f(normal1X, normal1Y, normal1Z);
+				glTexCoord2f(s, t);
+				glVertex3f(x1, y1, z1);
+			}
+		}
+		glEnd();
+
+		glDisable(GL_TEXTURE_2D);
+	}
+	glPopMatrix();
 }
 
 void CGLRenderer::DrawWheel()

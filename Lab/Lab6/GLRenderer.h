@@ -48,6 +48,7 @@ private:
 	void DrawTerrain();
 	void DrawWheels();
 	void DrawTruck();
+	void DrawEllipsoid();
 
 	// helpers
 	void DrawWheel();
